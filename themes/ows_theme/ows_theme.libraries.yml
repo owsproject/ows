@@ -1,0 +1,22 @@
+global-styling:
+  version: VERSION
+  css:
+    base:
+      css/sweetalert.css: {}
+      css/twitter/twitter.css: {}
+      css/jquery.dialogr.css: {}
+      ows.css: {}
+  component:
+    css/components/ui-dialog.css: {}
+  js:
+    js/jquery.browser.min.js: {}
+    js/jquery.nicescroll.min.js: {}
+    js/jquery.splashscreen.js: {}
+    js/ui.dialogr.js: {}
+    js/jquery.cookie.js: {}
+    js/sweetalert.min.js: {}
+    ows.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.ui.dialog
+    - core/jquery.ui.widget

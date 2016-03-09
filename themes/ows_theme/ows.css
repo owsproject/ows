@@ -1,0 +1,85 @@
+@import url("https://fonts.googleapis.com/css?family=Roboto:400,700,500,300");
+
+body {
+	background: #333 url("images/background.png") no-repeat scroll center center;
+	font-family: 'Roboto', sans-serif !important;
+	min-height: 700px;
+}
+
+#ascrail2000 {
+	border: 1px solid #444;
+}
+
+#splashScreen img{
+	margin:0 auto;
+}
+
+#splashScreen{
+	position:absolute;
+	top:0;
+	left:0;
+	height:100%;
+	width:100%;
+	background-color:#252525;
+	background-repeat:no-repeat;
+	text-align:center;
+}
+
+/*
+Dialog styles
+*/
+
+#welcome-box {
+	display: none;
+}
+
+.sweet-alert {
+	background: rgba(0,0,0,0.30);
+	border-radius: 9px;
+	padding: 8px;
+	font-family: 'Roboto', sans-serif !important;
+	width: 600px;
+	margin-left: 0;
+}
+
+.sweet-alert .sweet-content-wrapper {
+	padding: 55px 15px 15px;
+	background: #fff;
+}
+
+.sweet-alert h2 {
+	margin: 0 8px;
+	padding-top: 10px;
+	text-align: center;
+    font-weight: bold;
+    font-size: 18px;
+    cursor: default;
+}
+
+.button {
+	width: 30px;
+	height: 50px;
+	border-radius: 9px;
+	text-shadow: 1px 1px 1px rgba(0,0,0,0.45);
+	color: #fff;
+	padding: 10px 14px;
+	text-decoration: none;
+	font-weight: bold;
+	font-size: 16px;
+	margin: 0 2px;
+}
+
+.button-red {
+	background: url(images/button-red.png);
+}
+
+.buttons a {
+	display: inline-block;
+	height: auto;
+	width: auto;
+}
+
+.welcome-text {
+	font-size: 14px;
+	margin-bottom: 20px;
+}

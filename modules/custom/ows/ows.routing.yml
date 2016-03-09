@@ -1,0 +1,31 @@
+ows.homepage:
+  path: '/home'
+  defaults:
+    _controller: 'Drupal\ows\Controller\OWSController::homepage'
+    _title: ''
+  requirements:
+    _permission: 'access content'
+
+ows.ajax_content:
+  path: '/ajax-content'
+  defaults:
+    _controller: 'Drupal\ows\Controller\OWSController::ajaxContent'
+    _title: ''
+  requirements:
+    _permission: 'access content'
+
+ows.content:
+  path: '/ajax-content'
+  defaults:
+    _controller: 'Drupal\ows\Controller\OWSController::ajaxContent'
+    _title: ''
+  requirements:
+    _permission: 'access content'
+
+ows.homepage_settings:
+  path: /admin/config/ows/homepage
+  defaults:
+    _form: 'Drupal\ows\HomepageSettingsForm'
+    _title: OWS homepage settings
+  requirements:
+    _permission: 'access administration pages'

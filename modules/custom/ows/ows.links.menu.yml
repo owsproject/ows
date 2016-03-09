@@ -1,0 +1,14 @@
+# OWS config group on admin - Parent
+system.admin_config_ows:
+  title: 'OWS settings'
+  description: 'OWS Settings'
+  route_name: ows.ajax_content
+  weight: 100
+  parent: system.admin_config
+# homepage message setting
+system.homepage_settings:
+  title: 'Homepage settings'
+  description: 'Homepage settings'
+  route_name: ows.homepage_settings
+  weight: 110
+  parent: system.admin_config_ows
