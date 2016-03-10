@@ -88,9 +88,9 @@ Dialog styles
 .ui-dialog {
 	-moz-border-radius: 8px;
     -webkit-border-radius: 8px;
-    border-width: 8px;
+    border-width: 2px;
     border-radius: 8px;
-    border-color: #dddddd;
+    border-color: #DD0946;
     background: rgba(7, 16, 20, 0.8) none repeat scroll 0 0;
 }
 
@@ -103,9 +103,34 @@ Dialog styles
 	color: #eee;
 }
 
-.ui-dialog button {
+.ui-dialog .button {
     display: inline-block;
     height: auto;
     width: auto;
     background: rgba(0, 0, 0, 0) url("images/button-red.png") repeat scroll 0 0;
+    text-shadow: none;
+    color: #fff;
+    border: none;
+}
+
+.ui-dialog .ui-dialog-titlebar {
+	background: transparent none repeat scroll 0 0;
+    border: medium none;
+    color: #fff !important;
+}
+
+#block-ows-theme-content .form-item label {
+	float:left;
+	width: 120px;
+}
+
+#block-ows-theme-content .form-item input {
+	float:left;
+	width: 300px;
+}
+
+#block-ows-theme-content .form-item {
+    float: left;
+    margin: 5px 0;
+    width: 100%;
 }

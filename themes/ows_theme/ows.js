@@ -41,7 +41,16 @@ jQuery(document).ready(function() {
 
     	swal.close();
     	jQuery('.dialog').dialogr({
-    		open: function( event, ui ) {}
+    		autoResize: true,
+    		width: 650,
+    		height: 600,
+    		fluid: true,
+    		//width: 'auto',
+            //height: 'auto',
+    		open: function( event, ui ) {
+    			w = jQuery('.ui-dialog-content').width();
+				jQuery('.ui-dialog').width(w);
+    		}
     	});
     });
 });
