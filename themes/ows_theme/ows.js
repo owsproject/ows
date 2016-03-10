@@ -41,9 +41,7 @@ jQuery(document).ready(function() {
 
     	swal.close();
     	jQuery('.dialog').dialogr({
-    		open: function( event, ui ) {
-    			console.log(ui);
-    		}
+    		open: function( event, ui ) {}
     	});
     });
 });

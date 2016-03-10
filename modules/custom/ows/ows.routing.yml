@@ -29,3 +29,11 @@ ows.homepage_settings:
     _title: OWS homepage settings
   requirements:
     _permission: 'access administration pages'
+
+ows.join_contest_form:
+  path: /join-contest
+  defualts:
+      _form: 'Drupal\ows\JoinContestForm'
+      _title: 'Join Contest'
+  requirements:
+      _permission: 'access content'

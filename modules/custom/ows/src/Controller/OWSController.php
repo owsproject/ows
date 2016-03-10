@@ -46,22 +46,28 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
   			</div>
 		</div>';
 
-		$html .= '<div class="dialog">Test</div>';
+		$html .= '<div class="dialog">Homepage</div>';
 
 		return array('#type' => 'markup', '#markup' => $html);
 	}
 
     public function ajaxContent() {
     	$type = $_REQUEST['type'];
-    	$html = 'Register form 11';
-
-    	$form['name'] = array(
+    	/*$form['name'] = array(
 		    '#type' => 'textfield',
 		    '#title' => t('Name'),
-		);
+		);*/
 
-		$html .= \Drupal::formBuilder()->getForm($form);
+    	// get user register form
+    	/*$entity = \Drupal::entityManager()->getStorage('user')->create(array());
+    	$formObject = \Drupal::entityManager()->getFormObject('user', 'register')->setEntity($entity);
+		$form = \Drupal::formBuilder()->getForm($formObject);
+		return $form;*/
 
+
+		$form = \Drupal::formBuilder()->getForm('\Drupal\ows\JoinContestForm');
+		return $form;
+		
         return array('#type' => 'markup', '#markup' => $html);
     }
 }

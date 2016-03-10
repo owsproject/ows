@@ -83,3 +83,29 @@ Dialog styles
 	font-size: 14px;
 	margin-bottom: 20px;
 }
+
+/* Dialogr css */
+.ui-dialog {
+	-moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
+    border-width: 8px;
+    border-radius: 8px;
+    border-color: #dddddd;
+    background: rgba(7, 16, 20, 0.8) none repeat scroll 0 0;
+}
+
+.ui-dialog * {
+	font-family: "Roboto",sans-serif !important;
+	color: #66757f;
+}
+
+.ui-dialog label {
+	color: #eee;
+}
+
+.ui-dialog button {
+    display: inline-block;
+    height: auto;
+    width: auto;
+    background: rgba(0, 0, 0, 0) url("images/button-red.png") repeat scroll 0 0;
+}

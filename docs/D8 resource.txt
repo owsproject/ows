@@ -1,2 +1,57 @@
 Settings form: https://www.drupal.org/node/2206607
 Scrollbar: http://nicescroll.areaaperta.com/demo.html
+
+
+form: http://www.trellon.com/content/blog/how-create-custom-form-in-drupal-8
+Save user: http://drupal8.ovh/en/tutoriels/13/create-a-user-account-programmatically-drupal-8
+
+---------------------
+$node = \Drupal\node\Entity\Node::create(array(
+          'type' => 'article',
+          'title' => 'The title',
+          'langcode' => 'en',
+          'uid' => 1,
+          'status' => 1,
+          'body' => array('The body text'),
+          'field_date' => array("2000-01-30"),
+    ));
+$node->save();
+
+
+---------------------
+// get user register form
+    	/*$entity = \Drupal::entityManager()->getStorage('user')->create(array());
+    	$formObject = \Drupal::entityManager()->getFormObject('user', 'register')->setEntity($entity);
+		$form = \Drupal::formBuilder()->getForm($formObject);
+		return $form;*/
+
+
+---------------------
+This renders within a block plugin:
+http://drupal.stackexchange.com/questions/147000/programmatically-get-a-form-in-drupal-8
+
+---------------------
+How to render a views programmatically in drupal 8?
+http://dropbucket.org/node/6605
+
+---------------------
+
+
+
+---------------------
+
+
+
+---------------------
+
+
+
+---------------------
+
+
+
+---------------------
+
+
+
+---------------------
