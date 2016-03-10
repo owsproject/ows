@@ -38,12 +38,14 @@ class JoinContestForm extends FormBase {
 
 		$form['last_name'] = array(
 			'#type' => 'textfield',
-			'#title' => 'Last Name'
+			'#title' => 'Last Name',
+			'#required' => true
 		);
 
 		$form['last_name'] = array(
 			'#type' => 'textfield',
-			'#title' => 'Last Name'
+			'#title' => 'Last Name',
+			'#required' => true
 		);
 
 		$form['birthday'] = array(
@@ -80,6 +82,23 @@ class JoinContestForm extends FormBase {
 		$form['hair'] = array(
 			'#type' => 'textfield',
 			'#title' => 'Hair Color'
+		);
+
+		$form['voice'] = array(
+			'#type' => 'file',
+			'#title' => 'Voice'
+		);
+
+		$form['terms'] = array(
+			'#type' => 'checkbox',
+			'#title' => 'Accept terms',
+			'#required' => true
+		);
+
+		$form['rule'] = array(
+			'#type' => 'checkbox',
+			'#title' => 'Accept rule',
+			'#required' => true
 		);
 
 		$form['voice'] = array(
