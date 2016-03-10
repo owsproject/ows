@@ -88,9 +88,9 @@ Dialog styles
 .ui-dialog {
 	-moz-border-radius: 8px;
     -webkit-border-radius: 8px;
-    border-width: 2px;
+    border-width: 10px;
     border-radius: 8px;
-    border-color: #DD0946;
+    border-color: #252525;
     background: rgba(7, 16, 20, 0.8) none repeat scroll 0 0;
 }
 

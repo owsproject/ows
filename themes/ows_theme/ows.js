@@ -48,6 +48,7 @@ jQuery(document).ready(function() {
     		width: 500,
     		height: 500,
     		fluid: true,
+    		minWidth: 470,
     		//width: 'auto',
             //height: 'auto',
     		open: function( event, ui ) {
