@@ -116,7 +116,11 @@ Dialog styles
 .ui-dialog .ui-dialog-titlebar {
 	background: transparent none repeat scroll 0 0;
     border: medium none;
-    color: #fff !important;
+}
+
+.ui-dialog .ui-dialog-titlebar span {
+	color: #fff !important;
+    font-size: 18px;
 }
 
 #block-ows-theme-content .form-item label {
@@ -133,4 +137,22 @@ Dialog styles
     float: left;
     margin: 5px 0;
     width: 100%;
+}
+
+#join-contest-form #edit-terms,
+#join-contest-form #edit-rule {
+	float: none;
+	width: auto;
+}
+
+#join-contest-form #edit-submit {
+	margin-left: 120px;
+}
+
+.ui-dialog h2.dialog-title {
+	display: none;
+}
+
+.nicescroll-rails > div {
+	border-color: #888 !important;
 }

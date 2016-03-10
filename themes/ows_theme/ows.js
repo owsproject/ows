@@ -19,7 +19,9 @@ jQuery(document).ready(function() {
 			text: jQuery('#welcome-box').html(),
 			html: true,
 			customClass: 'twitter',
-			showConfirmButton: false
+			showConfirmButton: false,
+			allowEscapeKey: false,
+			allowOutsideClick: false
 			//allowEscapeKey: false
 		});
 
@@ -40,16 +42,33 @@ jQuery(document).ready(function() {
 		});
 
     	swal.close();
+    	// read jquery ui dialog documentation
     	jQuery('.dialog').dialogr({
     		autoResize: true,
-    		width: 650,
-    		height: 600,
+    		width: 500,
+    		height: 500,
     		fluid: true,
     		//width: 'auto',
             //height: 'auto',
     		open: function( event, ui ) {
     			w = jQuery('.ui-dialog-content').width();
 				jQuery('.ui-dialog').width(w);
+
+				// title
+				t = jQuery('.dialog-title').html();
+				if (t) {
+					jQuery('.ui-dialog-titlebar > span').html(t);
+				}
+
+				// title for register dialog
+				if (jQuery("#user-register-form").length) {
+					jQuery('.ui-dialog-titlebar > span').html('Enter Contest');
+				}
+
+				jQuery(".ui-dialog-content").niceScroll();
+    		},
+    		dragStop: function(event, ui) {
+    			jQuery(".ui-dialog-content").getNiceScroll().resize();	
     		}
     	});
     });

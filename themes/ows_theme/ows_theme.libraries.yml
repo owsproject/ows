@@ -11,6 +11,7 @@ global-styling:
   js:
     js/jquery.browser.min.js: {}
     js/jquery.nicescroll.min.js: {}
+    js/jquery.nicescroll.plus.js: {}
     js/jquery.splashscreen.js: {}
     js/ui.dialogr.js: {}
     js/jquery.cookie.js: {}
