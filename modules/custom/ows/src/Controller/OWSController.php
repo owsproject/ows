@@ -92,7 +92,8 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
 			'#weight' => 21
 		);
 
-		$form['account']['actions']['submit']['#value']->string = "Enter";
+		$form['#action'] = '/user/register';
+
 
 		kint($form);
 		return $form;
