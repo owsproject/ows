@@ -66,6 +66,7 @@ jQuery(document).ready(function() {
 				}
 
 				jQuery(".ui-dialog-content").niceScroll();
+				jQuery("#user-register-form #edit-submit").val("Enter");
     		},
     		dragStop: function(event, ui) {
     			jQuery(".ui-dialog-content").getNiceScroll().resize();	
