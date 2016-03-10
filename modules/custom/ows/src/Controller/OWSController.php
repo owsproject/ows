@@ -48,6 +48,9 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
 
 		$html .= '<div class="dialog">Homepage</div>';
 
+		//$user = \Drupal\user\Entity\User::load(\Drupal::currentUser()->id());
+		//kint($user);
+
 		return array('#type' => 'markup', '#markup' => $html);
 	}
 
@@ -59,12 +62,26 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
 		);*/
 
     	// get user register form
-    	/*$entity = \Drupal::entityManager()->getStorage('user')->create(array());
+    	$entity = \Drupal::entityManager()->getStorage('user')->create(array());
     	$formObject = \Drupal::entityManager()->getFormObject('user', 'register')->setEntity($entity);
 		$form = \Drupal::formBuilder()->getForm($formObject);
-		return $form;*/
 
+		// Adjust form fields
+		// only allow contestant role (use css to hide this field)
+		$form['account']['roles']['#options'] = array(
+			'contestant' => "Contestant"
+		);
+		unset($form['account']['roles']['administrator']);
+		unset($form['account']['roles']['voter']);
 
+		unset($form['account']['notify']);
+		unset($form['timezone']);
+		unset($form['contact']);
+
+		kint($form);
+		return $form;
+
+		// custom form
 		$form = \Drupal::formBuilder()->getForm('\Drupal\ows\JoinContestForm');
 		return $form;
 		

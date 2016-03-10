@@ -16,6 +16,8 @@ class JoinContestForm extends FormBase {
 	public function buildForm(array $form, FormStateInterface $form_state) {
 		$form = array();
 
+		$form['header'] = array('#markup' => '<h2 class="dialog-title">Enter Contest</h2>');
+
 		$form['first_name'] = array(
 			'#type' => 'textfield',
 			'#title' => 'First Name',
@@ -45,6 +47,12 @@ class JoinContestForm extends FormBase {
 		$form['last_name'] = array(
 			'#type' => 'textfield',
 			'#title' => 'Last Name',
+			'#required' => true
+		);
+
+		$form['email'] = array(
+			'#type' => 'email',
+			'#title' => 'Email',
 			'#required' => true
 		);
 
@@ -121,7 +129,30 @@ class JoinContestForm extends FormBase {
 	}
 
 	public function submitForm(array &$form, FormStateInterface $form_state) {
-		/*drupal_set_message($this->t('Your phone number is @number', array('@number' => $form_state->getValue('phone_number'))));*/
+		$lang = \Drupal::languageManager()->getCurrentLanguage()->getId();
+    	$user = \Drupal\user\Entity\User::create();
+
+    	$form_state->setRebuild(FALSE);
+    	$user->setUsername($form_state->getValue('email'));
+	    $user->setPassword('Bosco');
+	    $user->setEmail($form_state->getValue('email'));
+	    $user->enforceIsNew();  // Set this to FALSE if you want to edit (resave) an existing user object
+	 
+		// Optional settings  <-- Thanks to http://drupal8.ovh/ for these suggestions!
+	    $user->set("init", $form_state->getValue(''));
+	    $user->set("langcode", $lang);
+	    $user->set("preferred_langcode", $lang);
+	    $user->set("preferred_admin_langcode", $lang);
+	    //$user->set("setting_name", 'setting_value');
+	    //$user->addRole(10);
+	    $user->roles = array(
+	    	'authenticated' => 'Authenticated user',
+	    	'contestant' => 'Contestant',
+	    );
+	    $user->activate();
+	 	kint($user);
+		// Save user
+	    $result = $user->save();
 	}
 
 }
