@@ -78,6 +78,22 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
 		unset($form['timezone']);
 		unset($form['contact']);
 
+		$form['terms'] = array(
+			'#type' => 'checkbox',
+			'#title' => 'Accept terms',
+			'#required' => true,
+			'#weight' => 20
+		);
+
+		$form['rule'] = array(
+			'#type' => 'checkbox',
+			'#title' => 'Accept rule',
+			'#required' => true,
+			'#weight' => 21
+		);
+
+		$form['account']['actions']['submit']['#value']->string = "Enter";
+
 		kint($form);
 		return $form;
 
