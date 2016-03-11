@@ -99,10 +99,7 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
 			$form = \Drupal::formBuilder()->getForm('\Drupal\ows\JoinContestForm');
 			return $form;
 		} elseif ($type == "browse") {
-			$view = \Drupal\views\Views::getView('browse');
-			$view->setDisplay('master');
-			$html = $view->render();
-			kint($html);
+			$html = \Drupal::service('renderer')->render(views_embed_view('browse', 'default'));
 		}
 		
         return array('#type' => 'markup', '#markup' => $html);
