@@ -13,25 +13,42 @@ jQuery(document).ready(function() {
 		]
 	});	*/
 	
-	if (jQuery('body').hasClass('path-frontpage')) {
-		swal({
-			title: 'Welcome to OWS',
-			text: jQuery('#welcome-box').html(),
-			html: true,
-			customClass: 'twitter',
-			showConfirmButton: false,
-			allowEscapeKey: false,
-			allowOutsideClick: false
-			//allowEscapeKey: false
-		});
+	user_option = jQuery.cookie('user.option');
 
-		jQuery('#block-ows-theme-content #welcome-box').remove();
-		jQuery('.sweet-alert').center();
+	if (user_option === undefined) {
+		if (jQuery('body').hasClass('path-frontpage')) {
+			swal({
+				title: 'Welcome to OWS',
+				text: jQuery('#welcome-box').html(),
+				html: true,
+				customClass: 'twitter',
+				showConfirmButton: false,
+				allowEscapeKey: true, // turn on for debug only
+				allowOutsideClick: false
+				//allowEscapeKey: false
+			});
+
+			jQuery('#block-ows-theme-content #welcome-box').remove();
+			jQuery('.sweet-alert').center();
+		}
+	} else {
+		// browse website
+		jQuery.ajax({
+			url: "/ajax-content",
+			data: {type: "browse"},
+			async: false, 
+			success: function(data) {
+				jQuery('.dialog').html(data);
+			}
+		});
 	}
 
-
+	// ------------------------------
     // enter contest
     jQuery('#btn-enter-contest').on('click', function() {
+    	// write cookie
+    	jQuery.cookie('user.option', 'enter-contest');
+
     	jQuery.ajax({
 			url: "/ajax-content",
 			data: {type: "register"},
@@ -74,6 +91,12 @@ jQuery(document).ready(function() {
     		}
     	});
     });
+
+    // ------------------------------
+    // Vote
+
+    // ------------------------------
+    // Browse
 });
 
 jQuery.fn.center = function () {

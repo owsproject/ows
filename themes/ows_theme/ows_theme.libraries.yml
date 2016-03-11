@@ -21,3 +21,4 @@ global-styling:
     - core/jquery
     - core/jquery.ui.dialog
     - core/jquery.ui.widget
+    - core/drupalSettings
