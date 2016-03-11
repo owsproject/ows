@@ -59,37 +59,6 @@ jQuery(document).ready(function() {
 		});
 
     	swal.close();
-    	// read jquery ui dialog documentation
-    	jQuery('.dialog').dialogr({
-    		autoResize: true,
-    		width: 500,
-    		height: 500,
-    		fluid: true,
-    		minWidth: 470,
-    		//width: 'auto',
-            //height: 'auto',
-    		open: function( event, ui ) {
-    			w = jQuery('.ui-dialog-content').width();
-				jQuery('.ui-dialog').width(w);
-
-				// title
-				t = jQuery('.dialog-title').html();
-				if (t) {
-					jQuery('.ui-dialog-titlebar > span').html(t);
-				}
-
-				// title for register dialog
-				if (jQuery("#user-register-form").length) {
-					jQuery('.ui-dialog-titlebar > span').html('Enter Contest');
-				}
-
-				jQuery(".ui-dialog-content").niceScroll();
-				jQuery("#user-register-form #edit-submit").val("Enter");
-    		},
-    		dragStop: function(event, ui) {
-    			jQuery(".ui-dialog-content").getNiceScroll().resize();	
-    		}
-    	});
     });
 
     // ------------------------------
@@ -97,6 +66,40 @@ jQuery(document).ready(function() {
 
     // ------------------------------
     // Browse
+
+    // ------------------------------
+    // dialog content
+    // read jquery ui dialog documentation
+	jQuery('.dialog').dialogr({
+		autoResize: true,
+		width: 500,
+		height: 500,
+		fluid: true,
+		minWidth: 470,
+		//width: 'auto',
+        //height: 'auto',
+		open: function( event, ui ) {
+			w = jQuery('.ui-dialog-content').width();
+			jQuery('.ui-dialog').width(w);
+
+			// title
+			t = jQuery('.dialog-title').html();
+			if (t) {
+				jQuery('.ui-dialog-titlebar > span').html(t);
+			}
+
+			// title for register dialog
+			if (jQuery("#user-register-form").length) {
+				jQuery('.ui-dialog-titlebar > span').html('Enter Contest');
+			}
+
+			jQuery(".ui-dialog-content").niceScroll();
+			jQuery("#user-register-form #edit-submit").val("Enter");
+		},
+		dragStop: function(event, ui) {
+			jQuery(".ui-dialog-content").getNiceScroll().resize();	
+		}
+	});
 });
 
 jQuery.fn.center = function () {
