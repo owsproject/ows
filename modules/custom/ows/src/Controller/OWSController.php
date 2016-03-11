@@ -56,51 +56,54 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
 
     public function ajaxContent() {
     	$type = $_REQUEST['type'];
-    	/*$form['name'] = array(
-		    '#type' => 'textfield',
-		    '#title' => t('Name'),
-		);*/
 
-    	// get user register form
-    	$entity = \Drupal::entityManager()->getStorage('user')->create(array());
-    	$formObject = \Drupal::entityManager()->getFormObject('user', 'register')->setEntity($entity);
-		$form = \Drupal::formBuilder()->getForm($formObject);
+		if ($type == "register") {
+	    	// get user register form
+	    	$entity = \Drupal::entityManager()->getStorage('user')->create(array());
+	    	$formObject = \Drupal::entityManager()->getFormObject('user', 'register')->setEntity($entity);
+			$form = \Drupal::formBuilder()->getForm($formObject);
 
-		// Adjust form fields
-		// only allow contestant role (use css to hide this field)
-		$form['account']['roles']['#options'] = array(
-			'contestant' => "Contestant"
-		);
-		unset($form['account']['roles']['administrator']);
-		unset($form['account']['roles']['voter']);
+			// Adjust form fields
+			// only allow contestant role (use css to hide this field)
+			$form['account']['roles']['#options'] = array(
+				'contestant' => "Contestant"
+			);
+			unset($form['account']['roles']['administrator']);
+			unset($form['account']['roles']['voter']);
 
-		unset($form['account']['notify']);
-		unset($form['timezone']);
-		unset($form['contact']);
+			unset($form['account']['notify']);
+			unset($form['timezone']);
+			unset($form['contact']);
 
-		$form['terms'] = array(
-			'#type' => 'checkbox',
-			'#title' => 'Accept terms',
-			'#required' => true,
-			'#weight' => 20
-		);
+			$form['terms'] = array(
+				'#type' => 'checkbox',
+				'#title' => 'Accept terms',
+				'#required' => true,
+				'#weight' => 20
+			);
 
-		$form['rule'] = array(
-			'#type' => 'checkbox',
-			'#title' => 'Accept rule',
-			'#required' => true,
-			'#weight' => 21
-		);
+			$form['rule'] = array(
+				'#type' => 'checkbox',
+				'#title' => 'Accept rule',
+				'#required' => true,
+				'#weight' => 21
+			);
 
-		$form['#action'] = '/user/register';
+			$form['#action'] = '/user/register';
 
 
-		kint($form);
-		return $form;
+			kint($form);
+			return $form;
 
-		// custom form
-		$form = \Drupal::formBuilder()->getForm('\Drupal\ows\JoinContestForm');
-		return $form;
+			// custom form
+			$form = \Drupal::formBuilder()->getForm('\Drupal\ows\JoinContestForm');
+			return $form;
+		} elseif ($type == "browse") {
+			$view = \Drupal\views\Views::getView('browse');
+			$view->setDisplay('master');
+			$html = $view->render();
+			kint($html);
+		}
 		
         return array('#type' => 'markup', '#markup' => $html);
     }
