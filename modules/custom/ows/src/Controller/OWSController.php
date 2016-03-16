@@ -50,7 +50,6 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
 
 		//$user = \Drupal\user\Entity\User::load(\Drupal::currentUser()->id());
 		//kint($user);
-
 		return array('#type' => 'markup', '#markup' => $html);
 	}
 
@@ -91,17 +90,23 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
 
 			$form['#action'] = '/user/register';
 
-
-			kint($form);
+			//kint($form);
 			return $form;
 
 			// custom form
-			$form = \Drupal::formBuilder()->getForm('\Drupal\ows\JoinContestForm');
-			return $form;
+			//$form = \Drupal::formBuilder()->getForm('\Drupal\ows\JoinContestForm');
+			//return $form;
 		} elseif ($type == "browse") {
-			$html = \Drupal::service('renderer')->render(views_embed_view('browse', 'default'));
+			$view = \Drupal::service('renderer')->render(views_embed_view('browse', 'default'));
+			$html = $view->__toString();
+		    return array('#type' => 'markup', '#markup' => $html);
 		}
-		
-        return array('#type' => 'markup', '#markup' => $html);
+
+		return array('#type' => 'markup', '#markup' => 'Hello');
     }
+
+    public function content() {
+    	return array('#type' => 'markup', '#markup' => 'Content');
+    }
+
 }

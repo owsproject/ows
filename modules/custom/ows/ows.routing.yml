@@ -15,9 +15,9 @@ ows.ajax_content:
     _permission: 'access content'
 
 ows.content:
-  path: '/ajax-content'
+  path: '/content'
   defaults:
-    _controller: 'Drupal\ows\Controller\OWSController::ajaxContent'
+    _controller: 'Drupal\ows\Controller\OWSController::content'
     _title: ''
   requirements:
     _permission: 'access content'
