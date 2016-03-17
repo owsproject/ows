@@ -70,6 +70,23 @@ jQuery(document).ready(function() {
 
     // ------------------------------
     // Browse
+    jQuery('#btn-browse').on('click', function() {
+    	// write cookie
+    	jQuery.cookie('user.option', 'browse');
+
+    	// browse website
+		jQuery.ajax({
+			url: "/ajax-content",
+			data: {type: "browse"},
+			async: false, 
+			success: function(data) {
+				dialog_title = 'Browse';
+				jQuery('.dialog').html(data);
+			}
+		});	
+
+    	swal.close();
+    });
 
     // ------------------------------
     // dialog content
