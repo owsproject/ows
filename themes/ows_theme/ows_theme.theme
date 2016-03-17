@@ -26,3 +26,9 @@ function ows_theme_page_attachments_alter(array &$attachments) {
 		$attachments['#attached']['drupalSettings']['user']['id'] = $user->id();
 	}
 }
+
+function ows_theme_theme_suggestions_page_alter(&$suggestions, &$vars) {
+	kint($vars);
+	kint($suggestions);
+	//$request = \Drupal::routeMatch()->getRouteObject()->getDefault('view_id');
+}

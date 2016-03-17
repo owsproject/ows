@@ -1,3 +1,5 @@
+var dialog_title;
+
 jQuery(document).ready(function() {
 	// nice scrollbar
     jQuery("html").niceScroll();
@@ -38,6 +40,7 @@ jQuery(document).ready(function() {
 			data: {type: "browse"},
 			async: false, 
 			success: function(data) {
+				dialog_title = 'Browse';
 				jQuery('.dialog').html(data);
 			}
 		});
@@ -54,6 +57,7 @@ jQuery(document).ready(function() {
 			data: {type: "register"},
 			async: false, 
 			success: function(data) {
+				dialog_title = 'Enter Contest';
 				jQuery('.dialog').html(data);
 			}
 		});
@@ -71,6 +75,7 @@ jQuery(document).ready(function() {
     // dialog content
     // read jquery ui dialog documentation
 	jQuery('.dialog').dialogr({
+		title: dialog_title,
 		autoResize: true,
 		width: 500,
 		height: 500,
@@ -83,6 +88,7 @@ jQuery(document).ready(function() {
 			jQuery('.ui-dialog').width(w);
 
 			// title
+			/*
 			t = jQuery('.dialog-title').html();
 			if (t) {
 				jQuery('.ui-dialog-titlebar > span').html(t);
@@ -92,11 +98,14 @@ jQuery(document).ready(function() {
 			if (jQuery("#user-register-form").length) {
 				jQuery('.ui-dialog-titlebar > span').html('Enter Contest');
 			}
+			*/
 
 			jQuery(".ui-dialog-content").niceScroll();
 			jQuery("#user-register-form #edit-submit").val("Enter");
 		},
+
 		dragStop: function(event, ui) {
+			// refresh scrollbar
 			jQuery(".ui-dialog-content").getNiceScroll().resize();	
 		}
 	});
