@@ -46,7 +46,9 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
   			</div>
 		</div>';
 
-		$html .= '<div class="dialog">Homepage</div>';
+		$html .= '<div class="dialog">Homepage</div>
+
+		<a href="/page/browse" class="use-ajax" data-accepts="application/vnd.drupal-modal">Browse</a>';
 
 		//$user = \Drupal\user\Entity\User::load(\Drupal::currentUser()->id());
 		//kint($user);
