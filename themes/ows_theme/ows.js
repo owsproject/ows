@@ -4,17 +4,6 @@ jQuery(document).ready(function() {
 	// nice scrollbar
     jQuery("html").niceScroll();
 
-	// splash screen
-
-	/*
-	jQuery('#splash-img').splashScreen({
-		textLayers : [
-			'/themes/ows_theme/images/thinner.png',
-			'/themes/ows_theme/images/more_elegant.png',
-			'/themes/ows_theme/images/our_new.png'
-		]
-	});	*/
-	
 	user_option = jQuery.cookie('user.option');
 
 	if (user_option === undefined) {
@@ -35,6 +24,7 @@ jQuery(document).ready(function() {
 		}
 	} else {
 		// browse website
+
 		jQuery.ajax({
 			url: "/ajax-content",
 			data: {type: "browse"},
@@ -88,45 +78,82 @@ jQuery(document).ready(function() {
     	swal.close();
     });
 
-    // ------------------------------
-    // dialog content
-    // read jquery ui dialog documentation
-	jQuery('.dialog').dialogr({
-		title: dialog_title,
-		autoResize: true,
-		width: 500,
-		height: 500,
-		fluid: true,
-		minWidth: 470,
-		//width: 'auto',
-        //height: 'auto',
-		open: function( event, ui ) {
-			w = jQuery('.ui-dialog-content').width();
-			jQuery('.ui-dialog').width(w);
+    // default dialog
+    openDialog();
+ 
 
-			// title
-			/*
-			t = jQuery('.dialog-title').html();
-			if (t) {
-				jQuery('.ui-dialog-titlebar > span').html(t);
+	Drupal.ajax({
+		url: 'page/browse',
+		data: 'html',
+		success: function(response) {
+	  	console.log(response);
+
+	  	// fetch object to get ajax response data
+	  	jQuery.each(response, function( key, value ) {			
+		  	if (value.command == 'insert' && value.method === null) {
+		    	content = jQuery('<div class="page-browse-dialog">' + value.data + '<a href="#nojs" class="use-ajax">Test</a></div>').appendTo('body');
+		    	jQuery('body').append(content);
+
+		    	openDialog('.page-browse-dialog', 'Browse', 750, 500, true, 'test();');
 			}
-
-			// title for register dialog
-			if (jQuery("#user-register-form").length) {
-				jQuery('.ui-dialog-titlebar > span').html('Enter Contest');
-			}
-			*/
-
-			jQuery(".ui-dialog-content").niceScroll();
-			jQuery("#user-register-form #edit-submit").val("Enter");
-		},
-
-		dragStop: function(event, ui) {
-			// refresh scrollbar
-			jQuery(".ui-dialog-content").getNiceScroll().resize();	
-		}
-	});
+		});
+	  }
+	}).execute();
 });
+
+function test() {
+	alert(1);
+}
+
+// ------------------------------
+// dialog content
+// read jquery ui dialog documentation
+function openDialog(element, title, width = 500, height = 500, is_new = false, callback = false) {
+	// default dialog
+	if (!is_new) {
+		jQuery('.dialog').dialogr({
+			title: dialog_title,
+			autoResize: true,
+			width: width,
+			height: height,
+			fluid: true,
+			minWidth: 470,
+			open: function( event, ui ) {
+				w = jQuery('.ui-dialog-content').width();
+				jQuery('.ui-dialog').width(w);
+
+				jQuery(".ui-dialog-content").niceScroll();
+				jQuery("#user-register-form #edit-submit").val("Enter");
+			},
+			dragStop: function(event, ui) {
+				// refresh scrollbar
+				jQuery(".ui-dialog-content").getNiceScroll().resize();	
+			}
+		});
+	} else {
+		jQuery(element).dialogr({
+			title: title,
+			autoResize: true,
+			width: width,
+			height: height,
+			fluid: true,
+			minWidth: 470,
+			open: function( event, ui ) {
+				w = jQuery('.ui-dialog-content').width();
+				jQuery('.ui-dialog').width(w);
+
+				jQuery(".ui-dialog-content").niceScroll();
+
+				// execute callback
+				eval(callback);
+			},
+			dragStop: function(event, ui) {
+				// refresh scrollbar
+				jQuery(".ui-dialog-content").getNiceScroll().resize();	
+			}
+		});
+	}
+}
 
 jQuery.fn.center = function () {
     this.css("position","absolute");
