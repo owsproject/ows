@@ -1,4 +1,5 @@
 var dialog_title;
+var dialogs = 0;
 
 jQuery(document).ready(function() {
 	// nice scrollbar
@@ -8,23 +9,10 @@ jQuery(document).ready(function() {
 
 	if (user_option === undefined) {
 		if (jQuery('body').hasClass('path-frontpage')) {
-			swal({
-				title: 'Welcome to OWS',
-				text: jQuery('#welcome-box').html(),
-				html: true,
-				customClass: 'twitter',
-				showConfirmButton: false,
-				allowEscapeKey: true, // turn on for debug only
-				allowOutsideClick: false
-				//allowEscapeKey: false
-			});
-
-			jQuery('#block-ows-theme-content #welcome-box').remove();
-			jQuery('.sweet-alert').center();
+			displayWelcome();
 		}
 	} else {
 		// browse website
-
 		jQuery.ajax({
 			url: "/ajax-content",
 			data: {type: "browse"},
@@ -35,25 +23,6 @@ jQuery(document).ready(function() {
 			}
 		});
 	}
-
-	// ------------------------------
-    // enter contest
-    jQuery('#btn-enter-contest').on('click', function() {
-    	// write cookie
-    	jQuery.cookie('user.option', 'enter-contest');
-
-    	jQuery.ajax({
-			url: "/ajax-content",
-			data: {type: "register"},
-			async: false, 
-			success: function(data) {
-				dialog_title = 'Enter Contest';
-				jQuery('.dialog').html(data);
-			}
-		});
-
-    	swal.close();
-    });
 
     // ------------------------------
     // Vote
@@ -81,24 +50,25 @@ jQuery(document).ready(function() {
     // default dialog
     openDialog();
  
+ 	try {
+		Drupal.ajax({
+			url: 'page/browse',
+			data: 'html',
+			success: function(response) {
+		  	console.log(response);
 
-	Drupal.ajax({
-		url: 'page/browse',
-		data: 'html',
-		success: function(response) {
-	  	console.log(response);
+		  	// fetch object to get ajax response data
+		  	jQuery.each(response, function( key, value ) {			
+			  	if (value.command == 'insert' && value.method === null) {
+			    	content = jQuery('<div class="page-browse-dialog">' + value.data + '<a href="#nojs" class="use-ajax">Test</a></div>').appendTo('body');
+			    	jQuery('body').append(content);
 
-	  	// fetch object to get ajax response data
-	  	jQuery.each(response, function( key, value ) {			
-		  	if (value.command == 'insert' && value.method === null) {
-		    	content = jQuery('<div class="page-browse-dialog">' + value.data + '<a href="#nojs" class="use-ajax">Test</a></div>').appendTo('body');
-		    	jQuery('body').append(content);
-
-		    	openDialog('.page-browse-dialog', 'Browse', 750, 500, true, 'test();');
-			}
-		});
-	  }
-	}).execute();
+			    	openDialog('.page-browse-dialog', 'Browse', 750, 500, true, 'test();');
+				}
+			});
+		  }
+		}).execute();
+	} catch (e) {}
 });
 
 function test() {
@@ -124,10 +94,15 @@ function openDialog(element, title, width = 500, height = 500, is_new = false, c
 
 				jQuery(".ui-dialog-content").niceScroll();
 				jQuery("#user-register-form #edit-submit").val("Enter");
+				dialogs++;
 			},
 			dragStop: function(event, ui) {
 				// refresh scrollbar
 				jQuery(".ui-dialog-content").getNiceScroll().resize();	
+			},
+			close: function(event, ui) {
+				if (dialogs > 0) dialogs--;
+				anyDialogActive();
 			}
 		});
 	} else {
@@ -146,12 +121,59 @@ function openDialog(element, title, width = 500, height = 500, is_new = false, c
 
 				// execute callback
 				eval(callback);
+				dialogs++;
 			},
 			dragStop: function(event, ui) {
 				// refresh scrollbar
 				jQuery(".ui-dialog-content").getNiceScroll().resize();	
+			},
+			close: function(event, ui) {
+				if (dialogs > 0) dialogs--;
+				anyDialogActive();
 			}
 		});
+	}
+}
+
+function displayWelcome() {
+	swal({
+		title: 'Welcome to OWS',
+		text: jQuery('#welcome-box').html(),
+		html: true,
+		customClass: 'twitter',
+		showConfirmButton: false,
+		allowEscapeKey: true, // turn on for debug only
+		allowOutsideClick: false
+		//allowEscapeKey: false
+	});
+
+	jQuery('#block-ows-theme-content #welcome-box').remove();
+	jQuery('.sweet-alert').center();
+
+	// ------------------------------
+    // enter contest
+    jQuery('#btn-enter-contest').on('click', function() {
+    	// write cookie
+    	jQuery.cookie('user.option', 'enter-contest');
+
+    	jQuery.ajax({
+			url: "/ajax-content",
+			data: {type: "register"},
+			async: false, 
+			success: function(data) {
+				dialog_title = 'Enter Contest';
+				jQuery('.dialog').html(data);
+			}
+		});
+
+    	swal.close();
+    });
+}
+
+function anyDialogActive() {
+	// no more dialog, display welcome mesasge
+	if(dialogs == 0) {
+		displayWelcome();
 	}
 }
 
