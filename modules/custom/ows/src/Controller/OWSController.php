@@ -100,7 +100,9 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
 			//return $form;
 		} elseif ($type == "browse") {
 			$view = \Drupal::service('renderer')->render(views_embed_view('browse', 'default'));
-			$html = $view->__toString();
+			kint($view);
+			if ($view) $html = $view->__toString();
+
 		    return array('#type' => 'markup', '#markup' => $html);
 		}
 
