@@ -42,13 +42,13 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
   					<a href="#enter-content" id="btn-enter-contest" class="button button-red enter-contest">Enter the Contest</a>
   					<a href="#vote" id="btn-sign" class="button button-red vote-contest">Vote in the Contest</a>
   					<a href="#browse" id="btn-browse" class="button button-red browse-website">Browse the Website</a>
+
+  					<a href="/user/register" id="btn-browse-s" class="button button-red use-ajax">Go</a>
   				</div>
   			</div>
 		</div>';
 
-		$html .= '<div class="dialog">Homepage</div>
-
-		<a href="/page/browse" class="use-ajax" data-accepts="application/vnd.drupal-modal">Browse</a>';
+		// $html .= '<div class="dialog">Homepage test</div>';
 
 		//$user = \Drupal\user\Entity\User::load(\Drupal::currentUser()->id());
 		//kint($user);
@@ -90,9 +90,16 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
 				'#weight' => 21
 			);
 
+			// avoid empty "action" rendered form
 			$form['#action'] = '/user/register';
+			$t = $form['actions']['submit']['#submit'];
+			unset($form['actions']['submit']['#submit']);
+			$form['actions']['submit']['#ajax'] = $t;
+			$form['actions']['submit']['#ajax']['accepts'] = 'application/vnd.drupal-modal';
 
-			//kint($form);
+			$form['actions']['submit']['#ajax_processed'] = true;
+
+			kint($form);
 			return $form;
 
 			// custom form
@@ -100,9 +107,7 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
 			//return $form;
 		} elseif ($type == "browse") {
 			$view = \Drupal::service('renderer')->render(views_embed_view('browse', 'default'));
-			kint($view);
 			if ($view) $html = $view->__toString();
-
 		    return array('#type' => 'markup', '#markup' => $html);
 		}
 
