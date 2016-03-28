@@ -1,5 +1,5 @@
-var dialog_title;
 var dialogs = 0;
+var welcome_box_content = false;
 
 jQuery(document).ready(function() {
 	// nice scrollbar
@@ -18,11 +18,74 @@ jQuery(document).ready(function() {
 			data: {type: "browse"},
 			async: false, 
 			success: function(data) {
-				dialog_title = 'Browse';
-				jQuery('.dialog').html(data);
+				// default dialog
+				openDialog('.dialog-browse', 'Browse', data);
 			}
 		});
+	} 
+ 
+ 	/*
+ 	try {
+		Drupal.ajax({
+			url: 'page/browse',
+			data: 'html',
+			success: function(response) {
+		  	console.log(response);
+
+		  	// fetch object to get ajax response data
+		  	jQuery.each(response, function( key, value ) {			
+			  	if (value.command == 'insert' && value.method === null) {
+			    	openDialog('.dialog-browse', 'Browse', value.data);
+			    	// openDialog('.page-browse-dialog', 'Browse', 750, 500, true, 'test();');
+				}
+			});
+		  }
+		}).execute();
+	} catch (e) {}
+	*/
+});
+
+function test() {
+	alert(1);
+}
+
+function displayWelcome() {
+	if (!welcome_box_content) {
+		welcome_box_content = jQuery('#block-ows-theme-content #welcome-box').html();
+		jQuery('#block-ows-theme-content #welcome-box').remove();
 	}
+
+	swal({
+		title: 'Welcome to OWS',
+		text: welcome_box_content,
+		html: true,
+		customClass: 'twitter',
+		showConfirmButton: false,
+		allowEscapeKey: true, // turn on for debug only
+		allowOutsideClick: false
+		//allowEscapeKey: false
+	});
+
+	jQuery('.sweet-alert').center();
+
+	// ------------------------------
+    // enter contest
+
+    jQuery('#btn-enter-contest').on('click', function() {
+    	// write cookie
+    	jQuery.cookie('user.option', 'enter-contest');
+
+    	jQuery.ajax({
+			url: "/ajax-content",
+			data: {type: "register"},
+			async: false, 
+			success: function(data) {
+				openDialog('.dialog-enter-contest', 'Enter Contest', data);
+			}
+		});
+
+    	swal.close();
+    });
 
     // ------------------------------
     // Vote
@@ -39,50 +102,71 @@ jQuery(document).ready(function() {
 			data: {type: "browse"},
 			async: false, 
 			success: function(data) {
-				dialog_title = 'Browse';
-				jQuery('.dialog').html(data);
+				openDialog('.dialog-browse', 'Browse', data);
 			}
 		});	
 
     	swal.close();
     });
-
-    // default dialog
-    openDialog();
- 
- 	try {
-		Drupal.ajax({
-			url: 'page/browse',
-			data: 'html',
-			success: function(response) {
-		  	console.log(response);
-
-		  	// fetch object to get ajax response data
-		  	jQuery.each(response, function( key, value ) {			
-			  	if (value.command == 'insert' && value.method === null) {
-			    	content = jQuery('<div class="page-browse-dialog">' + value.data + '<a href="#nojs" class="use-ajax">Test</a></div>').appendTo('body');
-			    	jQuery('body').append(content);
-
-			    	openDialog('.page-browse-dialog', 'Browse', 750, 500, true, 'test();');
-				}
-			});
-		  }
-		}).execute();
-	} catch (e) {}
-});
-
-function test() {
-	alert(1);
 }
 
-// ------------------------------
-// dialog content
-// read jquery ui dialog documentation
-function openDialog(element, title, width = 500, height = 500, is_new = false, callback = false) {
+/*
+------------------------------
+dialog content
+read jquery ui dialog documentation
+element: element class 
+title: dialog title
+data: dialog data
+width & height: dialog size
+is_new: create new dialog
+callback: callback for opened dialog
+*/
+function openDialog(element, title, data, width = 500, height = 500, is_new = false, callback = false) {
 	// default dialog
-	if (!is_new) {
+	// check dialog element 
+	if (!jQuery('.ui-dialog ' +element).length) {
+		jQuery('.ui-dialog ' +element).remove();
+	} else {
+		//jQuery(element).dialogr("open");
+	}
+	
+	// create dialog with content
+	jQuery('<div class="'+element.replace('.', '')+'" style="display:none;">' + data + '</div>').appendTo('body'); //<a href="#nojs" class="use-ajax">Test</a>
+
+	jQuery(element).dialogr({
+		title: title,
+		autoResize: true,
+		width: width,
+		height: height,
+		fluid: true,
+		minWidth: 470,
+		dialogClass: element.replace('.', ''),
+		open: function( event, ui ) {
+			w = jQuery(element + ' .ui-dialog-content').width();
+			jQuery(element + ' .ui-dialog').width(w);
+
+			jQuery(element + " .ui-dialog-content").niceScroll();
+
+			// execute callback
+			if (callback) eval(callback);
+			dialogs++;
+		},
+		dragStop: function(event, ui) {
+			// refresh scrollbar
+			jQuery(element + " .ui-dialog-content").getNiceScroll().resize();	
+		},
+		close: function(event, ui) {
+			if (dialogs > 0) dialogs--;
+			anyDialogActive();
+
+			// destroy dialog when close
+			jQuery(element).remove()
+		}
+	});
+
+	/*if (!is_new) {
 		jQuery('.dialog').dialogr({
-			title: dialog_title,
+			title: title,
 			autoResize: true,
 			width: width,
 			height: height,
@@ -105,69 +189,7 @@ function openDialog(element, title, width = 500, height = 500, is_new = false, c
 				anyDialogActive();
 			}
 		});
-	} else {
-		jQuery(element).dialogr({
-			title: title,
-			autoResize: true,
-			width: width,
-			height: height,
-			fluid: true,
-			minWidth: 470,
-			open: function( event, ui ) {
-				w = jQuery('.ui-dialog-content').width();
-				jQuery('.ui-dialog').width(w);
-
-				jQuery(".ui-dialog-content").niceScroll();
-
-				// execute callback
-				eval(callback);
-				dialogs++;
-			},
-			dragStop: function(event, ui) {
-				// refresh scrollbar
-				jQuery(".ui-dialog-content").getNiceScroll().resize();	
-			},
-			close: function(event, ui) {
-				if (dialogs > 0) dialogs--;
-				anyDialogActive();
-			}
-		});
-	}
-}
-
-function displayWelcome() {
-	swal({
-		title: 'Welcome to OWS',
-		text: jQuery('#welcome-box').html(),
-		html: true,
-		customClass: 'twitter',
-		showConfirmButton: false,
-		allowEscapeKey: true, // turn on for debug only
-		allowOutsideClick: false
-		//allowEscapeKey: false
-	});
-
-	jQuery('#block-ows-theme-content #welcome-box').remove();
-	jQuery('.sweet-alert').center();
-
-	// ------------------------------
-    // enter contest
-    jQuery('#btn-enter-contest').on('click', function() {
-    	// write cookie
-    	jQuery.cookie('user.option', 'enter-contest');
-
-    	jQuery.ajax({
-			url: "/ajax-content",
-			data: {type: "register"},
-			async: false, 
-			success: function(data) {
-				dialog_title = 'Enter Contest';
-				jQuery('.dialog').html(data);
-			}
-		});
-
-    	swal.close();
-    });
+	} else {*/
 }
 
 function anyDialogActive() {
