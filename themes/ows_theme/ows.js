@@ -2,6 +2,10 @@ var dialogs = 0;
 var welcome_box_content = false;
 
 jQuery(document).ready(function() {
+	jQuery("#my-dialog").dialogExtend({
+  		
+	});
+
 	// nice scrollbar
     jQuery("html").niceScroll();
 
@@ -19,7 +23,7 @@ jQuery(document).ready(function() {
 			async: false, 
 			success: function(data) {
 				// default dialog
-				openDialog('.dialog-browse', 'Browse', data);
+				//openDialog('.dialog-browse', 'Browse', data);
 			}
 		});
 	} 
@@ -133,7 +137,7 @@ function openDialog(element, title, data, width = 500, height = 500, is_new = fa
 	// create dialog with content
 	jQuery('<div class="'+element.replace('.', '')+'" style="display:none;">' + data + '</div>').appendTo('body'); //<a href="#nojs" class="use-ajax">Test</a>
 
-	jQuery(element).dialogr({
+	jQuery(element).dialog({
 		title: title,
 		autoResize: true,
 		width: width,

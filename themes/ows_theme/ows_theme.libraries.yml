@@ -12,13 +12,16 @@ global-styling:
     js/jquery.browser.min.js: {}
     js/jquery.nicescroll.min.js: {}
     js/jquery.nicescroll.plus.js: {}
-    js/jquery.splashscreen.js: {}
+    #js/jquery.splashscreen.js: {}
+    js/jquery.dialogextend.min.js: {}
     js/ui.dialogr.js: {}
     js/jquery.cookie.js: {}
     js/sweetalert.min.js: {}
     ows.js: {}
   dependencies:
     - core/jquery
+    - core/drupal.ajax
+    - core/drupal
     - core/jquery.ui.dialog
     - core/jquery.ui.widget
     - core/drupalSettings

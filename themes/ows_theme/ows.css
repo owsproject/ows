@@ -163,43 +163,43 @@ Dialog styles
 	border-color: #888 !important;
 }
 
-.ui-dialog #user-register-form #edit-status--wrapper,
-.ui-dialog #user-register-form #edit-account .description,
-.ui-dialog #user-register-form #edit-user-picture-wrapper .description,
-.ui-dialog #user-register-form #edit-name--description .description {
+.ui-dialog .user-register-form #edit-status--wrapper,
+.ui-dialog .user-register-form #edit-account .description,
+.ui-dialog .user-register-form #edit-user-picture-wrapper .description,
+.ui-dialog .user-register-form #edit-name--description .description {
 	display: none;
 }
 
-.ui-dialog #user-register-form .js-form-type-managed-file .form-submit {
+.ui-dialog .user-register-form .js-form-type-managed-file .form-submit {
 	font-size: 11px;
     font-weight: normal;
     padding: 4px;
     width: auto;
 }
 
-.ui-dialog #user-register-form .form-item .description,
-.ui-dialog #user-register-form .form-file {
+.ui-dialog .user-register-form .form-item .description,
+.ui-dialog .user-register-form .form-file {
 	font-size: 11px;
 }
 
-.ui-dialog #user-register-form,
-.ui-dialog #user-register-form .field--type-datetime h4 {
+.ui-dialog .user-register-form,
+.ui-dialog .user-register-form .field--type-datetime h4 {
 	font-size: 12px;
 	font-weight: normal;
 	color: #eee;
 }
 
-.ui-dialog #user-register-form .form-managed-file .form-submit {
+.ui-dialog .user-register-form .form-managed-file .form-submit {
 	/*margin-left: 120px;
     margin-top: 6px;*/
     margin-left: 10px;
 }
 
-.ui-dialog #user-register-form #edit-field-voice-wrapper .description {
+.ui-dialog .user-register-form #edit-field-voice-wrapper .description {
 	display: none;
 }
 
-.ui-dialog #user-register-form .field--type-datetime h4 {
+.ui-dialog .user-register-form .field--type-datetime h4 {
 	float: left;
 	width: 120px;
 	margin: 6px 0 0;
@@ -209,24 +209,24 @@ Dialog styles
 	float: left;
 }
 
-#user-register-form .form-checkbox {
+.ui-dialog .user-register-form .form-checkbox {
 	float: none !important;
 	width: auto !important;
 }
 
-#user-register-form #edit-actions #edit-submit {
+.ui-dialog .user-register-form #edit-actions #edit-submit {
 	margin-left: 120px;
 }
 
-#user-register-form .form-number {
+.ui-dialog .user-register-form .form-number {
 	width: 80px !important;
 }
 
-#user-register-form .form-select {
+.ui-dialog .user-register-form .form-select {
 	width: 85px !important;
 }
 
-#user-register-form #edit-field-voice-wrapper .form-file,
-#user-register-form #edit-user-picture-wrapper .form-file {
+.ui-dialog .user-register-form #edit-field-voice-wrapper .form-file,
+.ui-dialog .user-register-form #edit-user-picture-wrapper .form-file {
 	width: 150px;
 }
