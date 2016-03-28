@@ -30,7 +30,20 @@ class OWSController extends ControllerBase
 
 		}
 
-		$html = '<div id="welcome-box" class="" title="Welcome to OWS">
+		$dialog_option = json_encode(array(
+			'width' => '500',
+			'draggable' => 'true',
+			'dialogClass' => 'ows-dialog',
+			'resizable' => 'true',
+			'close' => 'function(event, ui) {alert(1);}',
+			'beforecreate' => 'function(event, ui) {alert(2)};'
+		));
+		
+		var_dump($dialog_option);
+
+		$html = "<a href='/user/register' class='use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_option."'>Go2</a>";
+		$html .= '
+		<div id="welcome-box" class="" title="Welcome to OWS">
 			<div class="welcome-wrapper">
   				<div class="welcome-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
 tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
@@ -42,8 +55,6 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
   					<a href="#enter-content" id="btn-enter-contest" class="button button-red enter-contest">Enter the Contest</a>
   					<a href="#vote" id="btn-sign" class="button button-red vote-contest">Vote in the Contest</a>
   					<a href="#browse" id="btn-browse" class="button button-red browse-website">Browse the Website</a>
-
-  					<a href="/user/register" id="btn-browse-s" class="button button-red use-ajax">Go</a>
   				</div>
   			</div>
 		</div>';
@@ -103,8 +114,8 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
 			return $form;
 
 			// custom form
-			//$form = \Drupal::formBuilder()->getForm('\Drupal\ows\JoinContestForm');
-			//return $form;
+			$form = \Drupal::formBuilder()->getForm('\Drupal\ows\JoinContestForm');
+			return $form;
 		} elseif ($type == "browse") {
 			$view = \Drupal::service('renderer')->render(views_embed_view('browse', 'default'));
 			if ($view) $html = $view->__toString();
