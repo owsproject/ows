@@ -39,8 +39,6 @@ class OWSController extends ControllerBase
 			'beforecreate' => 'function(event, ui) {alert(2)};'
 		));
 		
-		var_dump($dialog_option);
-
 		$html = "<a href='/user/register' class='use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_option."'>Go2</a>";
 		$html .= '
 		<div id="welcome-box" class="" title="Welcome to OWS">
