@@ -13,8 +13,8 @@ global-styling:
     js/jquery.nicescroll.min.js: {}
     js/jquery.nicescroll.plus.js: {}
     # js/jquery.splashscreen.js: {}
-    js/jquery.dialogextend.min.js: {}
-    # js/ui.dialogr.js: {}
+    #js/jquery.dialogextend.min.js: {}
+    js/ui.dialogr.js: {}
     js/jquery.cookie.js: {}
     js/sweetalert.min.js: {}
     ows.js: {}

@@ -2,10 +2,6 @@ var dialogs = 0;
 var welcome_box_content = false;
 
 jQuery(document).ready(function() {
-	jQuery("#my-dialog").dialogExtend({
-  		
-	});
-
 	// nice scrollbar
     jQuery("html").niceScroll();
 
@@ -145,6 +141,7 @@ function openDialog(element, title, data, width = 500, height = 500, is_new = fa
 		fluid: true,
 		minWidth: 470,
 		dialogClass: element.replace('.', ''),
+		'maximizable': true,
 		open: function( event, ui ) {
 			w = jQuery(element + ' .ui-dialog-content').width();
 			jQuery(element + ' .ui-dialog').width(w);
