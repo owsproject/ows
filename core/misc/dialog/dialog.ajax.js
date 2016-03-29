@@ -102,8 +102,6 @@
     }
     var $dialog = $(response.selector);
 
-    console.log($dialog.attr('id'));
-
     var dialogExtendOptions = {
       "closable" : true,
       "maximizable" : true,
@@ -112,8 +110,7 @@
       "collapsable" : true
     };
 
-
-    jQuery($dialog.attr('id')).dialogExtend();
+    //jQuery($dialog.attr('id')).dialog().dialogExtend(dialogExtendOptions);
 
     if (!$dialog.length) {
       // Create the element if needed.
