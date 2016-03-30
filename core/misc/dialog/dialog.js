@@ -32,10 +32,10 @@
     // closing.
     close: function (event) {
       Drupal.detachBehaviors(event.target, null, 'unload');
-      closeOWSDialog()
+      closeOWSDialog(event.target);
     },
     open: function (event) {
-      openOWSDialog();
+      openOWSDialog(event.target);
     }
   };
 
