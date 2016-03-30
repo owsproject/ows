@@ -31,11 +31,8 @@
     // `jQuery(event.target).remove()` as well, to remove the dialog on
     // closing.
     close: function (event) {
+      Drupal.dialog(event.target).close();
       Drupal.detachBehaviors(event.target, null, 'unload');
-      closeOWSDialog(event.target);
-    },
-    open: function (event) {
-      openOWSDialog(event.target);
     }
   };
 
@@ -64,27 +61,6 @@
    * @return {Drupal.dialog~dialogDefinition}
    */
   Drupal.dialog = function (element, options) {
-
-    function openDialog(settings) {
-      settings = $.extend({}, drupalSettings.dialog, options, settings);
-      // Trigger a global event to allow scripts to bind events to the dialog.
-      $(window).trigger('dialog:beforecreate', [dialog, $element, settings]);
-
-      $element.dialog(settings);
-      console.log(settings);
-      dialog.open = true;
-      
-      $(window).trigger('dialog:aftercreate', [dialog, $element, settings]);
-    }
-
-    function closeDialog(value) {
-      $(window).trigger('dialog:beforeclose', [dialog, $element]);
-      $element.dialog('close');
-      dialog.returnValue = value;
-      dialog.open = false;
-      $(window).trigger('dialog:afterclose', [dialog, $element]);
-    }
-
     var undef;
     var $element = $(element);
     var dialog = {
@@ -98,6 +74,23 @@
       },
       close: closeDialog
     };
+
+    function openDialog(settings) {
+      settings = $.extend({}, drupalSettings.dialog, options, settings);
+      // Trigger a global event to allow scripts to bind events to the dialog.
+      $(window).trigger('dialog:beforecreate', [dialog, $element, settings]);
+      $element.dialog(settings);
+      dialog.open = true;
+      $(window).trigger('dialog:aftercreate', [dialog, $element, settings]);
+    }
+
+    function closeDialog(value) {
+      $(window).trigger('dialog:beforeclose', [dialog, $element]);
+      $element.dialog('close');
+      dialog.returnValue = value;
+      dialog.open = false;
+      $(window).trigger('dialog:afterclose', [dialog, $element]);
+    }
 
     return dialog;
   };

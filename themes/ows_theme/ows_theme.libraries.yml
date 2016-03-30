@@ -23,5 +23,6 @@ global-styling:
     - core/drupal.ajax
     - core/drupal
     - core/jquery.ui.dialog
+    - core/drupal.dialog.ajax
     - core/jquery.ui.widget
     - core/drupalSettings

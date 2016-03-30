@@ -29,7 +29,6 @@
       // Special behaviors specific when attaching content within a dialog.
       // These behaviors usually fire after a validation error inside a dialog.
       var $dialog = $context.closest('.ui-dialog-content');
-      
       if ($dialog.length) {
         // Remove and replace the dialog buttons with those from the new form.
         if ($dialog.dialog('option', 'drupalAutoButtons')) {
@@ -101,22 +100,10 @@
       return false;
     }
     var $dialog = $(response.selector);
-
-    var dialogExtendOptions = {
-      "closable" : true,
-      "maximizable" : true,
-      "minimizable" : true,
-      "minimizeLocation" : true,
-      "collapsable" : true
-    };
-
-    //jQuery($dialog.attr('id')).dialog().dialogExtend(dialogExtendOptions);
-
     if (!$dialog.length) {
       // Create the element if needed.
       $dialog = $('<div id="' + response.selector.replace(/^#/, '') + '" class="ui-front"/>').appendTo('body');
     }
-
     // Set up the wrapper, if there isn't one.
     if (!ajax.wrapper) {
       ajax.wrapper = $dialog.attr('id');
@@ -141,7 +128,6 @@
 
     // Open the dialog itself.
     response.dialogOptions = response.dialogOptions || {};
-
     var dialog = Drupal.dialog($dialog.get(0), response.dialogOptions);
     if (response.dialogOptions.modal) {
       dialog.showModal();

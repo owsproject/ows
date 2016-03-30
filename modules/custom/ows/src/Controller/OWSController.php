@@ -33,11 +33,7 @@ class OWSController extends ControllerBase
 		$enter_contest = json_encode(array(
 			'title' => 'Enter the Contest',
 			'width' => '600',
-			'draggable' => true,
 			'dialogClass' => 'dialog-enter-contest',
-			'resizable' => true,
-			'dialog:beforecreate' => 'dialogCreated',
-			'beforecreate' => 'dialogCreated',
 		));
 		
 		//$html = "<a href='/user/register' class='use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_option."'>Go2</a>";

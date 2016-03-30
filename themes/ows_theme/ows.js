@@ -50,7 +50,7 @@ function test() {
 }
 
 function displayWelcome() {
-	if (!welcome_box_content) {
+	if (!welcome_box_content && jQuery('#block-ows-theme-content #welcome-box').length) {
 		welcome_box_content = jQuery('#block-ows-theme-content #welcome-box').html();
 
 		// enter contest button
@@ -128,6 +128,9 @@ function openOWSDialog(target) {
 	obj = jQuery(target);
 	obj.niceScroll();
 	obj.parent().find('span.ui-button-text').html("Enter the Contest");
+	obj.parent().find('.user-register-form').submit(function(e) {
+		
+	});
 }
 
 function closeOWSDialog(target) {
