@@ -32,6 +32,10 @@
     // closing.
     close: function (event) {
       Drupal.detachBehaviors(event.target, null, 'unload');
+      closeOWSDialog()
+    },
+    open: function (event) {
+      openOWSDialog();
     }
   };
 
@@ -67,6 +71,7 @@
       $(window).trigger('dialog:beforecreate', [dialog, $element, settings]);
 
       $element.dialog(settings);
+      console.log(settings);
       dialog.open = true;
       
       $(window).trigger('dialog:aftercreate', [dialog, $element, settings]);
