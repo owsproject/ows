@@ -6,22 +6,22 @@ jQuery(document).ready(function() {
     jQuery("html").niceScroll();
 
 	user_option = jQuery.cookie('user.option');
-
 	if (user_option === undefined) {
 		if (jQuery('body').hasClass('path-frontpage')) {
 			displayWelcome();
 		}
 	} else {
-		// browse website
+		displayWelcome();
+		/*// browse website
 		jQuery.ajax({
 			url: "/ajax-content",
 			data: {type: "browse"},
 			async: false, 
 			success: function(data) {
 				// default dialog
-				//openDialog('.dialog-browse', 'Browse', data);
+				openDialog('.dialog-browse', 'Browse', data);
 			}
-		});
+		});*/
 	} 
  
  	/*
@@ -52,7 +52,13 @@ function test() {
 function displayWelcome() {
 	if (!welcome_box_content) {
 		welcome_box_content = jQuery('#block-ows-theme-content #welcome-box').html();
-		jQuery('#block-ows-theme-content #welcome-box').remove();
+
+		// enter contest button
+		// replace button ID
+		welcome_box_content = welcome_box_content.replace('btn-enter-contest', 'sa-btn-enter-contest');
+		// replace href to avoid dialog ajax error
+		welcome_box_content = welcome_box_content.replace('/user/register', '#enter-contest');
+		// jQuery('#block-ows-theme-content #welcome-box').remove();
 	}
 
 	swal({
@@ -68,9 +74,15 @@ function displayWelcome() {
 
 	jQuery('.sweet-alert').center();
 
+	// blind click event for button - click this button will trigger drupal button 
+	jQuery('.sweet-alert #sa-btn-enter-contest').on('click', function() {
+		swal.close();
+  		jQuery('.layout-content #btn-enter-contest').trigger('click');
+	});
+
 	// ------------------------------
     // enter contest
-
+    /*
     jQuery('#btn-enter-contest').on('click', function() {
     	// write cookie
     	jQuery.cookie('user.option', 'enter-contest');
@@ -85,7 +97,7 @@ function displayWelcome() {
 		});
 
     	swal.close();
-    });
+    });*/
 
     // ------------------------------
     // Vote
@@ -108,6 +120,14 @@ function displayWelcome() {
 
     	swal.close();
     });
+}
+
+function openOWSDialog() {
+	alert('open');
+}
+
+function closeOWSDialog() {
+	alert('close');
 }
 
 /*
