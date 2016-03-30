@@ -31,12 +31,12 @@ class OWSController extends ControllerBase
 		}
 
 		$dialog_option = json_encode(array(
-			'width' => '500',
+			'width' => '600',
 			'draggable' => 'true',
 			'dialogClass' => 'ows-dialog',
 			'resizable' => 'true',
-			'close' => 'function(event, ui) {alert(1);}',
-			'beforecreate' => 'function(event, ui) {alert(2)};'
+			'dialog:beforecreate' => 'dialogCreated',
+			'beforecreate' => 'dialogCreated',
 		));
 		
 		$html = "<a href='/user/register' class='use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_option."'>Go2</a>";
@@ -48,14 +48,16 @@ tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
 quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
 consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
 cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
-  				<div class="buttons">
-  					<a href="#enter-content" id="btn-enter-contest" class="button button-red enter-contest">Enter the Contest</a>
-  					<a href="#vote" id="btn-sign" class="button button-red vote-contest">Vote in the Contest</a>
-  					<a href="#browse" id="btn-browse" class="button button-red browse-website">Browse the Website</a>
+proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
+
+		$html .= "
+  				<div class='buttons'>
+  					<a id='btn-enter-contest' class='use-ajax button button-red enter-contest' href='/user/register' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_option."'>Enter the Contest</a>
+  					<a href='#vote' id='btn-sign' class='button button-red vote-contest'>Vote in the Contest</a>
+  					<a href='#browse' id='btn-browse' class='button button-red browse-website'>Browse the Website</a>
   				</div>
   			</div>
-		</div>';
+		</div>";
 
 		// $html .= '<div class="dialog">Homepage test</div>';
 
