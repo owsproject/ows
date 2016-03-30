@@ -164,10 +164,7 @@ Dialog styles
 }
 
 /* Enter contest form styles */
-.ui-dialog .user-register-form #edit-status--wrapper,
-.ui-dialog .user-register-form div.description,
-.ui-dialog .user-register-form #edit-user-picture-wrapper .description,
-.ui-dialog .user-register-form #edit-name--description .description {
+.ui-dialog .user-register-form div.description {
 	display: none;
 }
 
@@ -196,7 +193,7 @@ Dialog styles
     margin-left: 10px;
 }
 
-.ui-dialog .user-register-form #edit-field-voice-wrapper .description {
+.ui-dialog .user-register-form .field--name-field-voice.form-wrapper .description {
 	display: none;
 }
 
@@ -206,7 +203,7 @@ Dialog styles
 	margin: 6px 0 0;
 }
 
-#edit-field-birthday-wrapper > div {
+.ui-dialog .field--name-field-birthday > div {
 	float: left;
 }
 
@@ -220,14 +217,46 @@ Dialog styles
 }
 
 .ui-dialog .user-register-form .form-number {
-	width: 80px !important;
+	
 }
 
 .ui-dialog .user-register-form .form-select {
-	width: 85px !important;
+	width: 126px !important;
 }
 
 .ui-dialog .user-register-form #edit-field-voice-wrapper .form-file,
 .ui-dialog .user-register-form #edit-user-picture-wrapper .form-file {
 	width: 150px;
+}
+
+.ui-dialog .user-register-form .form-item label {
+	float: left;
+	width: 120px;
+}
+
+.ui-dialog .user-register-form .form-item {
+	margin: 6px 0;
+}
+
+.ui-dialog .user-register-form input {
+	width: 120px;
+}
+
+.ui-dialog .form-wrapper {
+	clear: both;
+}
+
+.ui-dialog-buttonpane {
+	position: relative;
+	z-index: 9999;
+	background: transparent none repeat scroll 0 0;
+    border-top: 1px solid #666;
+}
+
+.ui-dialog-buttonpane button.button--primary .ui-button-text {
+	color: #fff !important;
+}
+
+#ui-datepicker-div {
+	z-index: 9999;
 }

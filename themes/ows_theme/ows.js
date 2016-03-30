@@ -122,12 +122,17 @@ function displayWelcome() {
     });
 }
 
-function openOWSDialog() {
-	alert('open');
+function openOWSDialog(target) {
+	dialogs++;
+	// get dialog object
+	obj = jQuery(target);
+	obj.niceScroll();
+	obj.parent().find('span.ui-button-text').html("Enter the Contest");
 }
 
-function closeOWSDialog() {
-	alert('close');
+function closeOWSDialog(target) {
+	dialogs--;
+	if (dialogs == 0) displayWelcome();
 }
 
 /*
@@ -153,7 +158,7 @@ function openDialog(element, title, data, width = 500, height = 500, is_new = fa
 	// create dialog with content
 	jQuery('<div class="'+element.replace('.', '')+'" style="display:none;">' + data + '</div>').appendTo('body'); //<a href="#nojs" class="use-ajax">Test</a>
 
-	jQuery(element).dialog({
+	jQuery(element).dialogr({
 		title: title,
 		autoResize: true,
 		width: width,
