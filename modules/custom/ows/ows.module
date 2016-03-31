@@ -1,0 +1,10 @@
+<?php
+
+function ows_preprocess_html(&$variables) {
+	$variables['page']['#attached']['library'][] = 'modal/modal';
+	$variables['page']['#attached']['library'][] = 'core/drupal.ajax';
+}
+
+function ows_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+	//kint($form_id);
+}

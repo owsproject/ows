@@ -37,3 +37,10 @@ ows.join_contest_form:
       _title: 'Join Contest'
   requirements:
       _permission: 'access content'
+
+ows.enter_contest:
+  path: '/enter-contest'
+  defaults:
+    _form: '\Drupal\ows\Form\EnterContestForm'
+  requirements:
+      _access: 'TRUE'

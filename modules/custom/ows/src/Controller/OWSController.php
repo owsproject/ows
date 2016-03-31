@@ -36,8 +36,8 @@ class OWSController extends ControllerBase
 			'dialogClass' => 'dialog-enter-contest',
 		));
 		
-		//$html = "<a href='/user/register' class='use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_option."'>Go2</a>";
-		$html = '
+		$html = "<a href='/user/register' class='use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options=''>Go2</a>";
+		$html .= '
 		<div id="welcome-box" class="" title="Welcome to OWS">
 			<div class="welcome-wrapper">
   				<div class="welcome-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
@@ -49,7 +49,7 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 
 		$html .= "
   				<div class='buttons'>
-  					<a id='btn-enter-contest' class='use-ajax button button-red enter-contest' href='/user/register' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$enter_contest."'>Enter the Contest</a>
+  					<a id='btn-enter-contest' class='use-ajax button button-red enter-contest' href='/enter-contest' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$enter_contest."'>Enter the Contest</a>
   					<a href='#vote' id='btn-sign' class='button button-red vote-contest'>Vote in the Contest</a>
   					<a href='#browse' id='btn-browse' class='button button-red browse-website'>Browse the Website</a>
   				</div>

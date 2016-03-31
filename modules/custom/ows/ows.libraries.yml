@@ -1,0 +1,7 @@
+ows:
+  version: 1.x
+  js:
+    ows.js: {}
+  dependencies:
+    - core/jquery
+    - core/ajax
