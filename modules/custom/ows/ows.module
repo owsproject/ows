@@ -7,8 +7,9 @@ function ows_preprocess_html(&$variables) {
 
 function ows_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
 	if($form_id == "user_register_form") {
-		$form['#attached']['library'][] = 'core/drupal.dialog.ajax';
-
+		
+		/*$form['#attached']['library'][] = 'core/drupal.dialog.ajax';
+		//kint($form);
 
 		$form['actions'] = array();
 		$form['actions']['#type'] = 'actions';
@@ -16,8 +17,8 @@ function ows_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state
             '#type' => 'submit',
             '#value' => 'Register',
             '#ajax' => array(
-                'callback' => 'Drupal\user\AccountForm::submitForm',
+                //'callback' => '::submitForm'
             )
-        );
+        );*/
 	}
 }

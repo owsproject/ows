@@ -58,68 +58,70 @@ function displayWelcome() {
 		welcome_box_content = welcome_box_content.replace('btn-enter-contest', 'sa-btn-enter-contest');
 		// replace href to avoid dialog ajax error
 		welcome_box_content = welcome_box_content.replace('/enter-contest', '#enter-contest');
-		jQuery('#block-ows-theme-content #welcome-box').remove();
+		// jQuery('#block-ows-theme-content #welcome-box').remove();
 	}
 
-	swal({
-		title: 'Welcome to OWS',
-		text: welcome_box_content,
-		html: true,
-		customClass: 'twitter',
-		showConfirmButton: false,
-		allowEscapeKey: true, // turn on for debug only
-		allowOutsideClick: false
-		//allowEscapeKey: false
-	});
-
-	jQuery('.sweet-alert').center();
-
-	// blind click event for button - click this button will trigger drupal button 
-	jQuery('.sweet-alert #sa-btn-enter-contest').on('click', function() {
-		swal.close();
-  		jQuery('.layout-content #btn-enter-contest').trigger('click');
-	});
-
-	// ------------------------------
-    // enter contest
-    /*
-    jQuery('#btn-enter-contest').on('click', function() {
-    	// write cookie
-    	jQuery.cookie('user.option', 'enter-contest');
-
-    	jQuery.ajax({
-			url: "/ajax-content",
-			data: {type: "register"},
-			async: false, 
-			success: function(data) {
-				openDialog('.dialog-enter-contest', 'Enter Contest', data);
-			}
+	if (welcome_box_content) {
+		swal({
+			title: 'Welcome to OWS',
+			text: welcome_box_content,
+			html: true,
+			customClass: 'twitter',
+			showConfirmButton: false,
+			allowEscapeKey: true, // turn on for debug only
+			allowOutsideClick: false
+			//allowEscapeKey: false
 		});
 
-    	swal.close();
-    });*/
+		jQuery('.sweet-alert').center();
 
-    // ------------------------------
-    // Vote
+		// blind click event for button - click this button will trigger drupal button 
+		jQuery('.sweet-alert #sa-btn-enter-contest').on('click', function() {
+			swal.close();
+	  		jQuery('.layout-content #btn-enter-contest').trigger('click');
+		});
 
-    // ------------------------------
-    // Browse
-    jQuery('#btn-browse').on('click', function() {
-    	// write cookie
-    	jQuery.cookie('user.option', 'browse');
+		// ------------------------------
+	    // enter contest
+	    /*
+	    jQuery('#btn-enter-contest').on('click', function() {
+	    	// write cookie
+	    	jQuery.cookie('user.option', 'enter-contest');
 
-    	// browse website
-		jQuery.ajax({
-			url: "/ajax-content",
-			data: {type: "browse"},
-			async: false, 
-			success: function(data) {
-				openDialog('.dialog-browse', 'Browse', data);
-			}
-		});	
+	    	jQuery.ajax({
+				url: "/ajax-content",
+				data: {type: "register"},
+				async: false, 
+				success: function(data) {
+					openDialog('.dialog-enter-contest', 'Enter Contest', data);
+				}
+			});
 
-    	swal.close();
-    });
+	    	swal.close();
+	    });*/
+
+	    // ------------------------------
+	    // Vote
+
+	    // ------------------------------
+	    // Browse
+	    jQuery('#btn-browse').on('click', function() {
+	    	// write cookie
+	    	jQuery.cookie('user.option', 'browse');
+
+	    	// browse website
+			jQuery.ajax({
+				url: "/ajax-content",
+				data: {type: "browse"},
+				async: false, 
+				success: function(data) {
+					openDialog('.dialog-browse', 'Browse', data);
+				}
+			});	
+
+	    	swal.close();
+	    });
+	}
 }
 
 function openOWSDialog(target) {

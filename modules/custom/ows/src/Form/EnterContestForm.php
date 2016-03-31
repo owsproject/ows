@@ -22,6 +22,7 @@ use Drupal\Core\Ajax\HtmlCommand;
  */
 class EnterContestForm extends FormBase {
 
+    var $user_empty;
     /**
     * {@inheritdoc}
     */
@@ -33,13 +34,8 @@ class EnterContestForm extends FormBase {
     * {@inheritdoc}
     */
     public function buildForm(array $form, FormStateInterface $form_state) {
-        $form['#attached']['library'][] = 'core/drupal.dialog.ajax';
+        //$form['#attached']['library'][] = 'core/drupal.dialog.ajax';
         
-        /*$entity = \Drupal::entityManager()->getStorage('user')->create(array());
-        $formObject = \Drupal::entityManager()->getFormObject('user', 'register')->setEntity($entity);
-        $form = \Drupal::formBuilder()->getForm($formObject);
-        */
-
         $form['mail'] = array(
             '#type' => 'email',
             '#title' => $this->t('Email'),
@@ -57,7 +53,8 @@ class EnterContestForm extends FormBase {
                     'message' => NULL,
                 ),
             ),
-            '#description' => ' '
+            '#description' => ' ',
+            '#required' => true
         );
 
         $form['first_name'] = array(
@@ -75,37 +72,89 @@ class EnterContestForm extends FormBase {
             '#title' => $this->t('Birthday'),
         );
 
-        $form['gender'] = array(
-            '#type' => 'radios',
-            '#title' => $this->t('Gender'),
-            '#options' => array('Male' => t('Male'), 'Female' => t('Female')),
-        );
-
         $form['photo'] = array(
-            '#type' => 'managed_file',
+            '#type' => 'file',
             '#title' => $this->t('Photo'),
         );
 
         $form['voice'] = array(
-            '#type' => 'managed_file',
+            '#type' => 'file',
             '#title' => $this->t('Voice'),
         );
 
+        $form['gender'] = array(
+            '#type' => 'radios',
+            '#title' => $this->t('Gender'),
+            '#options' => array('Male' => t('Male'), 'Female' => t('Female')),
+            '#required' => true
+        );
 
+        $form['eyes_color'] = array(
+            '#type' => 'select',
+            '#title' => $this->t('Eyes Color'),
+            '#options' => $this->getUserFieldValues('field_eyes_color'),
+            '#required' => true
+        );
+
+        $form['hair_color'] = array(
+            '#type' => 'select',
+            '#title' => $this->t('Hair Color'),
+            '#options' => $this->getUserFieldValues('field_hair_color')
+        );
+
+        $form['height'] = array(
+            '#type' => 'number',
+            '#title' => $this->t('Height'),
+        );
+
+        $form['weight'] = array(
+            '#type' => 'number',
+            '#title' => $this->t('Weight'),
+        );
+
+        $form['bust'] = array(
+            '#type' => 'number',
+            '#title' => $this->t('Bust'),
+        );
+
+        $form['waist'] = array(
+            '#type' => 'number',
+            '#title' => $this->t('Waist'),
+        );
+
+        $form['hips'] = array(
+            '#type' => 'number',
+            '#title' => $this->t('Hips'),
+        );
 
         $form['actions']['#type'] = 'actions';
             $form['actions']['submit'] = array(
             '#type' => 'submit',
-            '#value' => $this->t('Load'),
+            '#value' => $this->t('Register'),
             '#ajax' => array(
-                'callback' => '::submitForm',
+                //'callback' => '::submitForm',
             ),
         );
 
-        $form['#title'] = 'Load node ID';
+        $form['#title'] = 'Enter the Contest';
         return $form;
     }
 
+    /*
+    * get user field list values
+    */
+    public function getUserFieldValues($field) {
+        $values = array();
+        // create empty entity
+        if (empty($user_empty)) {
+            $this->user_empty = \Drupal::entityManager()->getStorage('user')->create(array());
+            return $this->user_empty->getFieldDefinitions()[$field]->getItemDefinition()->getSettings()['allowed_values'];
+        }
+    }
+
+    /*
+    * validate email field
+    */
     public function validateMailCallback(array &$form, FormStateInterface $form_state) {
         // Instantiate an AjaxResponse Object to return.
         $response = new AjaxResponse();
@@ -123,8 +172,16 @@ class EnterContestForm extends FormBase {
         return $response;
     }
 
-    public function submitForm(array &$form, FormStateInterface $form_state) {/*
-        $response = new AjaxResponse();
+    // validate form
+    public function validateForm(array &$form, FormStateInterface $form_state) {
+
+    }
+
+    /*
+    * form submit
+    */
+    public function submitForm(array &$form, FormStateInterface $form_state) {
+        //$response = new AjaxResponse();
              
         $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
         $user = \Drupal\user\Entity\User::create();
@@ -140,26 +197,58 @@ class EnterContestForm extends FormBase {
         $user->set("langcode", $language);
         $user->set("preferred_langcode", $language);
         $user->set("preferred_admin_langcode", $language);
+
+        // custom fields
+        $user->set("field_gender", $form_state->get('gender'));
+        $user->set("field_birthday", $form_state->get('birthday'));
+        $user->set("field_bust", $form_state->get('bust'));
+        $user->set("field_eyes_color", $form_state->get('eyes_color'));
+        $user->set("field_first_name", $form_state->get('first_name'));
+        $user->set("field_last_name", $form_state->get('last_name'));
+        $user->set("field_waist", $form_state->get('waist'));
+        $user->set("field_weight", $form_state->get('weight'));
         $user->set("field_gender", "Male");
+        $user->set("field_gender", "Male");
+
+        // save photo
+        $file = file_save_upload('photo');
+        if ($file) {
+            // set status permanent
+            $file[0]->setPermanent();
+            $file[0]->save();
+            // move file from temporary:// to public://
+            $file = file_move($file[0], 'public://'.$file[0]->getFilename());
+            // set photo to user
+            $user->set('user_picture', array('target_id' => $file->id()));
+        }
+
+        $file = file_save_upload('voice');
+        if ($file) {
+            // set status permanent
+            $file[0]->setPermanent();
+            $file[0]->save();
+            // move file from temporary:// to public://
+            $file = file_move($file[0], 'public://'.$file[0]->getFilename());
+            // set photo to user
+            $user->set('field_voice', array('target_id' => $file->id()));
+        }
+
         // $user->activate();
-
-        //Save user
-        // $res = $user->save();
-        // kint($user);
-
+        // save user
+        $result = $user->save();
+        
         // No email verification required; log in user immediately.
-        //_user_mail_notify('register_no_approval_required', $user);
-        user_login_finalize($user);
+        /*_user_mail_notify('register_no_approval_required', $user);
+         user_login_finalize($user);*/
 
         // drupal_set_message($this->t('Registration successful. You are now logged in.'));
         // $form_state->setRedirect('');
 
-        $response->addCommand(new OpenModalDialogCommand('Thank you', 'You have entered the contest!'));
-        return $response;
-        */
+        //$response->addCommand(new OpenModalDialogCommand('Thank you', 'You have entered the contest!'));
+        //return $response;
     }
 
-    /*
+    /* return ajax dialog
     public function open_modal(&$form, FormStateInterface $form_state) {
         $node_title = $form_state->getValue('node_title');
         $query = \Drupal::entityQuery('node')->condition('title', $node_title);
