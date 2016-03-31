@@ -35,12 +35,29 @@ class EnterContestForm extends FormBase {
     public function buildForm(array $form, FormStateInterface $form_state) {
         $form['#attached']['library'][] = 'core/drupal.dialog.ajax';
         
+        /*$entity = \Drupal::entityManager()->getStorage('user')->create(array());
+        $formObject = \Drupal::entityManager()->getFormObject('user', 'register')->setEntity($entity);
+        $form = \Drupal::formBuilder()->getForm($formObject);
+        */
+
         $form['mail'] = array(
             '#type' => 'email',
             '#title' => $this->t('Email'),
             '#ajax' => array(
-                'callback' => array($this, 'validateMail'),
-            )
+                // Function to call when event on form element triggered.
+                'callback' => array($this, 'validateMailCallback'),
+                // Effect when replacing content. Options: 'none' (default), 'slide', 'fade'.
+                'effect' => 'fade',
+                // Javascript event to trigger Ajax. Currently for: 'onchange'.
+                'event' => 'change',
+                'progress' => array(
+                    // Graphic shown to indicate ajax. Options: 'throbber' (default), 'bar'.
+                    'type' => 'throbber',
+                    // Message to show along progress graphic. Default: 'Please wait...'.
+                    'message' => NULL,
+                ),
+            ),
+            '#description' => ' '
         );
 
         $form['first_name'] = array(
@@ -92,21 +109,54 @@ class EnterContestForm extends FormBase {
     public function validateMailCallback(array &$form, FormStateInterface $form_state) {
         // Instantiate an AjaxResponse Object to return.
         $response = new AjaxResponse();
-        $valid = $this->validateEmail($form, $form_state);
-        
-        
+
+        if (!valid_email_address($form_state->getValue('mail'))) {
+            $response->addCommand(new HtmlCommand('.form-item-mail .description', 'Invalid email adress!'));
+        }
+
+        // validate email
+        if (user_load_by_mail($form_state->getValue('mail')) && $form_state->getValue('mail') != false) {
+            $response->addCommand(new HtmlCommand('.form-item-mail .description', 'Email already exist!'));
+            //$response->addCommand(new InvokeCommand('#edit-mail', 'css', array('color', '#ff0000')));
+        }
+
+        return $response;
     }
-    /**
-    * {@inheritdoc}
-    */
-    public function submitForm(array &$form, FormStateInterface $form_state) {
+
+    public function submitForm(array &$form, FormStateInterface $form_state) {/*
         $response = new AjaxResponse();
-        
-        //$response->addCommand(new CssCommand('#edit-mail', $css));
-        //$response->addCommand(new HtmlCommand('.valid-message', $this->t('Email not valid.')));
+             
+        $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
+        $user = \Drupal\user\Entity\User::create();
+
+        // Mandatory settings
+        $user->setPassword('|contestant|');
+        $user->enforceIsNew();
+        $user->setEmail($form_state->getValue('mail'));
+        $user->setUsername($form_state->getValue('mail'));
+
+        // Optional settings
+        $user->set("init", $form_state->getValue('mail'));
+        $user->set("langcode", $language);
+        $user->set("preferred_langcode", $language);
+        $user->set("preferred_admin_langcode", $language);
+        $user->set("field_gender", "Male");
+        // $user->activate();
+
+        //Save user
+        // $res = $user->save();
+        // kint($user);
+
+        // No email verification required; log in user immediately.
+        //_user_mail_notify('register_no_approval_required', $user);
+        user_login_finalize($user);
+
+        // drupal_set_message($this->t('Registration successful. You are now logged in.'));
+        // $form_state->setRedirect('');
 
         $response->addCommand(new OpenModalDialogCommand('Thank you', 'You have entered the contest!'));
         return $response;
+        */
     }
 
     /*

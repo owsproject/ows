@@ -7,6 +7,12 @@
 
 namespace Drupal\ows\Controller;
 
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax;
+use Drupal\Core\Ajax\OpenModalDialogCommand;
+use Drupal\Core\Ajax\CssCommand;
+use Drupal\Core\Ajax\HtmlCommand;
+
 use Drupal\Core\Controller\ControllerBase;
 
 class OWSController extends ControllerBase
@@ -60,6 +66,7 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 
 		//$user = \Drupal\user\Entity\User::load(\Drupal::currentUser()->id());
 		//kint($user);
+
 		return array('#type' => 'markup', '#markup' => $html);
 	}
 
@@ -72,6 +79,8 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 	    	$formObject = \Drupal::entityManager()->getFormObject('user', 'register')->setEntity($entity);
 			$form = \Drupal::formBuilder()->getForm($formObject);
 
+			$form['#attached']['library'][] = 'core/drupal.dialog.ajax';
+			
 			// Adjust form fields
 			// only allow contestant role (use css to hide this field)
 			$form['account']['roles']['#options'] = array(
@@ -99,6 +108,7 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 			);
 
 			// avoid empty "action" rendered form
+			/*
 			$form['#action'] = '/user/register';
 			$t = $form['actions']['submit']['#submit'];
 			unset($form['actions']['submit']['#submit']);
@@ -106,6 +116,18 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 			$form['actions']['submit']['#ajax']['accepts'] = 'application/vnd.drupal-modal';
 
 			$form['actions']['submit']['#ajax_processed'] = true;
+			*/
+			/*
+			$form['actions'] = array();
+			$form['actions']['#type'] = 'actions';
+	        $form['actions']['submit'] = array(
+	            '#type' => 'submit',
+	            '#value' => $this->t('Register'),
+	            '#ajax' => array(
+	                'callback' => 'Drupal\ows\Form\EnterContestForm::submitForm',
+	            ),
+	            '#submit' => 'Drupal\ows\Form\EnterContestForm::submitFormDrupal\ows\Form\EnterContestForm::submitForm'
+	        );*/
 
 			kint($form);
 			return $form;

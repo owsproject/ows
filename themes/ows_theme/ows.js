@@ -58,7 +58,7 @@ function displayWelcome() {
 		welcome_box_content = welcome_box_content.replace('btn-enter-contest', 'sa-btn-enter-contest');
 		// replace href to avoid dialog ajax error
 		welcome_box_content = welcome_box_content.replace('/enter-contest', '#enter-contest');
-		// jQuery('#block-ows-theme-content #welcome-box').remove();
+		jQuery('#block-ows-theme-content #welcome-box').remove();
 	}
 
 	swal({
