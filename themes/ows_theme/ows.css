@@ -260,3 +260,54 @@ Dialog styles
 #ui-datepicker-div {
 	z-index: 9999 !important;
 }
+
+.hidden {
+	display: none !important;
+}
+
+/* Enter contest form */
+
+.enter-contest-form .form-item {
+	float: left;
+	width: 100%;
+	margin: 4px 0;
+}
+
+.enter-contest-form label {
+	float: left;
+	width: 120px;
+}
+
+.enter-contest-form input {
+	float: left;
+	width: 200px;
+}
+
+.enter-contest-form .form-item-gender input {
+	width: 20px;
+	margin-left: 118px;
+}
+
+.enter-contest-form .fieldgroup legend {
+	color: #fff;
+}
+
+.enter-contest-form .form-number {
+    width: 100px !important;
+}
+
+.enter-contest-form .form-select {
+    width: 108px !important;
+}
+
+.enter-contest-form .description {
+	color: #fff !important;
+    display: block;
+    float: left;
+    padding-left: 10px;
+    margin-top: 4px;
+}
+
+.enter-contest-form .description > div {
+    color: #ff0000;
+}

@@ -12,41 +12,17 @@ jQuery(document).ready(function() {
 		}
 	} else {
 		displayWelcome();
-		/*// browse website
-		jQuery.ajax({
-			url: "/ajax-content",
-			data: {type: "browse"},
-			async: false, 
-			success: function(data) {
-				// default dialog
-				openDialog('.dialog-browse', 'Browse', data);
-			}
-		});*/
-	} 
- 
- 	/*
- 	try {
-		Drupal.ajax({
-			url: 'page/browse',
-			data: 'html',
-			success: function(response) {
-		  	console.log(response);
+	}
 
-		  	// fetch object to get ajax response data
-		  	jQuery.each(response, function( key, value ) {			
-			  	if (value.command == 'insert' && value.method === null) {
-			    	openDialog('.dialog-browse', 'Browse', value.data);
-			    	// openDialog('.page-browse-dialog', 'Browse', 750, 500, true, 'test();');
-				}
-			});
-		  }
-		}).execute();
-	} catch (e) {}
-	*/
+	// Check dialog active jQuery('.ui-dialog').length;
 });
 
 function test() {
 	alert(1);
+}
+
+function niceScrollActivate(id) {
+	jQuery(id).niceScroll();
 }
 
 function displayWelcome() {
@@ -55,9 +31,10 @@ function displayWelcome() {
 
 		// enter contest button
 		// replace button ID
-		welcome_box_content = welcome_box_content.replace('btn-enter-contest', 'sa-btn-enter-contest');
+		//welcome_box_content = welcome_box_content.replace('btn-enter-contest', 'sa-btn-enter-contest');
+
 		// replace href to avoid dialog ajax error
-		welcome_box_content = welcome_box_content.replace('/enter-contest', '#enter-contest');
+		// welcome_box_content = welcome_box_content.replace('/enter-contest', '#enter-contest');
 		// jQuery('#block-ows-theme-content #welcome-box').remove();
 	}
 
@@ -75,30 +52,16 @@ function displayWelcome() {
 
 		jQuery('.sweet-alert').center();
 
-		// blind click event for button - click this button will trigger drupal button 
-		jQuery('.sweet-alert #sa-btn-enter-contest').on('click', function() {
-			swal.close();
-	  		jQuery('.layout-content #btn-enter-contest').trigger('click');
-		});
-
 		// ------------------------------
-	    // enter contest
-	    /*
-	    jQuery('#btn-enter-contest').on('click', function() {
-	    	// write cookie
-	    	jQuery.cookie('user.option', 'enter-contest');
-
-	    	jQuery.ajax({
-				url: "/ajax-content",
-				data: {type: "register"},
-				async: false, 
-				success: function(data) {
-					openDialog('.dialog-enter-contest', 'Enter Contest', data);
-				}
-			});
-
-	    	swal.close();
-	    });*/
+		// blind click event for button - click this button will trigger drupal button 
+		jQuery('.sweet-alert #swal-btn-register').on('click', function() {
+			swal.close();
+	  		jQuery('.dialog-buttons-wrapper #btn-enter-contest').trigger('click');
+	  		
+	  		setTimeout(function () {
+	  			jQuery('#drupal-modal').niceScroll();
+	  		}, 3000);
+		});
 
 	    // ------------------------------
 	    // Vote
@@ -194,33 +157,6 @@ function openDialog(element, title, data, width = 500, height = 500, is_new = fa
 			jQuery(element).remove()
 		}
 	});
-
-	/*if (!is_new) {
-		jQuery('.dialog').dialogr({
-			title: title,
-			autoResize: true,
-			width: width,
-			height: height,
-			fluid: true,
-			minWidth: 470,
-			open: function( event, ui ) {
-				w = jQuery('.ui-dialog-content').width();
-				jQuery('.ui-dialog').width(w);
-
-				jQuery(".ui-dialog-content").niceScroll();
-				jQuery("#user-register-form #edit-submit").val("Enter");
-				dialogs++;
-			},
-			dragStop: function(event, ui) {
-				// refresh scrollbar
-				jQuery(".ui-dialog-content").getNiceScroll().resize();	
-			},
-			close: function(event, ui) {
-				if (dialogs > 0) dialogs--;
-				anyDialogActive();
-			}
-		});
-	} else {*/
 }
 
 function anyDialogActive() {
