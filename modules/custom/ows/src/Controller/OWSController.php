@@ -41,8 +41,27 @@ class OWSController extends ControllerBase
 			'width' => '600',
 			'dialogClass' => 'dialog-enter-contest',
 		));
+
+		$vote = json_encode(array(
+			'title' => 'Vote',
+			'width' => '600',
+			'dialogClass' => 'dialog-vote',
+		));
+
+		$browse = json_encode(array(
+			'title' => 'Browse',
+			'width' => '600',
+			'dialogClass' => 'dialog-browse',
+		));
 		
-		$html = "<a href='/user/register' class='use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options=''>Go2</a>";
+		$html = "<a href='/enter-contest' class='use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$enter_contest."'>Go2</a>";
+		
+		// buttons open dialog
+		$html .= "<div class='dialog-buttons-wrapper hidden'><a href='/enter-contest' id='btn-enter-contest' class='button button-red use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$enter_contest."'>Enter the Contest</a>
+				<a href='/vote' id='btn-sign' class='button button-red use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$vote.">Vote in the Contest</a>
+				<a href='/browse' id='btn-browse' class='button button-red browse-website use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$browse.">Browse the Website</a></div>";
+
+		// sweet alert box
 		$html .= '
 		<div id="welcome-box" class="" title="Welcome to OWS">
 			<div class="welcome-wrapper">
@@ -55,12 +74,14 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 
 		$html .= "
   				<div class='buttons'>
-  					<a id='btn-enter-contest' class='use-ajax button button-red enter-contest' href='/enter-contest' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$enter_contest."'>Enter the Contest</a>
-  					<a href='#vote' id='btn-sign' class='button button-red vote-contest'>Vote in the Contest</a>
-  					<a href='#browse' id='btn-browse' class='button button-red browse-website'>Browse the Website</a>
+  					<a href='#enter-contest' id='swal-btn-register' class='button button-red'>Enter the Contest</a>
+  					<a href='#vote' id='swal-btn-sign' class='button button-red'>Vote in the Contest</a>
+  					<a href='#browse' id='swal-btn-browse' class='button button-red browse-website'>Browse the Website</a>
   				</div>
   			</div>
 		</div>";
+
+		// <a id='btn-enter-contest' class='use-ajax button button-red enter-contest' href='/enter-contest' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$enter_contest."'>Enter the Contest</a>
 
 		// $html .= '<div class="dialog">Homepage test</div>';
 

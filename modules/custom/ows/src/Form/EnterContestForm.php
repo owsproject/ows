@@ -91,7 +91,7 @@ class EnterContestForm extends FormBase {
 
         $form['eyes_color'] = array(
             '#type' => 'select',
-            '#title' => $this->t('Eyes Color'),
+            '#title' => $this->t('Eye Color'),
             '#options' => $this->getUserFieldValues('field_eyes_color'),
             '#required' => true
         );
@@ -161,12 +161,14 @@ class EnterContestForm extends FormBase {
 
         if (!valid_email_address($form_state->getValue('mail'))) {
             $response->addCommand(new HtmlCommand('.form-item-mail .description', 'Invalid email adress!'));
-        }
-
-        // validate email
-        if (user_load_by_mail($form_state->getValue('mail')) && $form_state->getValue('mail') != false) {
-            $response->addCommand(new HtmlCommand('.form-item-mail .description', 'Email already exist!'));
-            //$response->addCommand(new InvokeCommand('#edit-mail', 'css', array('color', '#ff0000')));
+        } else {
+            // validate email
+            if (user_load_by_mail($form_state->getValue('mail')) && $form_state->getValue('mail') != false) {
+                $response->addCommand(new HtmlCommand('.form-item-mail .description', 'Email already exist!'));
+                //$response->addCommand(new InvokeCommand('#edit-mail', 'css', array('color', '#ff0000')));
+            } else {
+                $response->addCommand(new HtmlCommand('.form-item-mail .description', ''));
+            }
         }
 
         return $response;
@@ -174,15 +176,16 @@ class EnterContestForm extends FormBase {
 
     // validate form
     public function validateForm(array &$form, FormStateInterface $form_state) {
-
+     
     }
 
     /*
     * form submit
     */
-    public function submitForm(array &$form, FormStateInterface $form_state) {
-        //$response = new AjaxResponse();
-             
+    public function submitForm(array &$form, FormStateInterface $form_state) {       
+        $form_state->setRedirect('ajax_test.dialog_contents');
+
+
         $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
         $user = \Drupal\user\Entity\User::create();
 
@@ -235,7 +238,7 @@ class EnterContestForm extends FormBase {
 
         // $user->activate();
         // save user
-        $result = $user->save();
+        //$result = $user->save();
         
         // No email verification required; log in user immediately.
         /*_user_mail_notify('register_no_approval_required', $user);
@@ -244,34 +247,28 @@ class EnterContestForm extends FormBase {
         // drupal_set_message($this->t('Registration successful. You are now logged in.'));
         // $form_state->setRedirect('');
 
-        //$response->addCommand(new OpenModalDialogCommand('Thank you', 'You have entered the contest!'));
-        //return $response;
+        $response = new AjaxResponse();
+        $response->addCommand(new OpenModalDialogCommand('Thank you', 'Please check your email to complete the registration'), ['width' => '700']);
+        return $response;
     }
 
-    /* return ajax dialog
+    /*// return ajax dialog
     public function open_modal(&$form, FormStateInterface $form_state) {
-        $node_title = $form_state->getValue('node_title');
-        $query = \Drupal::entityQuery('node')->condition('title', $node_title);
-        $entity = $query->execute();
-
-        $title = 'Node ID';
-        $key = array_keys($entity);
-        $id = !empty($key[0]) ? $key[0] : NULL;
         $response = new AjaxResponse();
         if ($id !== NULL) {
-            $content = '<div class="test-popup-content"> Node ID is: ' . $id . '</div>';
+            $content = 'Test';
             $options = array(
-            'dialogClass' => 'popup-dialog-class',
-            'width' => '300',
-            'height' => '300',
+                'dialogClass' => 'popup-dialog-class',
+                'width' => '300',
+                'height' => '300',
             );
+
             $response->addCommand(new OpenModalDialogCommand($title, $content, $options));
         } else {
-            $content = 'Not found record with this title <strong>' . $node_title .'</strong>';
-            $response->addCommand(new OpenModalDialogCommand($title, $content));
+            $content = 'Not found record with this title';
+            $response->addCommand(new OpenModalDialogCommand('Test', $content));
         }
 
         return $response;
-    }
-    */
+    }*/
 }
