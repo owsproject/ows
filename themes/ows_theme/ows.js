@@ -90,17 +90,21 @@ function displayWelcome() {
 function openOWSDialog(target) {
 	dialogs++;
 	// get dialog object
-	obj = jQuery(target);
-	obj.niceScroll();
-	obj.parent().find('span.ui-button-text').html("Enter the Contest");
-	obj.parent().find('.user-register-form').submit(function(e) {
-		
-	});
+	jQuery(target + ' #drupal-modal').niceScroll();
 }
 
-function closeOWSDialog(target) {
+function closeOWSDialog(dialog) {
 	dialogs--;
 	if (dialogs == 0) displayWelcome();
+}
+
+/*
+Paremt for callback from dialog modal must be int.
+1: enter contest dialog
+*/
+function owsDialogCallback(dialog) {
+	if (dialog == 1) alert(1);
+	console.log(dialog);
 }
 
 /*
