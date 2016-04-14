@@ -59,8 +59,8 @@ function displayWelcome() {
 	  		jQuery('.dialog-buttons-wrapper #btn-enter-contest').trigger('click');
 	  		
 	  		setTimeout(function () {
-	  			jQuery('#drupal-modal').niceScroll();
-	  		}, 3000);
+	  			openOWSDialog();
+	  		}, 2000);
 		});
 
 	    // ------------------------------
@@ -87,24 +87,32 @@ function displayWelcome() {
 	}
 }
 
-function openOWSDialog(target) {
+function openOWSDialog() {
 	dialogs++;
 	// get dialog object
-	jQuery(target + ' #drupal-modal').niceScroll();
+	jQuery('#drupal-modal').niceScroll();
 }
 
-function closeOWSDialog(dialog) {
+function closeOWSDialog() {
 	dialogs--;
 	if (dialogs == 0) displayWelcome();
 }
 
 /*
-Paremt for callback from dialog modal must be int.
+Param for callback from dialog modal must be int.
 1: enter contest dialog
 */
 function owsDialogCallback(dialog) {
-	if (dialog == 1) alert(1);
-	console.log(dialog);
+	dialog_class = '';
+
+	if (dialog == 1) {
+		dialog_class = '.dialog-enter-contest';
+	}
+
+	
+	jQuery(dialog_class + ' .ui-dialog-titlebar-close').on('click', function() {
+		closeOWSDialog();
+	});
 }
 
 /*
