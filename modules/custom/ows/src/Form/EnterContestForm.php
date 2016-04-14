@@ -138,19 +138,6 @@ class EnterContestForm extends FormBase {
         );
 
         $form['#title'] = 'Enter the Contest';
-
-        // attach js for dialog content
-        $form['script']= array(
-            '#markup' => "<script>openOWSDialog('.dialog-enter-contest');</script>",
-        );
-
-        $form['#attached']['js'][] = array(
-            array(
-                'type' => 'inline',
-                'data' => 'jQuery(function() { alert(1); });',
-            )
-        );
-
         return $form;
     }
 
@@ -263,7 +250,7 @@ class EnterContestForm extends FormBase {
         $response->addCommand(new CloseDialogCommand('.dialog-enter-contest'));
         // open message dialog
         $message = 'Please check your email to complete the registration.';
-        $message .= '<script>closeOWSDialog(1);</script>';
+        $message .= '<script>owsDialogCallback(1);</script>';
         $response->addCommand(new OpenModalDialogCommand('Thank you', $message), ['width' => '700']);
         return $response;
     }
