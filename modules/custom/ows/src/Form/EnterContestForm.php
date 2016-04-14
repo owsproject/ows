@@ -50,7 +50,7 @@ class EnterContestForm extends FormBase {
                     // Graphic shown to indicate ajax. Options: 'throbber' (default), 'bar'.
                     'type' => 'throbber',
                     // Message to show along progress graphic. Default: 'Please wait...'.
-                    'message' => NULL,
+                    'message' => 'Verifying email...',
                 ),
             ),
             '#description' => ' ',
@@ -132,7 +132,7 @@ class EnterContestForm extends FormBase {
             '#type' => 'submit',
             '#value' => $this->t('Register'),
             '#ajax' => array(
-                //'callback' => '::submitForm',
+                'callback' => '::submitForm',
             ),
         );
 
@@ -250,6 +250,7 @@ class EnterContestForm extends FormBase {
         $response = new AjaxResponse();
         $response->addCommand(new OpenModalDialogCommand('Thank you', 'Please check your email to complete the registration'), ['width' => '700']);
         return $response;
+
     }
 
     /*// return ajax dialog
