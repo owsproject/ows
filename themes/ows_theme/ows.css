@@ -285,11 +285,16 @@ Dialog styles
 
 .enter-contest-form .form-item-gender input {
 	width: 20px;
-	margin-left: 118px;
+	margin-left: 68px;
 }
 
 .enter-contest-form .fieldgroup legend {
 	color: #fff;
+	float: left;
+}
+
+.enter-contest-form .fieldgroup .fieldset-wrapper {
+	float: left;
 }
 
 .enter-contest-form .form-number {
