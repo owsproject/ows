@@ -9,9 +9,10 @@ namespace Drupal\ows\Form;
 
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax;
+use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\OpenModalDialogCommand;
+use Drupal\Core\Ajax\CloseDialogCommand;
 use Drupal\Core\Ajax\CssCommand;
 use Drupal\Core\Ajax\HtmlCommand;
 
@@ -137,6 +138,19 @@ class EnterContestForm extends FormBase {
         );
 
         $form['#title'] = 'Enter the Contest';
+
+        // attach js for dialog content
+        $form['script']= array(
+            '#markup' => "<script>openOWSDialog('.dialog-enter-contest');</script>",
+        );
+
+        $form['#attached']['js'][] = array(
+            array(
+                'type' => 'inline',
+                'data' => 'jQuery(function() { alert(1); });',
+            )
+        );
+
         return $form;
     }
 
@@ -183,9 +197,6 @@ class EnterContestForm extends FormBase {
     * form submit
     */
     public function submitForm(array &$form, FormStateInterface $form_state) {       
-        $form_state->setRedirect('ajax_test.dialog_contents');
-
-
         $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
         $user = \Drupal\user\Entity\User::create();
 
@@ -248,9 +259,13 @@ class EnterContestForm extends FormBase {
         // $form_state->setRedirect('');
 
         $response = new AjaxResponse();
-        $response->addCommand(new OpenModalDialogCommand('Thank you', 'Please check your email to complete the registration'), ['width' => '700']);
+        // close dialog
+        $response->addCommand(new CloseDialogCommand('.dialog-enter-contest'));
+        // open message dialog
+        $message = 'Please check your email to complete the registration.';
+        $message .= '<script>closeOWSDialog(1);</script>';
+        $response->addCommand(new OpenModalDialogCommand('Thank you', $message), ['width' => '700']);
         return $response;
-
     }
 
     /*// return ajax dialog
