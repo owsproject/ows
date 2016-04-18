@@ -81,6 +81,7 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
   			</div>
 		</div>";
 
+		
 		// <a id='btn-enter-contest' class='use-ajax button button-red enter-contest' href='/enter-contest' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$enter_contest."'>Enter the Contest</a>
 
 		// $html .= '<div class="dialog">Homepage test</div>';
