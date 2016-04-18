@@ -186,3 +186,11 @@ jQuery.fn.center = function () {
                                                 jQuery(window).scrollLeft()) + "px");
     return this;
 }
+
+/*close: function (event) {
+      Drupal.detachBehaviors(event.target, null, 'unload');
+      closeOWSDialog(event.target);
+    },
+    open: function (event) {
+      openOWSDialog(event.target);
+    }*/
