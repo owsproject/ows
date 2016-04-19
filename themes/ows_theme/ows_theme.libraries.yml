@@ -5,6 +5,7 @@ global-styling:
       css/sweetalert.css: {}
       css/twitter/twitter.css: {}
       css/jquery.dialogr.css: {}
+      css/bootstrap.min.css: {}
       ows.css: {}
   component:
     css/components/ui-dialog.css: {}
@@ -17,6 +18,7 @@ global-styling:
     js/ui.dialogr.js: {}
     js/jquery.cookie.js: {}
     js/sweetalert.min.js: {}
+    js/bootstrap.min.js: {}
     ows.js: {}
   dependencies:
     - core/jquery

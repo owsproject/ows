@@ -62,6 +62,12 @@ function displayWelcome() {
 	  		
 	  		setTimeout(function () {
 	  			openOWSDialog();
+	  			// bind close dialog
+	  			dialog_class = '.dialog-enter-contest'; 
+	  			jQuery(dialog_class + ' .ui-dialog-titlebar-close').on('click', function() {
+					closeOWSDialog();
+				});
+
 	  		}, 2000);
 		});
 
@@ -93,6 +99,7 @@ function openOWSDialog() {
 	dialogs++;
 	// get dialog object
 	jQuery('#drupal-modal').niceScroll();
+
 }
 
 function closeOWSDialog() {

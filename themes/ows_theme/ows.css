@@ -281,8 +281,6 @@ Dialog styles
 .enter-contest-form input {
 	float: left;
 	width: 200px;
-	border-radius: 4px;
-    height: 22px;
 }
 
 .enter-contest-form .form-item-gender input {
@@ -300,7 +298,7 @@ Dialog styles
 }
 
 .enter-contest-form .form-number {
-    width: 100px !important;
+    width: 108px !important;
 }
 
 .enter-contest-form .form-select {
