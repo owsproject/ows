@@ -31,8 +31,8 @@ function displayWelcome() {
 		sweetalert_content = jQuery('#block-ows-theme-content #welcome-box');
 	}*/
 
-	if (!sweetalert_content && jQuery('.layout-content').length) {
-		sweetalert_content = jQuery('.layout-content');
+	if (!sweetalert_content && jQuery('#block-ows-theme-content #welcome-box').length) {
+		sweetalert_content = jQuery('#block-ows-theme-content #welcome-box');
 	}
 
 	// remove enter contest button

@@ -281,6 +281,8 @@ Dialog styles
 .enter-contest-form input {
 	float: left;
 	width: 200px;
+	border-radius: 4px;
+    height: 22px;
 }
 
 .enter-contest-form .form-item-gender input {
@@ -315,4 +317,36 @@ Dialog styles
 
 .enter-contest-form .description > div {
     color: #ff0000;
+}
+
+.validator.error {
+	color: #ff0000;
+    margin-bottom: 10px;
+}
+
+.js-form-submit.form-submit span {
+	color: #fff;
+	font-weight: bold;
+}
+
+.menu-bar {
+	background: #fff none repeat scroll 0 0;
+    bottom: 0;
+    height: 120px;
+    left: 0;
+    position: fixed;
+    width: 100%;
+
+    -webkit-box-shadow: 0px -5px 17px 0px rgba(0,0,0,0.4);
+	-moz-box-shadow: 0px -5px 17px 0px rgba(0,0,0,0.4);
+	box-shadow: 0px -5px 17px 0px rgba(0,0,0,0.4);
+}
+
+.menu-bar a.home {
+	display: block;
+	width: 100px;
+	height: 100px;
+	background: url(images/home.png) no-repeat;
+	margin: 10px auto 0;
+	color: #fff;
 }
