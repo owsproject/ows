@@ -133,7 +133,7 @@ class EnterContestForm extends FormBase {
             '#type' => 'submit',
             '#value' => $this->t('Register'),
             '#ajax' => array(
-                'callback' => '::submitForm',
+                'callback' => '::submitForm2',
             ),
         );
 
@@ -183,7 +183,11 @@ class EnterContestForm extends FormBase {
     /*
     * form submit
     */
-    public function submitForm(array &$form, FormStateInterface $form_state) {       
+
+    public function submitForm(array &$form, FormStateInterface $form_state) {}
+
+    // Change method name to avoid duplicate callback
+    public function submitForm2(array &$form, FormStateInterface $form_state) {       
         $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
         $user = \Drupal\user\Entity\User::create();
 
@@ -194,10 +198,11 @@ class EnterContestForm extends FormBase {
         $user->setUsername($form_state->getValue('mail'));
 
         // Optional settings
+        /*
         $user->set("init", $form_state->getValue('mail'));
         $user->set("langcode", $language);
         $user->set("preferred_langcode", $language);
-        $user->set("preferred_admin_langcode", $language);
+        $user->set("preferred_admin_langcode", $language);*/
 
         // custom fields
         $user->set("field_gender", $form_state->get('gender'));
@@ -209,7 +214,6 @@ class EnterContestForm extends FormBase {
         $user->set("field_waist", $form_state->get('waist'));
         $user->set("field_weight", $form_state->get('weight'));
         $user->set("field_gender", "Male");
-        $user->set("field_gender", "Male");
 
         // save photo
         $file = file_save_upload('photo');
@@ -220,7 +224,7 @@ class EnterContestForm extends FormBase {
             // move file from temporary:// to public://
             $file = file_move($file[0], 'public://'.$file[0]->getFilename());
             // set photo to user
-            $user->set('user_picture', array('target_id' => $file->id()));
+            @$user->set('user_picture', array('target_id' => $file->id()));
         }
 
         $file = file_save_upload('voice');
@@ -231,16 +235,16 @@ class EnterContestForm extends FormBase {
             // move file from temporary:// to public://
             $file = file_move($file[0], 'public://'.$file[0]->getFilename());
             // set photo to user
-            $user->set('field_voice', array('target_id' => $file->id()));
+            @$user->set('field_voice', array('target_id' => $file->id()));
         }
 
         // $user->activate();
         // save user
-        //$result = $user->save();
+        $user->save();
         
         // No email verification required; log in user immediately.
-        /*_user_mail_notify('register_no_approval_required', $user);
-         user_login_finalize($user);*/
+        _user_mail_notify('register_no_approval_required', $user);
+        //user_login_finalize($user);
 
         // drupal_set_message($this->t('Registration successful. You are now logged in.'));
         // $form_state->setRedirect('');

@@ -1,5 +1,5 @@
 var dialogs = 0;
-var welcome_box_content = false;
+var sweetalert_content = false;
 
 jQuery(document).ready(function() {
 	// nice scrollbar
@@ -25,23 +25,25 @@ function niceScrollActivate(id) {
 	jQuery(id).niceScroll();
 }
 
+// Welcome sweetalert box
 function displayWelcome() {
-	if (!welcome_box_content && jQuery('#block-ows-theme-content #welcome-box').length) {
-		welcome_box_content = jQuery('#block-ows-theme-content #welcome-box').html();
+	/*if (!sweetalert_content && jQuery('#block-ows-theme-content #welcome-box').length) {
+		sweetalert_content = jQuery('#block-ows-theme-content #welcome-box');
+	}*/
 
-		// enter contest button
-		// replace button ID
-		//welcome_box_content = welcome_box_content.replace('btn-enter-contest', 'sa-btn-enter-contest');
-
-		// replace href to avoid dialog ajax error
-		// welcome_box_content = welcome_box_content.replace('/enter-contest', '#enter-contest');
-		// jQuery('#block-ows-theme-content #welcome-box').remove();
+	if (!sweetalert_content && jQuery('.layout-content').length) {
+		sweetalert_content = jQuery('.layout-content');
 	}
 
-	if (welcome_box_content) {
+	// remove enter contest button
+	if (jQuery.cookie('enter-contest')) {
+		sweetalert_content.find('a#swal-btn-register').remove();
+	}
+
+	if (sweetalert_content) {
 		swal({
 			title: 'Welcome to OWS',
-			text: welcome_box_content,
+			text: sweetalert_content.html(),
 			html: true,
 			customClass: 'twitter',
 			showConfirmButton: false,
@@ -107,8 +109,8 @@ function owsDialogCallback(dialog) {
 
 	if (dialog == 1) {
 		dialog_class = '.dialog-enter-contest';
+		jQuery.cookie('enter-contest', true);
 	}
-
 	
 	jQuery(dialog_class + ' .ui-dialog-titlebar-close').on('click', function() {
 		closeOWSDialog();
