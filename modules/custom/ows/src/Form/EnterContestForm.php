@@ -16,6 +16,8 @@ use Drupal\Core\Ajax\CloseDialogCommand;
 use Drupal\Core\Ajax\CssCommand;
 use Drupal\Core\Ajax\HtmlCommand;
 
+
+use Symfony\Component\HttpFoundation\JsonResponse;
 /**
  * Class EnterContestForm.
  *
@@ -36,7 +38,10 @@ class EnterContestForm extends FormBase {
     */
     public function buildForm(array $form, FormStateInterface $form_state) {
         //$form['#attached']['library'][] = 'core/drupal.dialog.ajax';
-        
+        $form['validator'] = array(
+            '#markup' => '<div class="validate error"></div>'
+        );
+
         $form['mail'] = array(
             '#type' => 'email',
             '#title' => $this->t('Email'),
@@ -71,6 +76,7 @@ class EnterContestForm extends FormBase {
         $form['birthday'] = array(
             '#type' => 'date',
             '#title' => $this->t('Birthday'),
+            '#date_year_range' => '-50:-10',
         );
 
         $form['photo'] = array(
@@ -133,7 +139,7 @@ class EnterContestForm extends FormBase {
             '#type' => 'submit',
             '#value' => $this->t('Register'),
             '#ajax' => array(
-                'callback' => '::submitForm2',
+                'callback' => '::submitFormAjax',
             ),
         );
 
@@ -183,10 +189,57 @@ class EnterContestForm extends FormBase {
     /*
     * form submit
     */
-    public function submitForm(array &$form, FormStateInterface $form_state) {}
+    public function submitForm(array &$form, FormStateInterface $form_state) {
+        kint($form_state);
+    }
+
+    function __set_year_range($form_element, $form_values) {
+        $form_element['year']['#options'] = drupal_map_assoc(range(2007, 2012));
+        return $form_element;
+    }
 
     // Change method name to avoid duplicate callback
-    public function submitForm2(array &$form, FormStateInterface $form_state) {       
+    public function submitFormAjax(array &$form, FormStateInterface $form_state) {
+        $response = new AjaxResponse();
+
+        $validate = false;
+        $debug = false;
+        $message = array();
+        $values = $form_state->getValues();
+
+        if ($debug) $message[] = print_r($form_state->getValues(), true);
+
+        // validate email
+        if (!valid_email_address($form_state->getValue('mail'))) {
+            $message[] = 'Invalid email adress.';
+        } else {
+            if (user_load_by_mail($form_state->getValue('mail')) && $form_state->getValue('mail') != false) {
+                $message[] = 'Email already exist.';
+            }
+        }
+
+        // validate birthday
+        $birthday = $values['birthday'];
+        $year = date('Y', strtotime($birthday));
+        $current_year = date('Y', time());
+        if (($current_year - $year) < 18) {
+            $message[] = 'You must be 18 to enter the contest.';    
+        }
+
+        // validate gender
+        if (!$values['gender']) {
+            $message[] = 'Gender is required.';
+        }
+
+        // validate flag
+        if (count($message)) {
+            $message = implode('<br>', $message);
+            $response->addCommand(new HtmlCommand('.validate', $message));
+            return $response;
+        }
+
+        // ----------------------------------
+        // save user when all fields are fine
         $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
         $user = \Drupal\user\Entity\User::create();
 
@@ -248,7 +301,6 @@ class EnterContestForm extends FormBase {
         // drupal_set_message($this->t('Registration successful. You are now logged in.'));
         // $form_state->setRedirect('');
 
-        $response = new AjaxResponse();
         // close dialog
         $response->addCommand(new CloseDialogCommand('.dialog-enter-contest'));
         // open message dialog
