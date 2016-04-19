@@ -183,7 +183,6 @@ class EnterContestForm extends FormBase {
     /*
     * form submit
     */
-
     public function submitForm(array &$form, FormStateInterface $form_state) {}
 
     // Change method name to avoid duplicate callback
