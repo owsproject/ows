@@ -76,7 +76,7 @@ function displayWelcome() {
 
 	    // ------------------------------
 	    // Browse
-	    jQuery('#btn-browse, #swal-btn-browse').on('click', function() {
+	    /*jQuery('#btn-browse, #swal-btn-browse').on('click', function() {
 	    	// write cookie
 	    	jQuery.cookie('user.option', 'browse');
 
@@ -91,7 +91,22 @@ function displayWelcome() {
 			});	
 
 	    	swal.close();
-	    });
+	    });*/
+
+	    jQuery('#btn-browse, #swal-btn-browse').on('click', function() {
+	    	swal.close();
+	  		jQuery('.dialog-buttons-wrapper #btn-browse').trigger('click');
+	  		
+	  		setTimeout(function () {
+	  			openOWSDialog();
+	  			// bind close dialog
+	  			dialog_class = '.dialog-browse'; 
+	  			jQuery(dialog_class + ' .ui-dialog-titlebar-close').on('click', function() {
+					closeOWSDialog();
+				});
+
+	  		}, 2000);
+	  	});
 	}
 }
 

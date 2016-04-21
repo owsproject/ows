@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css?family=Roboto:400,700,500,300");
 
 body {
-	background: #333 url("images/background.png") no-repeat scroll center center;
+	background: #000 url("images/background.png") no-repeat scroll center center;
 	font-family: 'Roboto', sans-serif !important;
 	min-height: 700px;
 }
