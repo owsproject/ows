@@ -76,7 +76,7 @@ function displayWelcome() {
 
 	    // ------------------------------
 	    // Browse
-	    jQuery('#btn-browse').on('click', function() {
+	    jQuery('#btn-browse, #swal-btn-browse').on('click', function() {
 	    	// write cookie
 	    	jQuery.cookie('user.option', 'browse');
 
@@ -86,7 +86,7 @@ function displayWelcome() {
 				data: {type: "browse"},
 				async: false, 
 				success: function(data) {
-					openDialog('.dialog-browse', 'Browse', data);
+					openDialog('.dialog-browse', 'Browse', data, 600, 500);
 				}
 			});	
 
