@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css?family=Roboto:400,700,500,300");
 
 body {
-	background: #000 url("images/background.png") no-repeat scroll center center;
+	background: #000 url("images/background1.png") no-repeat scroll center center;
 	font-family: 'Roboto', sans-serif !important;
 	min-height: 700px;
 }
@@ -28,6 +28,10 @@ body {
 /*
 Dialog styles
 */
+
+#drupal-modal {
+	overflow: hidden;
+}
 
 #welcome-box {
 	display: none;
@@ -347,4 +351,9 @@ Dialog styles
 	background: url(images/home.png) no-repeat;
 	margin: 10px auto 0;
 	color: #fff;
+}
+
+/* Browse */
+.dialog-browse .views-row {
+	float: left;
 }

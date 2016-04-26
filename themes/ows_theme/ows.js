@@ -1,5 +1,6 @@
 var dialogs = 0;
 var sweetalert_content = false;
+var callbackInterval = false;
 
 jQuery(document).ready(function() {
 	// nice scrollbar
@@ -17,16 +18,9 @@ jQuery(document).ready(function() {
 	// Check dialog active jQuery('.ui-dialog').length;
 });
 
-function test() {
-	alert(1);
-}
-
-function niceScrollActivate(id) {
-	jQuery(id).niceScroll();
-}
-
 // Welcome sweetalert box
 function displayWelcome() {
+	console.log("welcome box");
 	/*if (!sweetalert_content && jQuery('#block-ows-theme-content #welcome-box').length) {
 		sweetalert_content = jQuery('#block-ows-theme-content #welcome-box');
 	}*/
@@ -35,7 +29,8 @@ function displayWelcome() {
 		sweetalert_content = jQuery('#block-ows-theme-content #welcome-box');
 	}
 
-	// remove enter contest button
+
+	// remove enter contest button for those who registered
 	if (jQuery.cookie('enter-contest')) {
 		sweetalert_content.find('a#swal-btn-register').remove();
 	}
@@ -60,15 +55,18 @@ function displayWelcome() {
 			swal.close();
 	  		jQuery('.dialog-buttons-wrapper #btn-enter-contest').trigger('click');
 	  		
-	  		setTimeout(function () {
-	  			openOWSDialog();
-	  			// bind close dialog
-	  			dialog_class = '.dialog-enter-contest'; 
-	  			jQuery(dialog_class + ' .ui-dialog-titlebar-close').on('click', function() {
-					closeOWSDialog();
-				});
+	  		callbackInterval = setInterval(function () {	
+	  			if (dialogOpened()) {
+	  				openOWSDialog();
+	  		
+		  			// bind close dialog
+		  			jQuery('.dialog-enter-contest .ui-dialog-titlebar-close').on('click', function() {
+						closeOWSDialog();
+					});
 
-	  		}, 2000);
+					clearInterval(callbackInterval);
+				}
+	  		}, 500);
 		});
 
 	    // ------------------------------
@@ -93,32 +91,41 @@ function displayWelcome() {
 	    	swal.close();
 	    });*/
 
-	    jQuery('#btn-browse, #swal-btn-browse').on('click', function() {
+	    jQuery('.sweet-alert #swal-btn-browse').on('click', function() {
 	    	swal.close();
 	  		jQuery('.dialog-buttons-wrapper #btn-browse').trigger('click');
 	  		
-	  		setTimeout(function () {
-	  			openOWSDialog();
-	  			// bind close dialog
-	  			dialog_class = '.dialog-browse'; 
-	  			jQuery(dialog_class + ' .ui-dialog-titlebar-close').on('click', function() {
-					closeOWSDialog();
-				});
+	  		callbackInterval = setInterval(function () {
+	  			if (dialogOpened()) {
+	  				openOWSDialog();
 
-	  		}, 2000);
+	  				// bind close dialog
+		  			jQuery('.dialog-browse .ui-dialog-titlebar-close').on('click', function() {
+						closeOWSDialog();
+					});
+
+					clearInterval(callbackInterval);
+	  			}
+	  		}, 500);
 	  	});
 	}
+}
+
+function dialogOpened() {
+	return jQuery('#drupal-modal').length;
 }
 
 function openOWSDialog() {
 	dialogs++;
 	// get dialog object
+	console.log('Open');
 	jQuery('#drupal-modal').niceScroll();
-
 }
 
 function closeOWSDialog() {
-	dialogs--;
+	if (dialogs > 0) dialogs--;
+	else dialogs = 0;
+	console.log('Close');
 	if (dialogs == 0) displayWelcome();
 }
 
