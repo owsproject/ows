@@ -38,23 +38,22 @@ class OWSController extends ControllerBase
 
 		$dialog_enter_contest = json_encode(array(
 			'title' => 'Enter the Contest',
-			'width' => '600',
+			'width' => '650',
 			'dialogClass' => 'dialog-enter-contest',
 		));
 
 		$dialog_vote = json_encode(array(
 			'title' => 'Vote',
-			'width' => '600',
+			'width' => '80%',
 			'dialogClass' => 'dialog-vote',
 		));
 
 		$dialog_browse = json_encode(array(
 			'title' => 'Browse',
-			'width' => '600',
+			'width' => '80%',
 			'dialogClass' => 'dialog-browse',
 		));
 		
-		print($dialog_browse);
 		// $html = "<a href='/enter-contest' class='use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$enter_contest."'>Go2</a>";
 		
 		// buttons open dialog
@@ -163,9 +162,11 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 			$form = \Drupal::formBuilder()->getForm('\Drupal\ows\JoinContestForm');
 			return $form;
 		} elseif ($type == "browse") {
+			// ========================
+			// Get browse views
 			$view = \Drupal::service('renderer')->render(views_embed_view('browse', 'default'));
 			if ($view) $html = $view->__toString();
-		    return array('#type' => 'markup', '#markup' => $html);
+		    return array('#type' => 'markup', '#markup' => '$html');
 		}
 
 		return array('#type' => 'markup', '#markup' => 'Hello');
