@@ -25,6 +25,14 @@ body {
 	text-align:center;
 }
 
+.welcome-wrapper .buttons a {
+
+}
+
+.welcome-wrapper .buttons a:hover {
+	color: #eee;
+}
+
 /*
 Dialog styles
 */
@@ -355,5 +363,62 @@ Dialog styles
 
 /* Browse */
 .dialog-browse .views-row {
-	float: left;
+	margin-bottom: 20px;
 }
+
+.col-xs-15,
+.col-sm-15,
+.col-md-15,
+.col-lg-15 {
+    position: relative;
+    min-height: 1px;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+.col-xs-15 {
+    width: 20%;
+    float: left;
+}
+
+@media (min-width: 768px) {
+.col-sm-15 {
+        width: 20%;
+        float: left;
+    }
+}
+@media (min-width: 992px) {
+    .col-md-15 {
+        width: 20%;
+        float: left;
+    }
+}
+@media (min-width: 1200px) {
+    .col-lg-15 {
+        width: 20%;
+        float: left;
+    }
+}
+
+nav.pager {
+	clear: both;
+}
+
+.pager li > a, .pager li > span {
+	padding: 2px 8px;
+	background-color: #666;
+    border: 1px solid #333;
+    color: #000;
+}
+
+.pager .pager__item span {
+	color: #000;
+}
+
+.ui-dialog .ui-dialog-titlebar-close {
+	background: url(images/close.png) no-repeat;
+	width: 16px;
+	height: 16px;
+	border: none;
+}
+
