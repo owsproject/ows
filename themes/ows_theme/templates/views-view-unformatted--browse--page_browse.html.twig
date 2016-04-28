@@ -18,8 +18,6 @@
  */
 #}
 
-{{ kint(rows) }}
-
 {% if title %}
   <h3>{{ title }}</h3>
 {% endif %}
@@ -30,10 +28,14 @@
     ]
   %}
 
-  {{ kint(row) }}
+  {{ kint(row['content']['#row']) }}
   <div{{ row.attributes.addClass(row_classes) }}>
-  	<a href="#" id="profile-{{ row['content']['#row']->uid }}">
+  	<a href="#" id="profile-">
     	{{ row.content }}
     </a>
   </div>
 {% endfor %}
+
+<?php
+print_r($rows);
+?>
