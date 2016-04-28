@@ -29,8 +29,10 @@
       default_row_class ? 'views-row',
     ]
   %}
+
+  {{ kint(row) }}
   <div{{ row.attributes.addClass(row_classes) }}>
-  	<a href="">
+  	<a href="#" id="profile-{{ row['content']['#row']->uid }}">
     	{{ row.content }}
     </a>
   </div>
