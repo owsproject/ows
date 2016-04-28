@@ -422,3 +422,7 @@ nav.pager {
 	border: none;
 }
 
+.dialog-browse .views-field.views-field-user-picture {
+    float: left;
+    width: 100px;
+}
