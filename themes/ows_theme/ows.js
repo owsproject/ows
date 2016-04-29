@@ -91,6 +91,8 @@ function displayWelcome() {
 	    	swal.close();
 	    });*/
 
+	    // ------------------------------
+	    // Browse
 	    jQuery('.sweet-alert #swal-btn-browse').on('click', function() {
 	    	swal.close();
 	  		jQuery('.dialog-buttons-wrapper #btn-browse').trigger('click');
@@ -103,6 +105,22 @@ function displayWelcome() {
 		  			jQuery('.dialog-browse .ui-dialog-titlebar-close').on('click', function() {
 						closeOWSDialog();
 					});
+
+					// view contestant dialog
+					jQuery('.dialog-browse .browse-contestant').on('click', function() {
+						id = jQuery(this).attr('id').replace('contestant-', '');
+				    	// browse website
+						jQuery.ajax({
+							url: "/ajax-content",
+							data: {type: "view-contestant", id: id},
+							async: false, 
+							success: function(data) {
+								openDialog('.dialog-contestant-'+id, 'Browse', data, 600, 500);
+							}
+						});	
+
+				    	swal.close();
+				    });
 
 					clearInterval(callbackInterval);
 	  			}
