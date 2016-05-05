@@ -27,8 +27,7 @@
       default_row_class ? 'views-row',
     ]
   %}
-  {{ kint(row) }}
-  {{ kint(title) }}
+  
   <div{{ row.attributes.addClass(row_classes) }}>
   	<a href="#" class="browse-contestant" id="contestant-{{ row.content['#row'].uid }}" name="">
     	{{ row.content }}

@@ -1,10 +1,11 @@
 var dialogs = 0;
 var sweetalert_content = false;
 var callbackInterval = false;
+var niceScrollOptions = {horizrailenabled:false};
 
 jQuery(document).ready(function() {
 	// nice scrollbar
-    jQuery("html").niceScroll();
+    //jQuery("html").niceScroll(niceScrollOptions);
 
 	user_option = jQuery.cookie('user.option');
 	if (user_option === undefined) {
@@ -16,6 +17,15 @@ jQuery(document).ready(function() {
 	}
 
 	// Check dialog active jQuery('.ui-dialog').length;
+	// --------------------------------------------
+	// extend dialog options
+	/*drupalSettings.dialog.close = function(event) {
+		_dialog_class = jQuery(event.target).parent().attr('class').split(' ').pop();
+		closeOWSDialog();
+	};
+
+	drupalSettings.dialog.draggable = true;
+	drupalSettings.dialog.resizable = true;*/
 });
 
 // Welcome sweetalert box
@@ -101,10 +111,10 @@ function displayWelcome() {
 	  			if (dialogOpened()) {
 	  				openOWSDialog();
 
-	  				// bind close dialog
+	  				/*// bind close dialog
 		  			jQuery('.dialog-browse .ui-dialog-titlebar-close').on('click', function() {
 						closeOWSDialog();
-					});
+					});*/
 
 					// view contestant dialog
 					jQuery('.dialog-browse .browse-contestant').on('click', function() {
@@ -136,14 +146,15 @@ function dialogOpened() {
 function openOWSDialog() {
 	dialogs++;
 	// get dialog object
-	console.log('Open');
-	jQuery('#drupal-modal').niceScroll();
+	//jQuery('#drupal-modal').niceScroll(niceScrollOptions);
+	
+	// jQuery('.ui-dialog').draggable({ containment: "window" });
+	// jQuery(element + " .ui-dialog-content").getNiceScroll(niceScrollOptions).resize();	
 }
 
 function closeOWSDialog() {
 	if (dialogs > 0) dialogs--;
 	else dialogs = 0;
-	console.log('Close');
 	if (dialogs == 0) displayWelcome();
 }
 
@@ -200,7 +211,7 @@ function openDialog(element, title, data, width = 500, height = 500, is_new = fa
 			w = jQuery(element + ' .ui-dialog-content').width();
 			jQuery(element + ' .ui-dialog').width(w);
 
-			jQuery(element + " .ui-dialog-content").niceScroll();
+			jQuery(element + " .ui-dialog-content").niceScroll(niceScrollOptions);
 
 			// execute callback
 			if (callback) eval(callback);
@@ -208,7 +219,7 @@ function openDialog(element, title, data, width = 500, height = 500, is_new = fa
 		},
 		dragStop: function(event, ui) {
 			// refresh scrollbar
-			jQuery(element + " .ui-dialog-content").getNiceScroll().resize();	
+			jQuery(element + " .ui-dialog-content").getNiceScroll(niceScrollOptions).resize();	
 		},
 		close: function(event, ui) {
 			if (dialogs > 0) dialogs--;
@@ -243,3 +254,4 @@ jQuery.fn.center = function () {
     open: function (event) {
       openOWSDialog(event.target);
     }*/
+
