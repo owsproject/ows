@@ -27,9 +27,9 @@
       default_row_class ? 'views-row',
     ]
   %}
-  
+
   <div{{ row.attributes.addClass(row_classes) }}>
-  	<a href="#" class="browse-contestant" id="contestant-{{ row.content['#row'].uid }}" name="">
+  	<a href="#contestant/{{ row.content['#row'].uid }}" class="browse-contestant" id="contestant-{{ row.content['#row'].uid }}" class='use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal'>
     	{{ row.content }}
     </a>
   </div>

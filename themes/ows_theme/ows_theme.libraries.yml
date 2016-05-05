@@ -14,7 +14,7 @@ global-styling:
     js/jquery.nicescroll.min.js: {}
     js/jquery.nicescroll.plus.js: {}
     # js/jquery.splashscreen.js: {}
-    js/jquery.dialogextend.js: {}
+    # js/jquery.dialogextend.js: {}
     js/ui.dialogr.js: {}
     js/dialog.custom.js: {}
     js/jquery.cookie.js: {}

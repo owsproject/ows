@@ -1,11 +1,11 @@
 var dialogs = 0;
 var sweetalert_content = false;
 var callbackInterval = false;
-var niceScrollOptions = {horizrailenabled:false};
+var scrollOptions = {horizrailenabled: false};
 
 jQuery(document).ready(function() {
 	// nice scrollbar
-    //jQuery("html").niceScroll(niceScrollOptions);
+    // jQuery("html").niceScroll(scrollOptions);
 
 	user_option = jQuery.cookie('user.option');
 	if (user_option === undefined) {
@@ -21,6 +21,7 @@ jQuery(document).ready(function() {
 	// extend dialog options
 	drupalSettings.dialog.open = function(event) {
 		console.log('Dialog Open');
+		jQuery('.ui-dialog').draggable();
 	};
 
 	drupalSettings.dialog.close = function(event) {
@@ -81,7 +82,7 @@ function displayWelcome() {
 
 					clearInterval(callbackInterval);
 				}
-	  		}, 500);
+	  		}, 2000);
 		});
 
 	    // ------------------------------
@@ -116,30 +117,33 @@ function displayWelcome() {
 	  			if (dialogOpened()) {
 	  				openOWSDialog();
 
-	  				/*// bind close dialog
+	  				// bind close dialog
 		  			jQuery('.dialog-browse .ui-dialog-titlebar-close').on('click', function() {
 						closeOWSDialog();
-					});*/
+					});
 
 					// view contestant dialog
 					jQuery('.dialog-browse .browse-contestant').on('click', function() {
 						id = jQuery(this).attr('id').replace('contestant-', '');
-				    	// browse website
-						jQuery.ajax({
-							url: "/ajax-content",
-							data: {type: "view-contestant", id: id},
-							async: false, 
-							success: function(data) {
-								openDialog('.dialog-contestant-'+id, 'Browse', data, 600, 500);
-							}
-						});	
+
+						if (!jQuery('.dialog-contestant-'+id).length) {
+					    	// browse website
+							jQuery.ajax({
+								url: "/ajax-content",
+								data: {type: "view-contestant", id: id},
+								async: false, 
+								success: function(data) {
+									openDialog('.dialog-contestant-'+id, 'Browse', data, 600, 500);
+								}
+							});
+						}
 
 				    	swal.close();
 				    });
 
 					clearInterval(callbackInterval);
 	  			}
-	  		}, 500);
+	  		}, 2000);
 	  	});
 	}
 }
@@ -151,15 +155,22 @@ function dialogOpened() {
 function openOWSDialog() {
 	dialogs++;
 	// get dialog object
-	//jQuery('#drupal-modal').niceScroll(niceScrollOptions);
-
-	// jQuery('.ui-dialog').draggable({ containment: "window" });
-	// jQuery(element + " .ui-dialog-content").getNiceScroll(niceScrollOptions).resize();	
+	console.log('Open');
+	jQuery('#drupal-modal').niceScroll(scrollOptions);
+	jQuery(".ui-dialog").draggable({
+		drag: function (event, ui) {
+			console.log('Drag');
+			setTimeout(function() {
+				jQuery('#drupal-modal').niceScroll(scrollOptions).resize();
+			}, 500);
+		}
+	});
 }
 
 function closeOWSDialog() {
 	if (dialogs > 0) dialogs--;
 	else dialogs = 0;
+	console.log('Close');
 	if (dialogs == 0) displayWelcome();
 }
 
@@ -216,7 +227,7 @@ function openDialog(element, title, data, width = 500, height = 500, is_new = fa
 			w = jQuery(element + ' .ui-dialog-content').width();
 			jQuery(element + ' .ui-dialog').width(w);
 
-			jQuery(element + " .ui-dialog-content").niceScroll(niceScrollOptions);
+			jQuery(element + " .ui-dialog-content").niceScroll(scrollOptions);
 
 			// execute callback
 			if (callback) eval(callback);
@@ -224,7 +235,7 @@ function openDialog(element, title, data, width = 500, height = 500, is_new = fa
 		},
 		dragStop: function(event, ui) {
 			// refresh scrollbar
-			jQuery(element + " .ui-dialog-content").getNiceScroll(niceScrollOptions).resize();	
+			jQuery(element + " .ui-dialog-content").getNiceScroll(scrollOptions).resize();	
 		},
 		close: function(event, ui) {
 			if (dialogs > 0) dialogs--;
@@ -259,4 +270,3 @@ jQuery.fn.center = function () {
     open: function (event) {
       openOWSDialog(event.target);
     }*/
-

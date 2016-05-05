@@ -93,7 +93,7 @@
       }*/
 
       // use default dialog for form
-      if (settings.dialogClass == "dialog-enter-contest") $element.dialog(settings);
+      if (settings.defaultDialog) $element.dialog(settings);
       else $element.dialogr(settings);
 
       dialog.open = true;
