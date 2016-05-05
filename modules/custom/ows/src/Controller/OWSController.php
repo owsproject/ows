@@ -170,7 +170,7 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 		    return array('#type' => 'markup', '#markup' => '$html');
 		} else if ($type == "view-contestant") {
 			print $_REQUEST['uid'];
-			return $this->contestantInfo($_REQUEST['uid']);
+			return $this->contestantInfo($_REQUEST['id']);
 		}
 
 		return array('#type' => 'markup', '#markup' => 'Hello');
