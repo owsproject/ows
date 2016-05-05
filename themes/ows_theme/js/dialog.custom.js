@@ -80,7 +80,22 @@
       settings = $.extend({}, drupalSettings.dialog, options, settings);
       // Trigger a global event to allow scripts to bind events to the dialog.
       $(window).trigger('dialog:beforecreate', [dialog, $element, settings]);
-      $element.dialogr(settings);
+
+      console.log(settings);
+      // reset settings
+      /*settings = {};
+      settings.open = function() {
+        alert(2);
+      }
+
+      settings.close = function() {
+        alert(1);
+      }*/
+
+      // use default dialog for form
+      if (settings.dialogClass == "dialog-enter-contest") $element.dialog(settings);
+      else $element.dialogr(settings);
+
       dialog.open = true;
       $(window).trigger('dialog:aftercreate', [dialog, $element, settings]);
     }

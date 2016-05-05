@@ -19,13 +19,18 @@ jQuery(document).ready(function() {
 	// Check dialog active jQuery('.ui-dialog').length;
 	// --------------------------------------------
 	// extend dialog options
-	/*drupalSettings.dialog.close = function(event) {
+	drupalSettings.dialog.open = function(event) {
+		console.log('Dialog Open');
+	};
+
+	drupalSettings.dialog.close = function(event) {
+		console.log('Dialog Close');
 		_dialog_class = jQuery(event.target).parent().attr('class').split(' ').pop();
 		closeOWSDialog();
 	};
 
 	drupalSettings.dialog.draggable = true;
-	drupalSettings.dialog.resizable = true;*/
+	drupalSettings.dialog.resizable = true;
 });
 
 // Welcome sweetalert box
@@ -147,7 +152,7 @@ function openOWSDialog() {
 	dialogs++;
 	// get dialog object
 	//jQuery('#drupal-modal').niceScroll(niceScrollOptions);
-	
+
 	// jQuery('.ui-dialog').draggable({ containment: "window" });
 	// jQuery(element + " .ui-dialog-content").getNiceScroll(niceScrollOptions).resize();	
 }

@@ -225,16 +225,12 @@
 		if (window.minimized) {
 			 $('.ui-dialog-titlebar-rest', this.uiDialog).click();
 		}
-		
-		
+			
 		  var self = this;
-
 	  
 		  if (false === self._trigger('beforeclose', event)) {
 			  return;
 		  }
-		  
-		  
 		  
 		  (self.overlay && self.overlay.destroy());
 		  self.uiDialog.unbind('keypress.ui-dialog');
