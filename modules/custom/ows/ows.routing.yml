@@ -14,6 +14,14 @@ ows.ajax_content:
   requirements:
     _permission: 'access content'
 
+ows.contestant_info:
+  path: '/contestant/{uid}'
+  defaults:
+    _controller: 'Drupal\ows\Controller\OWSController::contestantInfo'
+    _title: ''
+  requirements:
+    _permission: 'access content'
+
 ows.content:
   path: '/content'
   defaults:

@@ -40,6 +40,7 @@ class OWSController extends ControllerBase
 			'title' => 'Enter the Contest',
 			'width' => '650',
 			'dialogClass' => 'dialog-enter-contest',
+			'defaultDialog' => true
 		));
 
 		$dialog_vote = json_encode(array(
@@ -167,6 +168,9 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 			$view = \Drupal::service('renderer')->render(views_embed_view('browse', 'default'));
 			if ($view) $html = $view->__toString();
 		    return array('#type' => 'markup', '#markup' => '$html');
+		} else if ($type == "view-contestant") {
+			print $_REQUEST['uid'];
+			return $this->contestantInfo($_REQUEST['uid']);
 		}
 
 		return array('#type' => 'markup', '#markup' => 'Hello');
@@ -174,6 +178,10 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 
     public function content() {
     	return array('#type' => 'markup', '#markup' => 'Content');
+    }
+
+    public function contestantInfo($uid) {
+    	return array('#type' => 'markup', '#markup' => $uid);
     }
 
 }
