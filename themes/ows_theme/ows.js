@@ -73,7 +73,7 @@ function displayWelcome() {
 	  		
 	  		callbackInterval = setInterval(function () {	
 	  			if (dialogOpened()) {
-	  				openOWSDialog();
+	  				openOWSDialog('.dialog-enter-contest');
 	  		
 		  			// bind close dialog
 		  			jQuery('.dialog-enter-contest .ui-dialog-titlebar-close').on('click', function() {
@@ -115,7 +115,7 @@ function displayWelcome() {
 	  		
 	  		callbackInterval = setInterval(function () {
 	  			if (dialogOpened()) {
-	  				openOWSDialog();
+	  				openOWSDialog('.dialog-browse');
 
 	  				// bind close dialog
 		  			jQuery('.dialog-browse .ui-dialog-titlebar-close').on('click', function() {
@@ -133,7 +133,7 @@ function displayWelcome() {
 								data: {type: "view-contestant", id: id},
 								async: false, 
 								success: function(data) {
-									openDialog('.dialog-contestant-'+id, 'Browse', data, 600, 500);
+									openDialog('.dialog-contestant-'+id, 'Test', data, 600, 500);
 								}
 							});
 						}
@@ -152,12 +152,12 @@ function dialogOpened() {
 	return jQuery('#drupal-modal').length;
 }
 
-function openOWSDialog() {
+function openOWSDialog(dialog_class) {
 	dialogs++;
 	// get dialog object
 	console.log('Open');
-	jQuery('#drupal-modal').niceScroll(scrollOptions);
-	jQuery(".ui-dialog").draggable({
+	jQuery(dialog_class + ' #drupal-modal').niceScroll(scrollOptions);
+	jQuery(dialog_class + ".ui-dialog").draggable({
 		drag: function (event, ui) {
 			console.log('Drag');
 			setTimeout(function() {
@@ -204,12 +204,12 @@ callback: callback for opened dialog
 */
 function openDialog(element, title, data, width = 500, height = 500, is_new = false, callback = false) {
 	// default dialog
-	// check dialog element 
+	/*// check dialog element 
 	if (!jQuery('.ui-dialog ' +element).length) {
 		jQuery('.ui-dialog ' +element).remove();
 	} else {
 		//jQuery(element).dialogr("open");
-	}
+	}*/
 	
 	// create dialog with content
 	jQuery('<div class="'+element.replace('.', '')+'" style="display:none;">' + data + '</div>').appendTo('body'); //<a href="#nojs" class="use-ajax">Test</a>
@@ -235,7 +235,7 @@ function openDialog(element, title, data, width = 500, height = 500, is_new = fa
 		},
 		dragStop: function(event, ui) {
 			// refresh scrollbar
-			jQuery(element + " .ui-dialog-content").getNiceScroll(scrollOptions).resize();	
+			jQuery(element + " .ui-dialog-content").niceScroll(scrollOptions).resize();	
 		},
 		close: function(event, ui) {
 			if (dialogs > 0) dialogs--;
