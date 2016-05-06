@@ -22,6 +22,9 @@ jQuery(document).ready(function() {
 	drupalSettings.dialog.open = function(event) {
 		console.log('Dialog Open');
 		jQuery('.ui-dialog').draggable();
+		// get dialog class to parse for callback
+		dialog_class = jQuery(event.target).parent().attr('class').match(/dialog-[\w-]*\b/);
+		openOWSDialog('.'+dialog_class);
 	};
 
 	drupalSettings.dialog.close = function(event) {
@@ -71,12 +74,14 @@ function displayWelcome() {
 			swal.close();
 	  		jQuery('.dialog-buttons-wrapper #btn-enter-contest').trigger('click');
 	  		
-	  		callbackInterval = setInterval(function () {	
-	  			if (dialogOpened()) {
-	  				openOWSDialog('.dialog-enter-contest');
+	  		// we still need interval for default dialog!
+	  		callbackInterval = setInterval(function () {
+	  			dialog_class = '.dialog-enter-contest';
+	  			if (dialogOpened(dialog_class)) {
+	  				openOWSDialog(dialog_class);
 	  		
 		  			// bind close dialog
-		  			jQuery('.dialog-enter-contest .ui-dialog-titlebar-close').on('click', function() {
+		  			jQuery(dialog_class + ' .ui-dialog-titlebar-close').on('click', function() {
 						closeOWSDialog();
 					});
 
@@ -113,9 +118,14 @@ function displayWelcome() {
 	    	swal.close();
 	  		jQuery('.dialog-buttons-wrapper #btn-browse').trigger('click');
 	  		
+	  		/* //  we can remove interval, the callback works fine with dialogr
 	  		callbackInterval = setInterval(function () {
 	  			if (dialogOpened()) {
 	  				openOWSDialog('.dialog-browse');
+	  				// fix dialog zindex for parent dialog
+	  				jQuery('.dialog-browse').click(function() {
+	  					jQuery(this).css('z-index', ++jQuery.ui.dialogr.maxZ);
+	  				});
 
 	  				// bind close dialog
 		  			jQuery('.dialog-browse .ui-dialog-titlebar-close').on('click', function() {
@@ -143,28 +153,62 @@ function displayWelcome() {
 
 					clearInterval(callbackInterval);
 	  			}
-	  		}, 2000);
+	  		}, 2000);*/
 	  	});
 	}
 }
 
-function dialogOpened() {
-	return jQuery('#drupal-modal').length;
+function dialogOpened(dialog_class) {
+	return jQuery(dialog_class + ' #drupal-modal').length;
 }
 
 function openOWSDialog(dialog_class) {
 	dialogs++;
 	// get dialog object
-	console.log('Open');
+	console.log('Dialog Open callback');
+	// refresh nicescroll
 	jQuery(dialog_class + ' #drupal-modal').niceScroll(scrollOptions);
+	// make dialog draggable
 	jQuery(dialog_class + ".ui-dialog").draggable({
 		drag: function (event, ui) {
-			console.log('Drag');
 			setTimeout(function() {
-				jQuery('#drupal-modal').niceScroll(scrollOptions).resize();
+				jQuery(dialog_class + '#drupal-modal').niceScroll(scrollOptions).resize();
 			}, 500);
 		}
 	});
+
+	// -------
+	console.log(dialog_class);
+	if (dialog_class == '.dialog-browse') {
+		// fix dialog zindex for parent dialog
+			jQuery('.dialog-browse').click(function() {
+				jQuery(this).css('z-index', ++jQuery.ui.dialogr.maxZ);
+			});
+
+			// bind close dialog
+			jQuery('.dialog-browse .ui-dialog-titlebar-close').on('click', function() {
+			closeOWSDialog();
+		});
+
+		// view contestant dialog
+		jQuery('.dialog-browse .browse-contestant').on('click', function() {
+			id = jQuery(this).attr('id').replace('contestant-', '');
+
+			if (!jQuery('.dialog-contestant-'+id).length) {
+		    	// browse website
+				jQuery.ajax({
+					url: "/ajax-content",
+					data: {type: "view-contestant", id: id},
+					async: false, 
+					success: function(data) {
+						openDialog('.dialog-contestant-'+id, 'Test', data, 600, 500);
+					}
+				});
+			}
+
+	    	swal.close();
+	    });
+	}
 }
 
 function closeOWSDialog() {
@@ -222,7 +266,7 @@ function openDialog(element, title, data, width = 500, height = 500, is_new = fa
 		fluid: true,
 		minWidth: 470,
 		dialogClass: element.replace('.', ''),
-		'maximizable': true,
+		maximizable: true,
 		open: function( event, ui ) {
 			w = jQuery(element + ' .ui-dialog-content').width();
 			jQuery(element + ' .ui-dialog').width(w);

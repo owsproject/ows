@@ -81,7 +81,6 @@
       // Trigger a global event to allow scripts to bind events to the dialog.
       $(window).trigger('dialog:beforecreate', [dialog, $element, settings]);
 
-      console.log(settings);
       // reset settings
       /*settings = {};
       settings.open = function() {
@@ -94,7 +93,13 @@
 
       // use default dialog for form
       if (settings.defaultDialog) $element.dialog(settings);
-      else $element.dialogr(settings);
+      else {
+        /*settings.autoResize = true;
+        settings.fluid = true;
+        settings.minWidth = 470;
+        settings.maximizable = true;*/
+        $element.dialogr(settings);
+      }
 
       dialog.open = true;
       $(window).trigger('dialog:aftercreate', [dialog, $element, settings]);
