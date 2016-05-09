@@ -72,6 +72,7 @@ function displayWelcome() {
 		// blind click event for button - click this button will trigger drupal button 
 		jQuery('.sweet-alert #swal-btn-register').on('click', function() {
 			swal.close();
+			loader();
 	  		jQuery('.dialog-buttons-wrapper #btn-enter-contest').trigger('click');
 	  		
 	  		// we still need interval for default dialog!
@@ -116,6 +117,7 @@ function displayWelcome() {
 	    // Browse
 	    jQuery('.sweet-alert #swal-btn-browse').on('click', function() {
 	    	swal.close();
+	    	loader();
 	  		jQuery('.dialog-buttons-wrapper #btn-browse').trigger('click');
 	  		
 	  		/* //  we can remove interval, the callback works fine with dialogr
@@ -178,7 +180,6 @@ function openOWSDialog(dialog_class) {
 	});
 
 	// -------
-	console.log(dialog_class);
 	if (dialog_class == '.dialog-browse') {
 		// fix dialog zindex for parent dialog
 			jQuery('.dialog-browse').click(function() {
@@ -192,6 +193,7 @@ function openOWSDialog(dialog_class) {
 
 		// view contestant dialog
 		jQuery('.dialog-browse .browse-contestant').on('click', function() {
+			loader();
 			id = jQuery(this).attr('id').replace('contestant-', '');
 
 			if (!jQuery('.dialog-contestant-'+id).length) {
@@ -201,6 +203,7 @@ function openOWSDialog(dialog_class) {
 					data: {type: "view-contestant", id: id},
 					async: false, 
 					success: function(data) {
+						loader(0);
 						openDialog('.dialog-contestant-'+id, 'Test', data, 600, 500);
 					}
 				});
@@ -209,6 +212,8 @@ function openOWSDialog(dialog_class) {
 	    	swal.close();
 	    });
 	}
+
+	loader(false);
 }
 
 function closeOWSDialog() {
@@ -314,3 +319,8 @@ jQuery.fn.center = function () {
     open: function (event) {
       openOWSDialog(event.target);
     }*/
+
+function loader(flag = true) {
+	if (flag) jQuery('.load-container').show();
+	else jQuery('.load-container').hide();
+}

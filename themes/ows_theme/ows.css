@@ -1,108 +1,173 @@
 @import url("https://fonts.googleapis.com/css?family=Roboto:400,700,500,300");
-
 *, a, div, html {
-	outline: none !important;
+    outline: none !important;
 }
 
 body {
-	background: #000 url("images/background1.png") no-repeat scroll center center;
-	font-family: 'Roboto', sans-serif !important;
-	min-height: 700px;
+    background: #000 url("images/background1.png") no-repeat scroll center center;
+    font-family: 'Roboto', sans-serif !important;
+    min-height: 700px;
 }
 
 #ascrail2000 {
-	border: 1px solid #444;
+    border: 1px solid #444;
 }
 
-#splashScreen img{
-	margin:0 auto;
+#splashScreen img {
+    margin: 0 auto;
 }
 
-#splashScreen{
-	position:absolute;
-	top:0;
-	left:0;
-	height:100%;
-	width:100%;
-	background-color:#252525;
-	background-repeat:no-repeat;
-	text-align:center;
+#splashScreen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #252525;
+    background-repeat: no-repeat;
+    text-align: center;
 }
 
-.welcome-wrapper .buttons a {
 
+/* loading */
+
+.load-container {
+    border-radius: 20px;
+    box-sizing: border-box;
+    float: left;
+    height: 200px;
+    opacity: 0.8;
+    overflow: hidden;
+    position: absolute;
+    width: 200px;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+    margin: 0 auto;
+    display: none;
 }
+.loader {
+    margin: 60px auto;
+    font-size: 10px;
+    position: relative;
+    text-indent: -9999em;
+    border-top: 1.1em solid rgba(229, 22, 75, 0.2);
+    border-right: 1.1em solid rgba(229, 22, 75, 0.2);
+    border-bottom: 1.1em solid rgba(229, 22, 75, 0.2);
+    border-left: 1.1em solid #e5164b;
+    -webkit-transform: translateZ(0);
+    -ms-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-animation: load8 1.1s infinite linear;
+    animation: load8 1.1s infinite linear;
+}
+
+.loader, .loader:after {
+    border-radius: 50%;
+    width: 6em;
+    height: 6em;
+}
+
+@-webkit-keyframes load8 {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes load8 {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+
+/* --- */
+
+.welcome-wrapper .buttons a {}
 
 .welcome-wrapper .buttons a:hover {
-	color: #eee;
+    color: #eee;
 }
+
 
 /*
 Dialog styles
 */
 
 #drupal-modal {
-	overflow: hidden;
+    overflow: hidden;
 }
 
 #welcome-box {
-	display: none;
+    display: none;
 }
 
 .sweet-alert {
-	background: rgba(0,0,0,0.30);
-	border-radius: 9px;
-	padding: 8px;
-	font-family: 'Roboto', sans-serif !important;
-	width: 600px;
-	margin-left: 0;
+    background: rgba(0, 0, 0, 0.30);
+    border-radius: 9px;
+    padding: 8px;
+    font-family: 'Roboto', sans-serif !important;
+    width: 600px;
+    margin-left: 0;
 }
 
 .sweet-alert .sweet-content-wrapper {
-	padding: 55px 15px 15px;
-	background: #fff;
+    padding: 55px 15px 15px;
+    background: #fff;
 }
 
 .sweet-alert h2 {
-	margin: 0 8px;
-	padding-top: 10px;
-	text-align: center;
+    margin: 0 8px;
+    padding-top: 10px;
+    text-align: center;
     font-weight: bold;
     font-size: 18px;
     cursor: default;
 }
 
 .button {
-	width: 30px;
-	height: 50px;
-	border-radius: 4px;
-	text-shadow: 1px 1px 1px rgba(0,0,0,0.45);
-	color: #fff;
-	padding: 6px 12px;
-	text-decoration: none;
-	font-weight: bold;
-	font-size: 16px;
-	margin: 0 2px;
+    width: 30px;
+    height: 50px;
+    border-radius: 4px;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.45);
+    color: #fff;
+    padding: 6px 12px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 16px;
+    margin: 0 2px;
 }
 
 .button-red {
-	background: url(images/button-red.png);
+    background: url(images/button-red.png);
 }
 
 .buttons a {
-	display: inline-block;
-	height: auto;
-	width: auto;
+    display: inline-block;
+    height: auto;
+    width: auto;
 }
 
 .welcome-text {
-	font-size: 14px;
-	margin-bottom: 20px;
+    font-size: 14px;
+    margin-bottom: 20px;
 }
 
+
 /* Dialogr css */
+
 .ui-dialog {
-	-moz-border-radius: 8px;
+    -moz-border-radius: 8px;
     -webkit-border-radius: 8px;
     border-width: 10px;
     border-radius: 8px;
@@ -111,12 +176,12 @@ Dialog styles
 }
 
 .ui-dialog * {
-	font-family: "Roboto",sans-serif !important;
-	color: #66757f;
+    font-family: "Roboto", sans-serif !important;
+    color: #66757f;
 }
 
 .ui-dialog label {
-	color: #eee;
+    color: #eee;
 }
 
 .ui-dialog .button {
@@ -130,29 +195,29 @@ Dialog styles
 }
 
 .ui-dialog .ui-dialog-titlebar {
-	background: transparent none repeat scroll 0 0;
+    background: transparent none repeat scroll 0 0;
     border: medium none;
 }
 
 .ui-dialog .ui-dialog-titlebar {
-	border-bottom: 1px solid #444 !important;
+    border-bottom: 1px solid #444 !important;
     border-radius: 0;
     margin: 0 6px;
 }
 
 .ui-dialog .ui-dialog-titlebar span {
-	color: #fff !important;
+    color: #fff !important;
     font-size: 18px;
 }
 
 #block-ows-theme-content .form-item label {
-	float:left;
-	width: 120px;
+    float: left;
+    width: 120px;
 }
 
 #block-ows-theme-content .form-item input {
-	float:left;
-	width: 300px;
+    float: left;
+    width: 300px;
 }
 
 #block-ows-theme-content .form-item {
@@ -161,156 +226,153 @@ Dialog styles
     width: 100%;
 }
 
-#join-contest-form #edit-terms,
-#join-contest-form #edit-rule {
-	float: none;
-	width: auto;
+#join-contest-form #edit-terms, #join-contest-form #edit-rule {
+    float: none;
+    width: auto;
 }
 
 #join-contest-form #edit-submit {
-	margin-left: 120px;
+    margin-left: 120px;
 }
 
 .ui-dialog h2.dialog-title {
-	display: none;
+    display: none;
 }
 
 .nicescroll-rails > div {
-	border-color: #888 !important;
+    border-color: #888 !important;
 }
 
+
 /* Enter contest form styles */
+
 .ui-dialog .user-register-form div.description {
-	display: none;
+    display: none;
 }
 
 .ui-dialog .user-register-form .js-form-type-managed input.js-form-file {
-	font-size: 11px;
+    font-size: 11px;
     font-weight: normal;
     padding: 4px;
     width: auto;
 }
 
-.ui-dialog .user-register-form .form-item .description,
-.ui-dialog .user-register-form .form-file {
-	font-size: 11px;
+.ui-dialog .user-register-form .form-item .description, .ui-dialog .user-register-form .form-file {
+    font-size: 11px;
 }
 
-.ui-dialog .user-register-form,
-.ui-dialog .user-register-form .field--type-datetime h4 {
-	font-size: 12px;
-	font-weight: normal;
-	color: #eee;
+.ui-dialog .user-register-form, .ui-dialog .user-register-form .field--type-datetime h4 {
+    font-size: 12px;
+    font-weight: normal;
+    color: #eee;
 }
 
 .ui-dialog .user-register-form .form-managed-file .form-submit {
-	/*margin-left: 120px;
+    /*margin-left: 120px;
     margin-top: 6px;*/
     margin-left: 10px;
 }
 
 .ui-dialog .user-register-form .field--name-field-voice.form-wrapper .description {
-	display: none;
+    display: none;
 }
 
 .ui-dialog .user-register-form .field--type-datetime h4 {
-	float: left;
-	width: 120px;
-	margin: 6px 0 0;
+    float: left;
+    width: 120px;
+    margin: 6px 0 0;
 }
 
 .ui-dialog .field--name-field-birthday > div {
-	float: left;
+    float: left;
 }
 
 .ui-dialog .user-register-form .form-checkbox {
-	float: none !important;
-	width: auto !important;
+    float: none !important;
+    width: auto !important;
 }
 
 .ui-dialog .user-register-form #edit-actions #edit-submit {
-	margin-left: 120px;
+    margin-left: 120px;
 }
 
-.ui-dialog .user-register-form .form-number {
-	
-}
+.ui-dialog .user-register-form .form-number {}
 
 .ui-dialog .user-register-form .form-select {
-	width: 126px !important;
+    width: 126px !important;
 }
 
-.ui-dialog .user-register-form #edit-field-voice-wrapper .form-file,
-.ui-dialog .user-register-form #edit-user-picture-wrapper .form-file {
-	width: 150px;
+.ui-dialog .user-register-form #edit-field-voice-wrapper .form-file, .ui-dialog .user-register-form #edit-user-picture-wrapper .form-file {
+    width: 150px;
 }
 
 .ui-dialog .user-register-form .form-item label {
-	float: left;
-	width: 120px;
+    float: left;
+    width: 120px;
 }
 
 .ui-dialog .user-register-form .form-item {
-	margin: 6px 0;
+    margin: 6px 0;
 }
 
 .ui-dialog .user-register-form input {
-	width: 120px;
+    width: 120px;
 }
 
 .ui-dialog .form-wrapper {
-	clear: both;
+    clear: both;
 }
 
 .ui-dialog-buttonpane {
-	position: relative;
-	z-index: 9999;
-	background: transparent none repeat scroll 0 0;
+    position: relative;
+    z-index: 9999;
+    background: transparent none repeat scroll 0 0;
     border-top: 1px solid #666;
 }
 
 .ui-dialog-buttonpane button.button--primary .ui-button-text {
-	color: #fff !important;
+    color: #fff !important;
 }
 
 #ui-datepicker-div {
-	z-index: 9999 !important;
+    z-index: 9999 !important;
 }
 
 .hidden {
-	display: none !important;
+    display: none !important;
 }
+
 
 /* Enter contest form */
 
 .enter-contest-form .form-item {
-	float: left;
-	width: 100%;
-	margin: 4px 0;
+    float: left;
+    width: 100%;
+    margin: 4px 0;
 }
 
 .enter-contest-form label {
-	float: left;
-	width: 120px;
+    float: left;
+    width: 120px;
 }
 
 .enter-contest-form input {
-	float: left;
-	width: 200px;
+    float: left;
+    width: 200px;
 }
 
 .enter-contest-form .form-item-gender input {
-	width: 20px;
-	margin-left: 68px;
+    width: 20px;
+    margin-left: 68px;
 }
 
 .enter-contest-form .fieldgroup legend {
-	color: #fff;
-	float: left;
+    color: #fff;
+    float: left;
 }
 
 .enter-contest-form .fieldgroup .fieldset-wrapper {
-	float: left;
+    float: left;
 }
 
 .enter-contest-form .form-number {
@@ -322,7 +384,7 @@ Dialog styles
 }
 
 .enter-contest-form .description {
-	color: #fff !important;
+    color: #fff !important;
     display: block;
     float: left;
     padding-left: 10px;
@@ -334,47 +396,45 @@ Dialog styles
 }
 
 .validator.error {
-	color: #ff0000;
+    color: #ff0000;
     margin-bottom: 10px;
 }
 
 .js-form-submit.form-submit span {
-	color: #fff;
-	font-weight: bold;
+    color: #fff;
+    font-weight: bold;
 }
 
 .menu-bar {
-	background: #fff none repeat scroll 0 0;
+    background: #fff none repeat scroll 0 0;
     bottom: 0;
     height: 120px;
     left: 0;
     position: fixed;
     width: 100%;
-
-    -webkit-box-shadow: 0px -5px 17px 0px rgba(0,0,0,0.4);
-	-moz-box-shadow: 0px -5px 17px 0px rgba(0,0,0,0.4);
-	box-shadow: 0px -5px 17px 0px rgba(0,0,0,0.4);
+    -webkit-box-shadow: 0px -5px 17px 0px rgba(0, 0, 0, 0.4);
+    -moz-box-shadow: 0px -5px 17px 0px rgba(0, 0, 0, 0.4);
+    box-shadow: 0px -5px 17px 0px rgba(0, 0, 0, 0.4);
 }
 
 .menu-bar a.home {
-	display: block;
-	width: 100px;
-	height: 100px;
-	background: url(images/home.png) no-repeat;
-	margin: 10px auto 0;
-	color: #fff;
+    display: block;
+    width: 100px;
+    height: 100px;
+    background: url(images/home.png) no-repeat;
+    margin: 10px auto 0;
+    color: #fff;
 }
+
 
 /* Browse */
+
 .dialog-browse .views-row {
-	margin-bottom: 20px;
-	min-height: 84px;
+    margin-bottom: 20px;
+    min-height: 84px;
 }
 
-.col-xs-15,
-.col-sm-15,
-.col-md-15,
-.col-lg-15 {
+.col-xs-15, .col-sm-15, .col-md-15, .col-lg-15 {
     position: relative;
     min-height: 1px;
     padding-right: 10px;
@@ -387,17 +447,19 @@ Dialog styles
 }
 
 @media (min-width: 768px) {
-.col-sm-15 {
+    .col-sm-15 {
         width: 20%;
         float: left;
     }
 }
+
 @media (min-width: 992px) {
     .col-md-15 {
         width: 20%;
         float: left;
     }
 }
+
 @media (min-width: 1200px) {
     .col-lg-15 {
         width: 20%;
@@ -406,30 +468,29 @@ Dialog styles
 }
 
 nav.pager {
-	margin-bottom: 0;
-	clear: both;
+    margin-bottom: 0;
+    clear: both;
 }
 
 .pager li > a, .pager li > span {
-	padding: 2px 8px;
-	background-color: #666;
+    padding: 2px 8px;
+    background-color: #666;
     border: 1px solid #333;
     color: #000;
 }
 
 .pager .pager__item span {
-	color: #000;
+    color: #000;
 }
 
 .ui-dialog .ui-dialog-titlebar-close {
-	background: url(images/close.png) no-repeat;
-	width: 16px;
-	height: 16px;
-	border: none;
+    background: url(images/close.png) no-repeat;
+    width: 16px;
+    height: 16px;
+    border: none;
 }
 
 .views-browse .views-field.views-field-user-picture {
     float: left;
     width: 100px;
 }
-
