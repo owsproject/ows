@@ -58,7 +58,8 @@ class OWSController extends ControllerBase
 		// $html = "<a href='/enter-contest' class='use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$enter_contest."'>Go2</a>";
 		
 		// buttons open dialog
-		$html = "<div class='dialog-buttons-wrapper hidden'>
+		$html = '<div class="load-container"><div class="loader">Loading...</div></div>';
+		$html .= "<div class='dialog-buttons-wrapper hidden'>
 			<a href='/enter-contest' id='btn-enter-contest' class='button button-red use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_enter_contest."'>Enter the Contest</a>
 
 			<a href='/vote' id='btn-vote' class='button button-red use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_vote."'>Vote in the Contest</a>
@@ -181,7 +182,29 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
     }
 
     public function contestantInfo($uid) {
-    	return array('#type' => 'markup', '#markup' => $uid);
-    }
+    	$contestant = user_load($uid);
 
+    	if ($contestant->uid) {
+//     		$full_name = $user->
+	    	$html = '<div class="contestant-info" id="contestant-'.$uid.'">
+	    		<ul class="nav nav-tabs">
+					<li class="active">
+						Personal Information
+					</li>
+					<li>More info about me</li>
+					<li>Invite</li>
+				</ul>
+
+				<div class="info">
+					<div class="photo"></div>
+					<div class="detail">
+						<span class="name">Full name</span>
+						<span class="name value">'.$uid.'</span>
+					</div>
+				</div>
+	    	</div>';
+    	}
+
+    	return array('#type' => 'markup', '#markup' => $html);
+    }
 }
