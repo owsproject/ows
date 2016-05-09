@@ -179,6 +179,31 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
      		$full_name = $contestant->get('field_first_name')->value. ' '.$contestant->get('field_last_name')->value;
 			// $photo = \Drupal::service('renderer')->render($contestant->user_picture->first()->view('large'));
 			
+			$variables = array(
+				'style_name' => 'thumbnail',
+				'uri' => $file->getFileUri(),
+			);
+
+			// The image.factory service will check if our image is valid.
+			$image = \Drupal::service('image.factory')->get($file->getFileUri());
+			if ($image->isValid()) {
+				$variables['width'] = $image->getWidth();
+				$variables['height'] = $image->getHeight();
+			} else {
+			  $variables['width'] = $variables['height'] = NULL;
+			}
+
+			$logo_render_array = [
+				'#theme' => 'image_style',
+				'#width' => $variables['width'],
+				'#height' => $variables['height'],
+				'#style_name' => $variables['style_name'],
+				'#uri' => $variables['uri'],
+			];
+
+			$renderer = \Drupal::service('renderer');
+			$renderer->addCacheableDependency($logo_render_array, $file);
+
 	    	$html = '<div class="contestant-info" id="contestant-'.$uid.'">
 	    		<ul class="nav nav-tabs">
 					<li class="active">
