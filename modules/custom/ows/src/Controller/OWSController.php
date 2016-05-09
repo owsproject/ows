@@ -14,28 +14,19 @@ use Drupal\Core\Ajax\CssCommand;
 use Drupal\Core\Ajax\HtmlCommand;
 
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\image\Entity\ImageStyle;
 
 class OWSController extends ControllerBase
 {
 	public function homepage() {
-		/*<div id="splash-img" style="display:none;">
-			<img src="/themes/ows_theme/images/splash.jpg" />
-    	</div>
-
-    	<div id="welcome-dialog" class="dialog" title="Welcome to OWS">
-  			<p>Lotem istest.</p>
-		</div>
-		
-		*/
-		
 		$account = \Drupal::currentUser();
-
 		if (!$account->uid) {
 
 		} else {
 
 		}
 
+		// dialog property
 		$dialog_enter_contest = json_encode(array(
 			'title' => 'Enter the Contest',
 			'width' => '650',
@@ -183,9 +174,11 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 
     public function contestantInfo($uid) {
     	$contestant = user_load($uid);
-
+    	kint ($contestant);
     	if ($contestant->uid) {
-//     		$full_name = $user->
+     		$full_name = $contestant->get('field_first_name')->value. ' '.$contestant->get('field_last_name')->value;
+			// $photo = \Drupal::service('renderer')->render($contestant->user_picture->first()->view('large'));
+			
 	    	$html = '<div class="contestant-info" id="contestant-'.$uid.'">
 	    		<ul class="nav nav-tabs">
 					<li class="active">
@@ -196,10 +189,12 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 				</ul>
 
 				<div class="info">
-					<div class="photo"></div>
+					<div class="photo">
+					'.$photo->__toString().'
+					</div>
 					<div class="detail">
 						<span class="name">Full name</span>
-						<span class="name value">'.$uid.'</span>
+						<span class="name value">'.$full_name.'</span>
 					</div>
 				</div>
 	    	</div>';
