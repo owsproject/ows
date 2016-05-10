@@ -14,14 +14,14 @@ use Drupal\Core\Ajax\CssCommand;
 use Drupal\Core\Ajax\HtmlCommand;
 
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\file\Entity\File;
 use Drupal\image\Entity\ImageStyle;
 
 class OWSController extends ControllerBase
 {
 	public function homepage() {
 		$account = \Drupal::currentUser();
-		if (!$account->uid) {
-
+		if (!empty($account->uid)) {
 		} else {
 
 		}
@@ -173,53 +173,161 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
     }
 
     public function contestantInfo($uid) {
-    	$contestant = user_load($uid);
-    	kint ($contestant);
-    	if ($contestant->uid) {
-     		$full_name = $contestant->get('field_first_name')->value. ' '.$contestant->get('field_last_name')->value;
-			// $photo = \Drupal::service('renderer')->render($contestant->user_picture->first()->view('large'));
+    	$user = user_load($uid);
+    	// kint ($user);
+    	if ($user->uid) {
+     		$full_name = $user->get('field_first_name')->value. ' '.$user->get('field_last_name')->value;
+		
+			// user photo
+			if (!empty($user->user_picture->target_id)) {
+				$file = File::load($user->user_picture->target_id);
+				$image_style_id = 'photo_large'; //$this->config('core.entity_view_display.user.user.compact')->get('content.user_picture.settings.image_style');
+    			$style = ImageStyle::load($image_style_id);
+    			$image_url = file_url_transform_relative($style->buildUrl($file->getfileUri()));
+    			$alt_text = 'Profile picture for user ' . $user->getUsername();
+			}
 			
-			$variables = array(
-				'style_name' => 'thumbnail',
-				'uri' => $file->getFileUri(),
-			);
-
-			// The image.factory service will check if our image is valid.
-			$image = \Drupal::service('image.factory')->get($file->getFileUri());
-			if ($image->isValid()) {
-				$variables['width'] = $image->getWidth();
-				$variables['height'] = $image->getHeight();
-			} else {
-			  $variables['width'] = $variables['height'] = NULL;
+			// country
+			$country = false;
+			if (!empty($user->get('field_country')->value)) {
+				$t = $user->get('field_country')->value;
+				$country = $user->getFieldDefinitions()['field_country']->getItemDefinition()->getSettings()['allowed_values'];
+				foreach($country as  $k => $v) {
+					if ($t == $k) {
+						$country = $v;
+						break;
+					}
+				}
 			}
 
-			$logo_render_array = [
-				'#theme' => 'image_style',
-				'#width' => $variables['width'],
-				'#height' => $variables['height'],
-				'#style_name' => $variables['style_name'],
-				'#uri' => $variables['uri'],
-			];
+			// birthday
+			$birthday = false;
+			$age = ' ';
+			$height = $weight = $bust = $hair = $eye = '';
+			if (!empty($user->get('field_birthday')->value)) {
+				$birthday = date('d M Y', strtotime($user->get('field_birthday')->value));
+				$age = (date('Y', time()) - date('Y', strtotime($birthday)));
+			}
 
-			$renderer = \Drupal::service('renderer');
-			$renderer->addCacheableDependency($logo_render_array, $file);
+			$measurements = '';
+			// waist
+			if (!empty($user->get('field_waist')->value)) {
+				$waist = $user->get('field_waist')->value;
+				$measurements = $waist;
+			}
+
+			// hip
+			if (!empty($user->get('field_hip')->value)) {
+				$hip = $user->get('field_hip')->value;
+				if ($measurements) $measurements .= ' - ' . $hip;
+				else $measurements = 'Hip: '.$hip;
+			}
+
+			// height
+			if (!empty($user->get('field_height')->value)) {
+				$height = $user->get('field_height')->value;
+			}
+			
+			// weight
+			if (!empty($user->get('field_weight')->value)) {
+				$weight = $user->get('field_weight')->value;
+			}
+			
+			// bust
+			if (!empty($user->get('field_bust')->value)) {
+				$bust = $user->get('field_bust')->value;
+			}
+			
+			// hair
+			if (!empty($user->get('field_hair_color')->value)) {
+				$hair = $user->get('field_hair_color')->value;
+			}
+			
+			// eyes
+			if (!empty($user->get('field_eyes_color')->value)) {
+				$eyes = $user->get('field_eyes_color')->value;
+			}
+
+			// about me
+			$about_me = '';
+			if (!empty($user->get('field_about_me')->value)) {
+				$about_me = $user->get('field_about_me')->value;
+			}
 
 	    	$html = '<div class="contestant-info" id="contestant-'.$uid.'">
 	    		<ul class="nav nav-tabs">
-					<li class="active">
-						Personal Information
-					</li>
-					<li>More info about me</li>
-					<li>Invite</li>
+					<li class="active"><a data-toggle="tab" href="#personal-information">Personal Information</a></li>
+					<li><a data-toggle="tab" href="#about-me">More info about me</a></li>
+					<li><a data-toggle="tab" href="#">Invite</a></li>
 				</ul>
 
-				<div class="info">
-					<div class="photo">
-					'.$photo->__toString().'
+				<div class="tab-content">
+					<div id="personal-information" class="info personal-information tab-pane fade in active">
+						<div class="photo"><img src="'.$image_url.'"/></div>
+						<div class="detail">
+							<div class="item">
+								<span class="name">Full name</span>
+								<span class="name value">'.$full_name.'</span>
+							</div>
+
+							<div class="item">
+								<span class="name">Country</span>
+								<span class="name value">'.$country.'</span>
+							</div>
+
+							<div class="item">
+								<span class="name">Date of Birth</span>
+								<span class="name value">'.$birthday.'</span>
+							</div>
+
+							<div class="item">
+								<span class="name">Age</span>
+								<span class="name value">'.$age.'</span>
+							</div>
+
+							<div class="item">
+								<span class="name">Hip</span>
+								<span class="name value">'.$hip.'</span>
+							</div>
+
+							<div class="item">
+								<span class="name">Height</span>
+								<span class="name value">'.$height.'</span>
+							</div>
+
+							<div class="item">
+								<span class="name">Weight</span>
+								<span class="name value">'.$weight.'</span>
+							</div>
+
+							<div class="item">
+								<span class="name">Burst</span>
+								<span class="name value">'.$bsut.'</span>
+							</div>
+
+							<div class="item">
+								<span class="name">Hair Color</span>
+								<span class="name value">'.$hair.'</span>
+							</div>
+
+							<div class="item">
+								<span class="name">Eye Color</span>
+								<span class="name value">'.$eyes.'</span>
+							</div>
+
+							<div class="item">
+								<span class="name">Measurements</span>
+								<span class="name value">'.$measurements.'</span>
+							</div>
+						</div>
 					</div>
-					<div class="detail">
-						<span class="name">Full name</span>
-						<span class="name value">'.$full_name.'</span>
+
+					<div id="about-me" class="info personal-information tab-pane fade in">
+						'.$about_me.'
+					</div>
+
+					<div id="invite" class="info personal-information tab-pane fade in">
+						eeeee
 					</div>
 				</div>
 	    	</div>';
