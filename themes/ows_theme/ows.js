@@ -200,10 +200,11 @@ function browseContestant(dialog_class) {
 	// -----------------
 	// view contestant dialog
 	jQuery(dialog_class + ' .browse-contestant').on('click', function() {
-		loader();
 		id = jQuery(this).attr('id').replace('contestant-', '');
 
 		if (!jQuery('.dialog-contestant-'+id).length) {
+			full_name = jQuery(this).find('.views-field-field-first-name .field-content').html() + ' ' + jQuery(this).find('.views-field-field-last-name .field-content').html();
+			loader();
 	    	// browse website
 			jQuery.ajax({
 				url: "/ajax-content",
@@ -211,7 +212,7 @@ function browseContestant(dialog_class) {
 				async: false, 
 				success: function(data) {
 					loader(0);
-					openDialog('.dialog-contestant-'+id, 'Test', data, 600, 500);
+					openDialog('.dialog-contestant-'+id, full_name, data, 600, 500);
 				}
 			});
 		}

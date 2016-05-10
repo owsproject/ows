@@ -494,3 +494,11 @@ nav.pager {
     float: left;
     width: 100px;
 }
+
+.contestant-info {
+
+}
+
+.contestant-info .photo {
+	float: left;
+}
