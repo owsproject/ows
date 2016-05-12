@@ -732,3 +732,5 @@ $databases['default']['default'] = array (
 );
 $settings['install_profile'] = 'standard';
 $config_directories['sync'] = 'sites/ows.dd/files/config_mOQBtXL4xOkXyPWcGZXLfGlAGd301Mqef9z5Tuf11c1xiIOGtquHxd5TKwarvHnY0T-Hb1aubw/sync';
+
+$settings['twig_debug'] = TRUE;
