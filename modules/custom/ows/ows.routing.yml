@@ -52,3 +52,12 @@ ows.enter_contest:
     _form: '\Drupal\ows\Form\EnterContestForm'
   requirements:
       _access: 'TRUE'
+
+ows.invite_friend:
+  path: '/invite-friend'
+  defaults:
+    _form: '\Drupal\ows\Form\InviteFriendForm'
+  requirements:
+      _access: 'TRUE'
+
+

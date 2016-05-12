@@ -45,6 +45,18 @@ class OWSController extends ControllerBase
 			'width' => '80%',
 			'dialogClass' => 'dialog-browse',
 		));
+
+		// invite friend
+		$dialog_invite = json_encode(array(
+			'title' => 'Invite Friend',
+			'width' => '60%',
+			'dialogClass' => 'dialog-invite',
+			'defaultDialog' => true
+		));
+
+		/*Name
+		Email
+		Dear $friend check out this hot contestant. Come join and vote like me.*/
 		
 		// $html = "<a href='/enter-contest' class='use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$enter_contest."'>Go2</a>";
 		
@@ -56,6 +68,8 @@ class OWSController extends ControllerBase
 			<a href='/vote' id='btn-vote' class='button button-red use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_vote."'>Vote in the Contest</a>
 
 			<a href='/browse' id='btn-browse' class='button button-red use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_browse."'>Browse the Website</a>
+
+			<a href='/invite-friend' id='btn-invite-friend' class='button button-red use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_invite."'>Invite Friend</a>
 		</div>";
 
 		// sweet alert box
@@ -126,28 +140,6 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 				'#weight' => 21
 			);
 
-			// avoid empty "action" rendered form
-			/*
-			$form['#action'] = '/user/register';
-			$t = $form['actions']['submit']['#submit'];
-			unset($form['actions']['submit']['#submit']);
-			$form['actions']['submit']['#ajax'] = $t;
-			$form['actions']['submit']['#ajax']['accepts'] = 'application/vnd.drupal-modal';
-
-			$form['actions']['submit']['#ajax_processed'] = true;
-			*/
-			/*
-			$form['actions'] = array();
-			$form['actions']['#type'] = 'actions';
-	        $form['actions']['submit'] = array(
-	            '#type' => 'submit',
-	            '#value' => $this->t('Register'),
-	            '#ajax' => array(
-	                'callback' => 'Drupal\ows\Form\EnterContestForm::submitForm',
-	            ),
-	            '#submit' => 'Drupal\ows\Form\EnterContestForm::submitFormDrupal\ows\Form\EnterContestForm::submitForm'
-	        );*/
-
 			kint($form);
 			return $form;
 
@@ -161,7 +153,6 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 			if ($view) $html = $view->__toString();
 		    return array('#type' => 'markup', '#markup' => '$html');
 		} else if ($type == "view-contestant") {
-			print $_REQUEST['uid'];
 			return $this->contestantInfo($_REQUEST['id']);
 		}
 
@@ -256,13 +247,13 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 
 	    	$html = '<div class="contestant-info" id="contestant-'.$uid.'">
 	    		<ul class="nav nav-tabs">
-					<li class="active"><a data-toggle="tab" href="#personal-information">Personal Information</a></li>
-					<li><a data-toggle="tab" href="#about-me">More info about me</a></li>
-					<li><a data-toggle="tab" href="#">Invite</a></li>
+					<li class="active"><a data-toggle="tab" href="#personal-information-tab">Personal Information</a></li>
+					<li><a data-toggle="tab" href="#about-me-tab">More info about me</a></li>
+					<li><a data-toggle="tab" href="#invite-tab">Invite</a></li>
 				</ul>
 
 				<div class="tab-content">
-					<div id="personal-information" class="info personal-information tab-pane fade in active">
+					<div id="personal-information-tab" class="info personal-information tab-pane fade in active">
 						<div class="photo"><img src="'.$image_url.'"/></div>
 						<div class="detail">
 							<div class="item">
@@ -302,7 +293,7 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 
 							<div class="item">
 								<span class="name">Burst</span>
-								<span class="name value">'.$bsut.'</span>
+								<span class="name value">'.$bust.'</span>
 							</div>
 
 							<div class="item">
@@ -322,12 +313,28 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 						</div>
 					</div>
 
-					<div id="about-me" class="info personal-information tab-pane fade in">
+					<div id="about-me-tab" class="info tab-pane fade in">
 						'.$about_me.'
+						<br>
+						<a href="#invite-friend" id="dialog-btn-invite-friend" class="button button-red invite-friend">Invite Friend</a>
 					</div>
 
-					<div id="invite" class="info personal-information tab-pane fade in">
-						eeeee
+					<div id="invite-tab" class="info tab-pane fade in">
+							<div class="form-item form-fullname">
+								<label for="edit-name">Your friend name</label>
+								<input type="text" class="form-name" maxlength="254" size="60" value="" name="name" id="edit-name">
+								<input type="text">
+							</div>
+
+							<div class="form-item form-content">
+								<label for="edit-content">Content</label>
+								<textarea class="form-content" maxlength="254" size="60" value="" name="content" id="edit-content"></textarea>
+							</div>
+
+							<div id="edit-actions" class="form-actions form-wrapper">
+								<input type="button" class="button button--primary form-submit" value="Invite" name="op" id="edit-submit">
+							</div>
+						
 					</div>
 				</div>
 	    	</div>';
