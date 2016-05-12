@@ -21,11 +21,12 @@ jQuery(document).ready(function() {
 	// --------------------------------------------
 	// extend dialog options
 	drupalSettings.dialog.open = function(event) {
-		console.log('Dialog Open');
 		// get dialog class to parse for callback
 		dialog_class = jQuery(event.target).parent().attr('class').match(/dialog-[\w-]*\b/);
-		jQuery('.'+dialog_class.toString() + ' .ui-dialog').draggable();
-		openOWSDialog('.'+dialog_class.toString());
+		if (dialog_class.toString() != "dialog-invite") {
+			jQuery('.'+dialog_class.toString() + ' .ui-dialog').draggable();
+			openOWSDialog('.'+dialog_class.toString());
+		}
 	};
 
 	drupalSettings.dialog.close = function(event) {
@@ -213,6 +214,13 @@ function browseContestant(dialog_class) {
 				success: function(data) {
 					loader(0);
 					openDialog('.dialog-contestant-'+id, full_name, data, 600, 500);
+
+					// ------------------------------
+					// blind click event for button - click this button will trigger drupal button 
+					jQuery('#dialog-btn-invite-friend').on('click', function() {
+						loader();
+				  		jQuery('.dialog-buttons-wrapper #btn-invite-friend').trigger('click');
+				  	});
 				}
 			});
 		}
