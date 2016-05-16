@@ -247,13 +247,13 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 
 	    	$html = '<div class="contestant-info" id="contestant-'.$uid.'">
 	    		<ul class="nav nav-tabs">
-					<li class="active"><a data-toggle="tab" href="#personal-information-tab">Personal Information</a></li>
-					<li><a data-toggle="tab" href="#about-me-tab">More info about me</a></li>
-					<li><a data-toggle="tab" href="#invite-tab">Invite</a></li>
+					<li class="active"><a data-toggle="tab" href="#personal-information-'.$uid.'">Personal Information</a></li>
+					<li><a data-toggle="tab" href="#about-me-'.$uid.'">More info about me</a></li>
+					<li><a data-toggle="tab" href="#invite-'.$uid.'">Invite</a></li>
 				</ul>
 
 				<div class="tab-content">
-					<div id="personal-information-tab" class="info personal-information tab-pane fade in active">
+					<div id="personal-information-'.$uid.'" class="info personal-information tab-pane fade in active">
 						<div class="photo"><img src="'.$image_url.'"/></div>
 						<div class="detail">
 							<div class="item">
@@ -313,13 +313,13 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 						</div>
 					</div>
 
-					<div id="about-me-tab" class="info tab-pane fade in">
+					<div id="about-me-'.$uid.'" class="info tab-pane fade in">
 						'.$about_me.'
 						<br>
 						<a href="#invite-friend" id="dialog-btn-invite-friend" class="button button-red invite-friend">Invite Friend</a>
 					</div>
 
-					<div id="invite-tab" class="info tab-pane fade in">
+					<div id="invite-'.$uid.'" class="info tab-pane fade in">
 							<div class="form-item form-fullname">
 								<label for="edit-name">Your friend name</label>
 								<input type="text" class="form-name" maxlength="254" size="60" value="" name="name" id="edit-name">
