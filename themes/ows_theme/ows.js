@@ -21,18 +21,17 @@ jQuery(document).ready(function() {
 	// --------------------------------------------
 	// extend dialog options
 	drupalSettings.dialog.open = function(event) {
+		console.log('Dialog Open');
 		// get dialog class to parse for callback
 		dialog_class = jQuery(event.target).parent().attr('class').match(/dialog-[\w-]*\b/);
-		if (dialog_class.toString() != "dialog-invite") {
-			jQuery('.'+dialog_class.toString() + ' .ui-dialog').draggable();
-			openOWSDialog('.'+dialog_class.toString());
-		}
+		jQuery('.'+dialog_class.toString() + ' .ui-dialog').draggable();
+		openOWSDialog(dialog_class.toString());
 	};
 
 	drupalSettings.dialog.close = function(event) {
 		console.log('Dialog Close');
-		_dialog_class = jQuery(event.target).parent().attr('class').split(' ').pop();
-		closeOWSDialog();
+		dialog_class = jQuery(event.target).parent().attr('class').match(/dialog-[\w-]*\b/);
+		closeOWSDialog(dialog_class.toString());
 	};
 });
 
@@ -164,6 +163,8 @@ function dialogOpened(dialog_class) {
 }
 
 function openOWSDialog(dialog_class) {
+	dialog_class = "." + dialog_class;
+
 	dialogs++;
 	// get dialog object
 	console.log('Dialog Open callback:' + dialog_class);
@@ -172,18 +173,26 @@ function openOWSDialog(dialog_class) {
 	jQuery(dialog_class + ".ui-dialog").draggable({
 		drag: function (event, ui) {
 			setTimeout(function() {
-				jQuery(dialog_class + '#drupal-modal').niceScroll(scrollOptions).resize();
+				// jQuery(dialog_class + ' .ui-dialog-content').niceScroll(scrollOptions).resize();
+				scrollbar(dialog_class);
 			}, 500);
 		}
 	});
 
+	// contestant detail event
 	if (dialog_class == '.dialog-browse') {
 		browseContestant(dialog_class);
 	}
 
 	// refresh nicescroll
-	//jQuery(dialog_class + ' #drupal-modal').niceScroll(scrollOptions);
+	// jQuery(dialog_class + ' .ui-dialog-content').niceScroll(scrollOptions);
+	scrollbar(dialog_class);
 	loader(false);
+
+	// bind custom close event
+	//jQuery(dialog_class + ' .ui-icon-closethick').click(function() {
+		//dialogRemoveScroll(dialog_class);
+	//})
 }
 
 // open contestant window
@@ -214,13 +223,6 @@ function browseContestant(dialog_class) {
 				success: function(data) {
 					loader(0);
 					openDialog('.dialog-contestant-'+id, full_name, data, 600, 500);
-
-					// ------------------------------
-					// blind click event for button - click this button will trigger drupal button 
-					jQuery('#dialog-btn-invite-friend').on('click', function() {
-						loader();
-				  		jQuery('.dialog-buttons-wrapper #btn-invite-friend').trigger('click');
-				  	});
 				}
 			});
 		}
@@ -229,7 +231,14 @@ function browseContestant(dialog_class) {
 	});
 }
 
-function closeOWSDialog() {
+function dialogRemoveScroll(dialog_class) {
+	
+}
+
+function closeOWSDialog(dialog_class) {
+	dialog_class = "." + dialog_class;
+	//jQuery(dialog_class + " .ui-dialog-content").getNiceScroll().remove();
+
 	if (dialogs > 0) dialogs--;
 	else dialogs = 0;
 	if (dialogs == 0) displayWelcome();
@@ -271,7 +280,8 @@ function openDialog(element, title, data, width = 500, height = 500, is_new = fa
 		open: function( event, ui ) {
 			w = jQuery(element + ' .ui-dialog-content').width();
 			jQuery(element + ' .ui-dialog').width(w);
-			jQuery(element + ' .ui-dialog-content').niceScroll(scrollOptions);
+			//jQuery(element + ' .ui-dialog-content').niceScroll(scrollOptions);
+			scrollbar(element + ' .ui-dialog-content');
 
 			// execute callback
 			if (callback) eval(callback);
@@ -279,7 +289,8 @@ function openDialog(element, title, data, width = 500, height = 500, is_new = fa
 		},
 		dragStop: function(event, ui) {
 			// refresh scrollbar
-			jQuery(element + " .ui-dialog-content").niceScroll(scrollOptions).resize();	
+			// jQuery(element + " .ui-dialog-content").niceScroll(scrollOptions).resize();	
+
 		},
 		close: function(event, ui) {
 			if (dialogs > 0) dialogs--;
@@ -295,6 +306,14 @@ function anyDialogActive() {
 	if(dialogs == 0) {
 		displayWelcome();
 	}
+}
+
+function scrollbar(dialog_class) {
+	jQuery(dialog_class + ' .ui-dialog-content').mCustomScrollbar({
+		live:true,
+		//theme:"inset-dark"
+		theme:"rounded-dark"
+	});
 }
 
 // loading

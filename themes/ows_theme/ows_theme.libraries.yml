@@ -6,20 +6,22 @@ global-styling:
       css/twitter/twitter.css: {}
       css/jquery.dialogr.css: {}
       css/bootstrap.min.css: {}
+      css/jquery.mCustomScrollbar.min.css: {}
       ows.css: {}
   component:
     css/components/ui-dialog.css: {}
   js:
     js/jquery.browser.min.js: {}
-    js/jquery.nicescroll.min.js: {}
-    js/jquery.nicescroll.plus.js: {}
+    # js/jquery.nicescroll.min.js: {}
+    # js/jquery.nicescroll.plus.js: {}
     # js/jquery.splashscreen.js: {}
-    # js/jquery.dialogextend.js: {}
+    js/jquery.mCustomScrollbar.js: {}
     js/ui.dialogr.js: {}
     js/dialog.custom.js: {}
     js/jquery.cookie.js: {}
     js/sweetalert.min.js: {}
     js/bootstrap.min.js: {}
+    js/jquery.fullscreen-min.js: {}
     ows.js: {}
   dependencies:
     - core/jquery
