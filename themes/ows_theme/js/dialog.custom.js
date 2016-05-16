@@ -81,16 +81,6 @@
       // Trigger a global event to allow scripts to bind events to the dialog.
       $(window).trigger('dialog:beforecreate', [dialog, $element, settings]);
 
-      // reset settings
-      /*settings = {};
-      settings.open = function() {
-        alert(2);
-      }
-
-      settings.close = function() {
-        alert(1);
-      }*/
-
       // use default dialog for form
       if (settings.defaultDialog) $element.dialog(settings);
       else {
