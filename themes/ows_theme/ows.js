@@ -71,22 +71,6 @@ function displayWelcome() {
 			swal.close();
 			loader();
 	  		jQuery('.dialog-buttons-wrapper #btn-enter-contest').trigger('click');
-	  		
-	  		// we still need interval for default dialog!
-	  		/*
-	  		callbackInterval = setInterval(function () {
-	  			dialog_class = '.dialog-enter-contest';
-	  			if (dialogOpened(dialog_class)) {
-	  				openOWSDialog(dialog_class);
-	  		
-		  			// bind close dialog
-		  			jQuery(dialog_class + ' .ui-dialog-titlebar-close').on('click', function() {
-						closeOWSDialog();
-					});
-
-					clearInterval(callbackInterval);
-				}
-	  		}, 2000);*/
 		});
 
 	    // ------------------------------
@@ -94,66 +78,10 @@ function displayWelcome() {
 
 	    // ------------------------------
 	    // Browse
-	    /*jQuery('#btn-browse, #swal-btn-browse').on('click', function() {
-	    	// write cookie
-	    	jQuery.cookie('user.option', 'browse');
-
-	    	// browse website
-			jQuery.ajax({
-				url: "/ajax-content",
-				data: {type: "browse"},
-				async: false, 
-				success: function(data) {
-					openDialog('.dialog-browse', 'Browse', data, 600, 500);
-				}
-			});	
-
-	    	swal.close();
-	    });*/
-
-	    // ------------------------------
-	    // Browse
 	    jQuery('.sweet-alert #swal-btn-browse').on('click', function() {
 	    	swal.close();
 	    	loader();
 	  		jQuery('.dialog-buttons-wrapper #btn-browse').trigger('click');
-	  		
-	  		/* //  we can remove interval, the callback works fine with dialogr
-	  		callbackInterval = setInterval(function () {
-	  			if (dialogOpened()) {
-	  				openOWSDialog('.dialog-browse');
-	  				// fix dialog zindex for parent dialog
-	  				jQuery('.dialog-browse').click(function() {
-	  					jQuery(this).css('z-index', ++jQuery.ui.dialogr.maxZ);
-	  				});
-
-	  				// bind close dialog
-		  			jQuery('.dialog-browse .ui-dialog-titlebar-close').on('click', function() {
-						closeOWSDialog();
-					});
-
-					// view contestant dialog
-					jQuery('.dialog-browse .browse-contestant').on('click', function() {
-						id = jQuery(this).attr('id').replace('contestant-', '');
-
-						if (!jQuery('.dialog-contestant-'+id).length) {
-					    	// browse website
-							jQuery.ajax({
-								url: "/ajax-content",
-								data: {type: "view-contestant", id: id},
-								async: false, 
-								success: function(data) {
-									openDialog('.dialog-contestant-'+id, 'Test', data, 600, 500);
-								}
-							});
-						}
-
-				    	swal.close();
-				    });
-
-					clearInterval(callbackInterval);
-	  			}
-	  		}, 2000);*/
 	  	});
 	}
 }
@@ -170,43 +98,25 @@ function openOWSDialog(dialog_class) {
 	console.log('Dialog Open callback:' + dialog_class);
 	
 	// make dialog draggable
-	jQuery(dialog_class + ".ui-dialog").draggable({
+	/*jQuery(dialog_class + ".ui-dialog").draggable({
 		drag: function (event, ui) {
 			setTimeout(function() {
-				// jQuery(dialog_class + ' .ui-dialog-content').niceScroll(scrollOptions).resize();
-				scrollbar(dialog_class);
+				//scrollbar(dialog_class);
 			}, 500);
 		}
-	});
+	});*/
 
 	// contestant detail event
 	if (dialog_class == '.dialog-browse') {
 		browseContestant(dialog_class);
 	}
-
-	// refresh nicescroll
-	// jQuery(dialog_class + ' .ui-dialog-content').niceScroll(scrollOptions);
+	
 	scrollbar(dialog_class);
 	loader(false);
-
-	// bind custom close event
-	//jQuery(dialog_class + ' .ui-icon-closethick').click(function() {
-		//dialogRemoveScroll(dialog_class);
-	//})
 }
 
 // open contestant window
 function browseContestant(dialog_class) {
-	/* // fix dialog zindex for parent dialog
-	jQuery(dialog_class).click(function() {
-		jQuery(this).css('z-index', ++jQuery.ui.dialogr.maxZ);
-	});
-
-	// bind close dialog
-	jQuery(dialog_class + ' .ui-dialog-titlebar-close').on('click', function() {
-		closeOWSDialog();
-	});*/
-
 	// -----------------
 	// view contestant dialog
 	jQuery(dialog_class + ' .browse-contestant').on('click', function() {
@@ -222,7 +132,8 @@ function browseContestant(dialog_class) {
 				async: false, 
 				success: function(data) {
 					loader(0);
-					openDialog('.dialog-contestant-'+id, full_name, data, 600, 500);
+					callback = "scrollbar('.ui-dialog .dialog-contestant-'+"+id+", false);";
+					openDialog('.dialog-contestant-'+id, full_name, data, 600, 500, false, callback);
 				}
 			});
 		}
@@ -236,12 +147,34 @@ function dialogRemoveScroll(dialog_class) {
 }
 
 function closeOWSDialog(dialog_class) {
-	dialog_class = "." + dialog_class;
-	//jQuery(dialog_class + " .ui-dialog-content").getNiceScroll().remove();
-
+	// dialog_class = "." + dialog_class;
 	if (dialogs > 0) dialogs--;
 	else dialogs = 0;
 	if (dialogs == 0) displayWelcome();
+}
+
+function anyDialogActive() {
+	// no more dialog, display welcome mesasge
+	if(dialogs == 0) {
+		displayWelcome();
+	}
+}
+
+function scrollbar(klass, is_dialog = true) {
+	if (is_dialog) klass = klass + ' .ui-dialog-content';
+	else _k = klass;
+
+	jQuery(klass).mCustomScrollbar({
+		live:true,
+		//theme:"inset-dark"
+		theme:"rounded-dark"
+	});
+}
+
+// loading
+function loader(flag = true) {
+	if (flag) jQuery('.load-container').show();
+	else jQuery('.load-container').hide();
 }
 
 /*
@@ -284,13 +217,12 @@ function openDialog(element, title, data, width = 500, height = 500, is_new = fa
 			scrollbar(element + ' .ui-dialog-content');
 
 			// execute callback
+			console.log(callback);
 			if (callback) eval(callback);
 			dialogs++;
 		},
 		dragStop: function(event, ui) {
 			// refresh scrollbar
-			// jQuery(element + " .ui-dialog-content").niceScroll(scrollOptions).resize();	
-
 		},
 		close: function(event, ui) {
 			if (dialogs > 0) dialogs--;
@@ -301,27 +233,6 @@ function openDialog(element, title, data, width = 500, height = 500, is_new = fa
 	});
 }
 
-function anyDialogActive() {
-	// no more dialog, display welcome mesasge
-	if(dialogs == 0) {
-		displayWelcome();
-	}
-}
-
-function scrollbar(dialog_class) {
-	jQuery(dialog_class + ' .ui-dialog-content').mCustomScrollbar({
-		live:true,
-		//theme:"inset-dark"
-		theme:"rounded-dark"
-	});
-}
-
-// loading
-function loader(flag = true) {
-	if (flag) jQuery('.load-container').show();
-	else jQuery('.load-container').hide();
-}
-
 // ajax complete event
 jQuery(document).ajaxComplete(function(event, xhr, settings) {
 	// user clicks on pager
@@ -330,13 +241,16 @@ jQuery(document).ajaxComplete(function(event, xhr, settings) {
 			id = jQuery(this).attr('id').replace('contestant-', '');
 
 			if (!jQuery('.dialog-contestant-'+id).length) {
+				full_name = jQuery(this).find('.views-field-field-first-name .field-content').html() + ' ' + jQuery(this).find('.views-field-field-last-name .field-content').html();
+				
 		    	// browse website
 				jQuery.ajax({
 					url: "/ajax-content",
 					data: {type: "view-contestant", id: id},
 					async: false, 
 					success: function(data) {
-						openDialog('.dialog-contestant-'+id, 'Test', data, 600, 500);
+						callback = "scrollbar('.ui-dialog .dialog-contestant-'+"+id+", false);";
+						openDialog('.dialog-contestant-'+id, full_name, data, 600, 500, false, callback);
 					}
 				});
 			}
