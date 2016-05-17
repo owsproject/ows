@@ -319,23 +319,7 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 						<a href="#invite-friend" id="dialog-btn-invite-friend" class="button button-red invite-friend">Invite Friend</a>
 					</div>
 
-					<div id="invite-'.$uid.'" class="info tab-pane fade in">
-							<div class="form-item form-fullname">
-								<label for="edit-name">Your friend name</label>
-								<input type="text" class="form-name" maxlength="254" size="60" value="" name="name" id="edit-name">
-								<input type="text">
-							</div>
-
-							<div class="form-item form-content">
-								<label for="edit-content">Content</label>
-								<textarea class="form-content" maxlength="254" size="60" value="" name="content" id="edit-content"></textarea>
-							</div>
-
-							<div id="edit-actions" class="form-actions form-wrapper">
-								<input type="button" class="button button--primary form-submit" value="Invite" name="op" id="edit-submit">
-							</div>
-						
-					</div>
+					<div id="invite-'.$uid.'" class="invite-friend-form tab-pane fade in"></div>
 				</div>
 	    	</div>';
     	}
