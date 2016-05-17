@@ -106,10 +106,8 @@ function openOWSDialog(dialog_class) {
 		}
 	});*/
 
-	// contestant detail event
-	if (dialog_class == '.dialog-browse') {
-		browseContestant(dialog_class);
-	}
+	// contestant detail event, already binded in ajaxcompleted
+	// if (dialog_class == '.dialog-browse') { browseContestant(dialog_class); }
 	
 	scrollbar(dialog_class);
 	loader(false);
@@ -123,7 +121,6 @@ function browseContestant(dialog_class) {
 		id = jQuery(this).attr('id').replace('contestant-', '');
 
 		if (!jQuery('.dialog-contestant-'+id).length) {
-			alert(10);
 			full_name = jQuery(this).find('.views-field-field-first-name .field-content').html() + ' ' + jQuery(this).find('.views-field-field-last-name .field-content').html();
 			loader();
 	    	// browse website
@@ -134,7 +131,6 @@ function browseContestant(dialog_class) {
 				success: function(data) {
 					loader(0);
 					callback = "scrollbar('.ui-dialog .dialog-contestant-"+id+"', false); inviteFriendForm('.dialog-contestant-"+id+" .invite-friend-form');";
-					alert(callback);
 					openDialog('.dialog-contestant-'+id, full_name, data, 600, 500, false, callback);
 				}
 			});
@@ -145,7 +141,6 @@ function browseContestant(dialog_class) {
 }
 
 function inviteFriendForm(klass) {
-	alert(klass);
 	html = '<div class="form-item form-fullname">';
 	html += '<label for="edit-name">Your friend name</label>';
 	html += '<input type="text" class="form-name" maxlength="254" size="60" value="" name="name" id="edit-name">';
@@ -255,7 +250,7 @@ function openDialog(element, title, data, width = 500, height = 500, is_new = fa
 jQuery(document).ajaxComplete(function(event, xhr, settings) {
 	// user clicks on pager
 	if (dialog_class.toString() == 'dialog-browse') {
-		browseContestant();
+		browseContestant('.dialog-browse');
 
 		/*
 		jQuery('.' + dialog_class.toString() + ' .browse-contestant').on('click', function() {
