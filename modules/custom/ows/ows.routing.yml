@@ -56,8 +56,6 @@ ows.enter_contest:
 ows.invite_friend:
   path: '/invite-friend'
   defaults:
-    _form: '\Drupal\ows\Form\InviteFriendForm'
+    _controller: 'Drupal\ows\Controller\OWSController::inviteFriend'
   requirements:
       _access: 'TRUE'
-
-

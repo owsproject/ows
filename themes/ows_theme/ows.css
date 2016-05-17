@@ -502,3 +502,21 @@ nav.pager {
 .contestant-info .photo {
 	float: left;
 }
+
+/* Invite friend */
+.invite-friend-form {
+
+}
+
+.invite-friend-form .form-item input, 
+.invite-friend-form .form-item textarea {
+    width: 400px;
+}
+
+.invite-friend-form .form-item textarea {
+    height: 200px;
+}
+
+.invite-friend-form .form-submit {
+    margin-left: 120px;
+}

@@ -103,6 +103,13 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 		return array('#type' => 'markup', '#markup' => $html);
 	}
 
+	public function inviteFriend() {
+		$friend_name = $_POST['name'];
+		$friend_mail = $_POST['email'];
+		$friend_content = $_POST['content'];
+		return $friend_content;
+	}
+
     public function ajaxContent() {
     	$type = $_REQUEST['type'];
 

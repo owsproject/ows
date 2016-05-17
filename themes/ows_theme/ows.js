@@ -140,11 +140,17 @@ function browseContestant(dialog_class) {
 	});
 }
 
+
+// Invite friend
 function inviteFriendForm(klass) {
 	html = '<div class="form-item form-fullname">';
 	html += '<label for="edit-name">Your friend name</label>';
 	html += '<input type="text" class="form-name" maxlength="254" size="60" value="" name="name" id="edit-name">';
-	html += '<input type="text">';
+	html += '</div>';
+
+	html += '<div class="form-item form-email">';
+	html += '<label for="edit-email">Email Address</label>';
+	html += '<input type="text" class="form-email" maxlength="254" size="60" value="" name="email" id="edit-email">';
 	html += '</div>';
 
 	html += '<div class="form-item form-content">';
@@ -153,10 +159,29 @@ function inviteFriendForm(klass) {
 	html += '</div>';
 
 	html += '<div id="edit-actions" class="form-actions form-wrapper">';
-	html += '<input type="button" class="button button--primary form-submit" value="Invite" name="op" id="edit-submit">';
+	html += '<input type="button" class="button button--primary form-submit" value="Invite" name="op" id="edit-submit-invite">';
 	html += '</div>';
 
+	// append form. Drupal not allow form return by ajax
 	jQuery(klass).html(html);
+
+	// bind event for invite form
+	jQuery(klass + ' #edit-actions .form-submit').click(function() {
+		loader();
+		_name = jQuery(klass + ' #edit-name').val();
+		_email = jQuery(klass + ' #edit-email').val();
+		_content = jQuery(klass + ' #edit-content').val();
+
+		jQuery.ajax({
+			url: "/invite-friend",
+			data: {name: _name, email: _email, content: _content},
+			async: false, 
+			success: function(data) {
+				loader(0);
+				alert("success");
+			}
+		});
+	});
 }
 
 function closeOWSDialog(dialog_class) {
@@ -186,8 +211,9 @@ function scrollbar(klass, is_dialog = true) {
 
 // loading
 function loader(flag = true) {
-	if (flag) jQuery('.load-container').show();
-	else jQuery('.load-container').hide();
+	if (flag) {
+		jQuery('.load-container').center().show();
+	} else jQuery('.load-container').hide();
 }
 
 /*
