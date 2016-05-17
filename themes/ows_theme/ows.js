@@ -123,6 +123,7 @@ function browseContestant(dialog_class) {
 		id = jQuery(this).attr('id').replace('contestant-', '');
 
 		if (!jQuery('.dialog-contestant-'+id).length) {
+			alert(10);
 			full_name = jQuery(this).find('.views-field-field-first-name .field-content').html() + ' ' + jQuery(this).find('.views-field-field-last-name .field-content').html();
 			loader();
 	    	// browse website
@@ -132,7 +133,8 @@ function browseContestant(dialog_class) {
 				async: false, 
 				success: function(data) {
 					loader(0);
-					callback = "scrollbar('.ui-dialog .dialog-contestant-'+"+id+", false);";
+					callback = "scrollbar('.ui-dialog .dialog-contestant-"+id+"', false); inviteFriendForm('.dialog-contestant-"+id+" .invite-friend-form');";
+					alert(callback);
 					openDialog('.dialog-contestant-'+id, full_name, data, 600, 500, false, callback);
 				}
 			});
@@ -142,8 +144,24 @@ function browseContestant(dialog_class) {
 	});
 }
 
-function dialogRemoveScroll(dialog_class) {
-	
+function inviteFriendForm(klass) {
+	alert(klass);
+	html = '<div class="form-item form-fullname">';
+	html += '<label for="edit-name">Your friend name</label>';
+	html += '<input type="text" class="form-name" maxlength="254" size="60" value="" name="name" id="edit-name">';
+	html += '<input type="text">';
+	html += '</div>';
+
+	html += '<div class="form-item form-content">';
+	html += '<label for="edit-content">Content</label>';
+	html += '<textarea class="form-content" maxlength="254" size="60" value="" name="content" id="edit-content"></textarea>';
+	html += '</div>';
+
+	html += '<div id="edit-actions" class="form-actions form-wrapper">';
+	html += '<input type="button" class="button button--primary form-submit" value="Invite" name="op" id="edit-submit">';
+	html += '</div>';
+
+	jQuery(klass).html(html);
 }
 
 function closeOWSDialog(dialog_class) {
@@ -237,6 +255,9 @@ function openDialog(element, title, data, width = 500, height = 500, is_new = fa
 jQuery(document).ajaxComplete(function(event, xhr, settings) {
 	// user clicks on pager
 	if (dialog_class.toString() == 'dialog-browse') {
+		browseContestant();
+
+		/*
 		jQuery('.' + dialog_class.toString() + ' .browse-contestant').on('click', function() {
 			id = jQuery(this).attr('id').replace('contestant-', '');
 
@@ -249,14 +270,14 @@ jQuery(document).ajaxComplete(function(event, xhr, settings) {
 					data: {type: "view-contestant", id: id},
 					async: false, 
 					success: function(data) {
-						callback = "scrollbar('.ui-dialog .dialog-contestant-'+"+id+", false);";
+						callback = "scrollbar('.ui-dialog .dialog-contestant-"+id+"', false);";
 						openDialog('.dialog-contestant-'+id, full_name, data, 600, 500, false, callback);
 					}
 				});
 			}
 
 	    	swal.close();
-	    });
+	    });*/
 	}
 });
 
