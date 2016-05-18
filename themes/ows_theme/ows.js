@@ -91,6 +91,7 @@ function dialogOpened(dialog_class) {
 }
 
 function openOWSDialog(dialog_class) {
+	jQuery('.ui-widget-overlay').remove();
 	dialog_class = "." + dialog_class;
 
 	dialogs++;
@@ -178,7 +179,11 @@ function inviteFriendForm(klass) {
 			async: false, 
 			success: function(data) {
 				loader(0);
-				alert("success");
+				if (data == 1) {
+					
+				} else {
+					
+				}
 			}
 		});
 	});

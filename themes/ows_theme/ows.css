@@ -428,6 +428,7 @@ copy
     list-style: outside none none;
     text-align: center;
     margin: 0;
+    padding: 0;
 }
 
 #block-mainmenu ul li {
@@ -568,4 +569,8 @@ nav.pager {
 
 .invite-friend-form .form-submit {
     margin-left: 120px;
+}
+
+.ui-widget-overlay {
+    background: none !important;
 }
