@@ -21,6 +21,8 @@ class OWSController extends ControllerBase
 {
 	public function homepage() {
 		$account = \Drupal::currentUser();
+
+		// user not logged
 		if (!empty($account->uid)) {
 			// dialog property
 			$dialog_enter_contest = json_encode(array(
@@ -101,6 +103,36 @@ class OWSController extends ControllerBase
 			}
 
 			kint($role);
+
+			// buttons open dialog
+			$html = '<div class="load-container"><div class="loader">Loading...</div></div>';
+			$html .= "<div class='dialog-buttons-wrapper hidden'>
+				<a href='/enter-contest' id='btn-enter-contest' class='button button-red use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_enter_contest."'>Men</a>
+
+				<a href='/vote' id='btn-vote' class='button button-red use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_vote."'>Women</a>
+
+				<a href='/browse' id='btn-browse' class='button button-red use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_browse."'>Things</a>
+			</div>";
+
+			// sweet alert box
+			$html .= '
+			<div id="welcome-box" class="" title="Welcome to OWS">
+				<div class="welcome-wrapper">
+	  				<div class="welcome-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+	tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+	quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+	consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+	cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+	proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
+
+			$html .= "
+	  				<div class='buttons'>
+	  					<a href='#enter-contest' id='swal-btn-register' class='button button-red'>Men</a>
+	  					<a href='#vote' id='swal-btn-sign' class='button button-red'>Women</a>
+	  					<a href='#browse' id='swal-btn-browse' class='button button-red browse-website'>Things</a>
+	  				</div>
+	  			</div>
+			</div>";
 		}
 
 		return array('#type' => 'markup', '#markup' => $html);
