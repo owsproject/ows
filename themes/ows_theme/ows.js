@@ -5,6 +5,21 @@ var callbackInterval = false;
 var scrollOptions = {horizrailenabled: false};
 
 jQuery(document).ready(function() {
+	jQuery("body").vegas({
+		overlay: drupalSettings.path.baseUrl+"themes/ows_theme/css/overlays/01.png",
+		transitionDuration: 4000,
+		preload: true,
+		delay: 5000,
+	    slides: [
+	        { src: drupalSettings.path.baseUrl+"themes/ows_theme/css/sliders/slide1.jpg" },
+	        { src: drupalSettings.path.baseUrl+"themes/ows_theme/css/sliders/slide2.jpg" },
+	        { src: drupalSettings.path.baseUrl+"themes/ows_theme/css/sliders/slide3.jpg" },
+	        { src: drupalSettings.path.baseUrl+"themes/ows_theme/css/sliders/slide4.jpg" },
+	    ]
+	});
+});
+
+jQuery(document).ready(function() {
 	// nice scrollbar
     // jQuery("html").niceScroll(scrollOptions);
 
@@ -182,7 +197,7 @@ function inviteFriendForm(klass) {
 				if (data == 1) {
 					
 				} else {
-					
+
 				}
 			}
 		});

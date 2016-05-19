@@ -7,6 +7,7 @@ global-styling:
       css/jquery.dialogr.css: {}
       css/bootstrap.min.css: {}
       css/jquery.mCustomScrollbar.min.css: {}
+      css/vegas.min.css: {}
       ows.css: {}
   component:
     css/components/ui-dialog.css: {}
@@ -16,6 +17,7 @@ global-styling:
     # js/jquery.nicescroll.plus.js: {}
     # js/jquery.splashscreen.js: {}
     js/jquery.mCustomScrollbar.js: {}
+    js/vegas.min.js: {}
     js/ui.dialogr.js: {}
     js/dialog.custom.js: {}
     js/jquery.cookie.js: {}
