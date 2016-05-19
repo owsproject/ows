@@ -17,6 +17,11 @@ jQuery(document).ready(function() {
 	        { src: drupalSettings.path.baseUrl+"themes/ows_theme/css/sliders/slide4.jpg" },
 	    ]
 	});
+
+	jQuery('li.home a').click(function(e) {
+		e.preventDefault();
+		displayWelcome();
+	});
 });
 
 jQuery(document).ready(function() {
