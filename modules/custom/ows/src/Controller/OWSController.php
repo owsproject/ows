@@ -104,10 +104,31 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 	}
 
 	public function inviteFriend() {
+		$result = 0;
+
 		$friend_name = $_POST['name'];
-		$friend_mail = $_POST['email'];
+		$to = $_POST['email'];
 		$friend_content = $_POST['content'];
-		return $friend_content;
+
+		$mailManager = \Drupal::service('plugin.manager.mail');
+		$module = 'ows';
+		$key = 'invite_friend';
+		
+		$params['message'] = 'Dear '.$friend_name.'<br>
+		Join and vote for me at OWS.';
+
+		$params['title'] = 'Join and vote for me at OWS!';
+		$langcode = \Drupal::currentUser()->getPreferredLangcode();
+		$send = true;
+		$result = $mailManager->mail($module, $key, $to, $langcode, $params, NULL, $send);
+
+		if ($result['result'] !== true) {
+			$result = 0;
+		} else {
+			$result = 1;
+		}
+
+		return array('#type' => 'markup', '#markup' => $result);
 	}
 
     public function ajaxContent() {

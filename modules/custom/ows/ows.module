@@ -21,3 +21,17 @@ function ows_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state
         );*/
 	}
 }
+
+function ows_mail($key, &$message, $params) {
+	$options = array(
+		'langcode' => $message['langcode'],
+	);
+
+	switch ($key) {
+		case 'invit_friend':
+			$message['from'] = \Drupal::config('system.site')->get('mail');
+			$message['subject'] = t('Article created: @title', array('@title' => $params['node_title']), $options);
+			$message['body'][] = $params['message'];
+		break;
+	}
+}
