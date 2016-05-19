@@ -22,6 +22,8 @@ class OWSController extends ControllerBase
 	public function homepage() {
 		$account = \Drupal::currentUser();
 
+		$html = ''; //<div class="load-container"><div class="load-wrapper"><div class="loader">Loading...</div></div></div>
+
 		// user not logged
 		if (!empty($account->uid)) {
 			// dialog property
@@ -53,7 +55,6 @@ class OWSController extends ControllerBase
 			));
 			
 			// buttons open dialog
-			$html = '<div class="load-container"><div class="loader">Loading...</div></div>';
 			$html .= "<div class='dialog-buttons-wrapper hidden'>
 				<a href='/enter-contest' id='btn-enter-contest' class='button button-red use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_enter_contest."'>Enter the Contest</a>
 
@@ -78,16 +79,14 @@ class OWSController extends ControllerBase
 			$html .= "
 	  				<div class='buttons'>
 	  					<a href='#enter-contest' id='swal-btn-register' class='button button-red'>Enter the Contest</a>
-	  					<a href='#vote' id='swal-btn-sign' class='button button-red'>Vote in the Contest</a>
+	  					<a href='#vote' id='swal-btn-vote' class='button button-red'>Vote in the Contest</a>
 	  					<a href='#browse' id='swal-btn-browse' class='button button-red browse-website'>Browse the Website</a>
 	  				</div>
 	  			</div>
 			</div>";
 		} else {
 			$role = '';
-			kint($account);
 			$roles = $account->getRoles();
-			kint($roles);
 			foreach($roles as $k => $v) {
 				if ($v == "voter") {
 					$role = "Voter";
@@ -98,20 +97,34 @@ class OWSController extends ControllerBase
 					$role = 'Contestant';
 					break;
 				}
-				
-				kint($v);
 			}
 
-			kint($role);
+			// dialog property
+			$dialog_men = json_encode(array(
+				'title' => 'Men',
+				'width' => '650',
+				'dialogClass' => 'dialog-men'
+			));
+
+			$dialog_women = json_encode(array(
+				'title' => 'Women',
+				'width' => '80%',
+				'dialogClass' => 'dialog-women',
+			));
+
+			$dialog_things = json_encode(array(
+				'title' => 'Things',
+				'width' => '80%',
+				'dialogClass' => 'dialog-things',
+			));
 
 			// buttons open dialog
-			$html = '<div class="load-container"><div class="loader">Loading...</div></div>';
 			$html .= "<div class='dialog-buttons-wrapper hidden'>
-				<a href='/enter-contest' id='btn-enter-contest' class='button button-red use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_enter_contest."'>Men</a>
+				<a href='/men' id='btn-men' class='button button-red use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_men."'>Men</a>
 
-				<a href='/vote' id='btn-vote' class='button button-red use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_vote."'>Women</a>
+				<a href='/women' id='btn-women' class='button button-red use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_women."'>Women</a>
 
-				<a href='/browse' id='btn-browse' class='button button-red use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_browse."'>Things</a>
+				<a href='/things' id='btn-things' class='button button-red use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_things."'>Things</a>
 			</div>";
 
 			// sweet alert box
@@ -127,9 +140,9 @@ class OWSController extends ControllerBase
 
 			$html .= "
 	  				<div class='buttons'>
-	  					<a href='#enter-contest' id='swal-btn-register' class='button button-red'>Men</a>
-	  					<a href='#vote' id='swal-btn-sign' class='button button-red'>Women</a>
-	  					<a href='#browse' id='swal-btn-browse' class='button button-red browse-website'>Things</a>
+	  					<a href='#men' id='swal-btn-men' class='button button-red'>Men</a>
+	  					<a href='#women' id='swal-btn-women' class='button button-red'>Women</a>
+	  					<a href='#things' id='swal-btn-things' class='button button-red browse-website'>Things</a>
 	  				</div>
 	  			</div>
 			</div>";
