@@ -22,83 +22,86 @@ class OWSController extends ControllerBase
 	public function homepage() {
 		$account = \Drupal::currentUser();
 		if (!empty($account->uid)) {
+			// dialog property
+			$dialog_enter_contest = json_encode(array(
+				'title' => 'Enter the Contest',
+				'width' => '650',
+				'dialogClass' => 'dialog-enter-contest',
+				'defaultDialog' => true
+			));
+
+			$dialog_vote = json_encode(array(
+				'title' => 'Vote',
+				'width' => '80%',
+				'dialogClass' => 'dialog-vote',
+			));
+
+			$dialog_browse = json_encode(array(
+				'title' => 'Browse',
+				'width' => '80%',
+				'dialogClass' => 'dialog-browse',
+			));
+
+			// invite friend
+			$dialog_invite = json_encode(array(
+				'title' => 'Invite Friend',
+				'width' => '60%',
+				'dialogClass' => 'dialog-invite',
+				'defaultDialog' => true
+			));
+			
+			// buttons open dialog
+			$html = '<div class="load-container"><div class="loader">Loading...</div></div>';
+			$html .= "<div class='dialog-buttons-wrapper hidden'>
+				<a href='/enter-contest' id='btn-enter-contest' class='button button-red use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_enter_contest."'>Enter the Contest</a>
+
+				<a href='/vote' id='btn-vote' class='button button-red use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_vote."'>Vote in the Contest</a>
+
+				<a href='/browse' id='btn-browse' class='button button-red use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_browse."'>Browse the Website</a>
+
+				<a href='/invite-friend' id='btn-invite-friend' class='button button-red use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_invite."'>Invite Friend</a>
+			</div>";
+
+			// sweet alert box
+			$html .= '
+			<div id="welcome-box" class="" title="Welcome to OWS">
+				<div class="welcome-wrapper">
+	  				<div class="welcome-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+	tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+	quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+	consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+	cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+	proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
+
+			$html .= "
+	  				<div class='buttons'>
+	  					<a href='#enter-contest' id='swal-btn-register' class='button button-red'>Enter the Contest</a>
+	  					<a href='#vote' id='swal-btn-sign' class='button button-red'>Vote in the Contest</a>
+	  					<a href='#browse' id='swal-btn-browse' class='button button-red browse-website'>Browse the Website</a>
+	  				</div>
+	  			</div>
+			</div>";
 		} else {
+			$role = '';
+			kint($account);
+			$roles = $account->getRoles();
+			kint($roles);
+			foreach($roles as $k => $v) {
+				if ($v == "voter") {
+					$role = "Voter";
+					break;
+				}
 
+				if ($v == "contestant") {
+					$role = 'Contestant';
+					break;
+				}
+				
+				kint($v);
+			}
+
+			kint($role);
 		}
-
-		// dialog property
-		$dialog_enter_contest = json_encode(array(
-			'title' => 'Enter the Contest',
-			'width' => '650',
-			'dialogClass' => 'dialog-enter-contest',
-			'defaultDialog' => true
-		));
-
-		$dialog_vote = json_encode(array(
-			'title' => 'Vote',
-			'width' => '80%',
-			'dialogClass' => 'dialog-vote',
-		));
-
-		$dialog_browse = json_encode(array(
-			'title' => 'Browse',
-			'width' => '80%',
-			'dialogClass' => 'dialog-browse',
-		));
-
-		// invite friend
-		$dialog_invite = json_encode(array(
-			'title' => 'Invite Friend',
-			'width' => '60%',
-			'dialogClass' => 'dialog-invite',
-			'defaultDialog' => true
-		));
-
-		/*Name
-		Email
-		Dear $friend check out this hot contestant. Come join and vote like me.*/
-		
-		// $html = "<a href='/enter-contest' class='use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$enter_contest."'>Go2</a>";
-		
-		// buttons open dialog
-		$html = '<div class="load-container"><div class="loader">Loading...</div></div>';
-		$html .= "<div class='dialog-buttons-wrapper hidden'>
-			<a href='/enter-contest' id='btn-enter-contest' class='button button-red use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_enter_contest."'>Enter the Contest</a>
-
-			<a href='/vote' id='btn-vote' class='button button-red use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_vote."'>Vote in the Contest</a>
-
-			<a href='/browse' id='btn-browse' class='button button-red use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_browse."'>Browse the Website</a>
-
-			<a href='/invite-friend' id='btn-invite-friend' class='button button-red use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_invite."'>Invite Friend</a>
-		</div>";
-
-		// sweet alert box
-		$html .= '
-		<div id="welcome-box" class="" title="Welcome to OWS">
-			<div class="welcome-wrapper">
-  				<div class="welcome-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
-
-		$html .= "
-  				<div class='buttons'>
-  					<a href='#enter-contest' id='swal-btn-register' class='button button-red'>Enter the Contest</a>
-  					<a href='#vote' id='swal-btn-sign' class='button button-red'>Vote in the Contest</a>
-  					<a href='#browse' id='swal-btn-browse' class='button button-red browse-website'>Browse the Website</a>
-  				</div>
-  			</div>
-		</div>";
-
-
-		// <a id='btn-enter-contest' class='use-ajax button button-red enter-contest' href='/enter-contest' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$enter_contest."'>Enter the Contest</a>
-
-		// $html .= '<div class="dialog">Homepage test</div>';
-
-		//$user = \Drupal\user\Entity\User::load(\Drupal::currentUser()->id());
-		//kint($user);
 
 		return array('#type' => 'markup', '#markup' => $html);
 	}
@@ -117,7 +120,7 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 		$params['message'] = 'Dear '.$friend_name.'<br>
 		Join and vote for me at OWS.';
 
-		$params['title'] = 'Join and vote for me at OWS!';
+		$params['title'] = "Dear $friend_name check out this hot contestant. Come join and vote like me!";
 		$langcode = \Drupal::currentUser()->getPreferredLangcode();
 		$send = true;
 		$result = $mailManager->mail($module, $key, $to, $langcode, $params, NULL, $send);
