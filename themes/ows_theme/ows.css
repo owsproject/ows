@@ -3,6 +3,10 @@
     outline: none !important;
 }
 
+.sweet-alert a:visited {
+    color: #fff;
+}
+
 body {
     background: #000 url("images/background1.png") no-repeat scroll center center;
     font-family: 'Roboto', sans-serif !important;
@@ -35,20 +39,28 @@ body {
 /* loading */
 
 .load-container {
-    border-radius: 20px;
+    background: rgba(0, 0, 0, 0.3) none repeat scroll 0 0;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.11), 0 6px 30px rgba(0, 0, 0, 0.14);
+    border-radius: 10px;
     box-sizing: border-box;
     float: left;
-    height: 120px;
     opacity: 0.9;
     overflow: hidden;
     position: absolute;
-    width: 120px;
     z-index: 99999;
     margin: 0 auto;
     display: none;
+    padding: 10px;
 }
+
+.load-wrapper {
+    background: rgba(255, 255, 255, 0.9) none repeat scroll 0 0;
+    border-radius: 4px;
+    padding: 20px;
+}
+
 .loader {
-    margin: 32px auto;
+    margin: 0 auto;
     font-size: 10px;
     position: relative;
     text-indent: -9999em;
@@ -65,8 +77,8 @@ body {
 
 .loader, .loader:after {
     border-radius: 50%;
-    width: 6em;
-    height: 6em;
+    width: 5em;
+    height: 5em;
 }
 
 @-webkit-keyframes load8 {
@@ -129,7 +141,7 @@ Dialog styles
 
 .sweet-alert h2 {
     margin: 0 8px;
-    padding-top: 10px;
+    padding-top: 8px;
     text-align: center;
     font-weight: bold;
     font-size: 18px;
