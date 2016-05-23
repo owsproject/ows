@@ -26,128 +26,131 @@ class OWSController extends ControllerBase
 
 		// user not logged
 		if (!empty($account->uid)) {
-			// dialog property
-			$dialog_enter_contest = json_encode(array(
-				'title' => 'Enter the Contest',
-				'width' => '650',
-				'dialogClass' => 'dialog-enter-contest',
-				'defaultDialog' => true
-			));
-
-			$dialog_vote = json_encode(array(
-				'title' => 'Vote',
-				'width' => '80%',
-				'dialogClass' => 'dialog-vote',
-			));
-
-			$dialog_browse = json_encode(array(
-				'title' => 'Browse',
-				'width' => '80%',
-				'dialogClass' => 'dialog-browse',
-			));
-
-			// invite friend
-			$dialog_invite = json_encode(array(
-				'title' => 'Invite Friend',
-				'width' => '60%',
-				'dialogClass' => 'dialog-invite',
-				'defaultDialog' => true
-			));
-			
-			// buttons open dialog
-			$html .= "<div class='dialog-buttons-wrapper hidden'>
-				<a href='/enter-contest' id='btn-enter-contest' class='button button-red use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_enter_contest."'>Enter the Contest</a>
-
-				<a href='/vote' id='btn-vote' class='button button-red use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_vote."'>Vote in the Contest</a>
-
-				<a href='/browse' id='btn-browse' class='button button-red use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_browse."'>Browse the Website</a>
-
-				<a href='/invite-friend' id='btn-invite-friend' class='button button-red use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_invite."'>Invite Friend</a>
-			</div>";
-
-			// sweet alert box
-			$html .= '
-			<div id="welcome-box" class="" title="Welcome to OWS">
-				<div class="welcome-wrapper">
-	  				<div class="welcome-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-	tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-	quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-	consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-	cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-	proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
-
-			$html .= "
-	  				<div class='buttons'>
-	  					<a href='#enter-contest' id='swal-btn-register' class='button button-red'>Enter the Contest</a>
-	  					<a href='#vote' id='swal-btn-vote' class='button button-red'>Vote in the Contest</a>
-	  					<a href='#browse' id='swal-btn-browse' class='button button-red browse-website'>Browse the Website</a>
-	  				</div>
-	  			</div>
-			</div>";
-		} else {
-			$role = '';
-			$roles = $account->getRoles();
-			foreach($roles as $k => $v) {
-				if ($v == "voter") {
-					$role = "Voter";
-					break;
-				}
-
-				if ($v == "contestant") {
-					$role = 'Contestant';
-					break;
-				}
-			}
-
-			// dialog property
-			$dialog_men = json_encode(array(
-				'title' => 'Men',
-				'width' => '650',
-				'dialogClass' => 'dialog-men'
-			));
-
-			$dialog_women = json_encode(array(
-				'title' => 'Women',
-				'width' => '80%',
-				'dialogClass' => 'dialog-women',
-			));
-
-			$dialog_things = json_encode(array(
-				'title' => 'Things',
-				'width' => '80%',
-				'dialogClass' => 'dialog-things',
-			));
-
-			// buttons open dialog
-			$html .= "<div class='dialog-buttons-wrapper hidden'>
-				<a href='/men' id='btn-men' class='button button-red use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_men."'>Men</a>
-
-				<a href='/women' id='btn-women' class='button button-red use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_women."'>Women</a>
-
-				<a href='/things' id='btn-things' class='button button-red use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_things."'>Things</a>
-			</div>";
-
-			// sweet alert box
-			$html .= '
-			<div id="welcome-box" class="" title="Welcome to OWS">
-				<div class="welcome-wrapper">
-	  				<div class="welcome-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-	tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-	quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-	consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-	cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-	proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
-
-			$html .= "
-	  				<div class='buttons'>
-	  					<a href='#men' id='swal-btn-men' class='button button-red'>Men</a>
-	  					<a href='#women' id='swal-btn-women' class='button button-red'>Women</a>
-	  					<a href='#things' id='swal-btn-things' class='button button-red browse-website'>Things</a>
-	  				</div>
-	  			</div>
-			</div>";
 		}
 
+		// -------------------
+		// dialog property
+		$dialog_enter_contest = json_encode(array(
+			'title' => 'Enter the Contest',
+			'width' => '650',
+			'dialogClass' => 'dialog-enter-contest',
+			'defaultDialog' => true
+		));
+
+		$dialog_vote = json_encode(array(
+			'title' => 'Vote',
+			'width' => '80%',
+			'dialogClass' => 'dialog-vote',
+		));
+
+		$dialog_browse = json_encode(array(
+			'title' => 'Browse',
+			'width' => '80%',
+			'dialogClass' => 'dialog-browse',
+		));
+
+		// invite friend
+		$dialog_invite = json_encode(array(
+			'title' => 'Invite Friend',
+			'width' => '60%',
+			'dialogClass' => 'dialog-invite',
+			'defaultDialog' => true
+		));
+		
+		// buttons open dialog
+		$html .= "<div class='dialog-buttons-wrapper hidden'>
+			<a href='/enter-contest' id='btn-enter-contest' class='button button-red use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_enter_contest."'>Enter the Contest</a>
+
+			<a href='/vote' id='btn-vote' class='button button-red use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_vote."'>Vote in the Contest</a>
+
+			<a href='/browse' id='btn-browse' class='button button-red use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_browse."'>Browse the Website</a>
+
+			<a href='/invite-friend' id='btn-invite-friend' class='button button-red use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_invite."'>Invite Friend</a>
+		</div>";
+
+		// sweet alert box
+		$html .= '
+		<div id="welcome-box" class="hidden" title="Welcome to OWS">
+			<div class="welcome-wrapper">
+  				<div class="welcome-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
+
+		$html .= "
+  				<div class='buttons'>
+  					<a href='#enter-contest' id='swal-btn-register' class='button button-red'>Enter the Contest</a>
+  					<a href='#vote' id='swal-btn-vote' class='button button-red'>Vote in the Contest</a>
+  					<a href='#browse' id='swal-btn-browse' class='button button-red browse-website'>Browse the Website</a>
+  				</div>
+  			</div>
+		</div>";
+
+		// -----------------
+		$role = '';
+		$roles = $account->getRoles();
+		foreach($roles as $k => $v) {
+			if ($v == "voter") {
+				$role = "Voter";
+				break;
+			}
+
+			if ($v == "contestant") {
+				$role = 'Contestant';
+				break;
+			}
+		}
+
+		// dialog property
+		$dialog_men = json_encode(array(
+			'title' => 'Men',
+			'width' => '650',
+			'dialogClass' => 'dialog-men'
+		));
+
+		$dialog_women = json_encode(array(
+			'title' => 'Women',
+			'width' => '80%',
+			'dialogClass' => 'dialog-women',
+		));
+
+		$dialog_things = json_encode(array(
+			'title' => 'Things',
+			'width' => '80%',
+			'dialogClass' => 'dialog-things',
+		));
+
+		// buttons open dialog
+		$html .= "<div class='dialog-buttons-wrapper hidden'>
+			<a href='/browse/Male' id='btn-men' class='button button-red use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_men."'>Men</a>
+
+			<a href='/browse/Female' id='btn-women' class='button button-red use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_women."'>Women</a>
+
+			<a href='/browse/things' id='btn-things' class='button button-red use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_things."'>Things</a>
+		</div>";
+
+		// sweet alert box
+		$html .= '
+		<div id="browse-box" class="hidden" title="Welcome to OWS">
+			<div class="welcome-wrapper">
+  				<div class="welcome-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
+
+		$html .= "
+  				<div class='buttons'>
+  					<a href='#men' id='swal-btn-men' class='button button-red'>Men</a>
+  					<a href='#women' id='swal-btn-women' class='button button-red'>Women</a>
+  					<a href='#things' id='swal-btn-things' class='button button-red browse-website'>Things</a>
+  				</div>
+  			</div>
+		</div>";
+		
 		return array('#type' => 'markup', '#markup' => $html);
 	}
 
