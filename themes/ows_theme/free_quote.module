@@ -1,0 +1,302 @@
+<?php
+
+function free_quote_menu() {
+	// ------ display 3 forms on a page, user javascript to switch ------
+	$items['free-quote-submit'] = array(
+		'title' => t(''),
+		'page callback' => '_free_quote_submit',
+		'access callback' => TRUE,
+		'type' => MENU_CALLBACK,
+	);
+
+	$items['add-to-quote'] = array(
+		'title' => t(''),
+		'page callback' => '_add_to_quote',
+		'access callback' => TRUE,
+		'type' => MENU_CALLBACK,
+	);
+
+	$items['submit-quote'] = array(
+		'title' => t(''),
+		'page callback' => '_submit_quote_list',
+		'access callback' => TRUE,
+		'type' => MENU_CALLBACK,
+	);
+
+	$items['my-quote'] = array(
+		'title' => t(''),
+		'page callback' => '_my_quote',
+		'access callback' => TRUE,
+		'type' => MENU_CALLBACK,
+	);
+
+	$items['add-to-list'] = array(
+		'title' => t(''),
+		'page callback' => '_add_to_list',
+		'access callback' => TRUE,
+		'type' => MENU_CALLBACK,
+	);
+
+	return $items;
+}
+
+function _add_to_list() {
+	session_start();
+	$ids = trim($_POST['ids'], '|');
+	$ids = explode('|', $ids);
+
+	$quantities = trim($_POST['quantities'], '|');
+	$quantities = explode('|', $quantities);
+
+	for($i = 0; $i < count($ids); $i++) {
+		if ($ids[$i] && is_numeric($ids[$i])) {
+			$n = node_load($ids[$i]);
+			//$products_string .= 'Product: '.$n->title.' | Quantity: '.$quantities[$i].'<br>';
+			$_SESSION['quote_list'][$ids[$i]] = array($n->title, $quantities[$i]);
+
+			if (!$quantities[$i]) unset($_SESSION['quote_list'][$pid]);
+		}
+	}	
+
+	dpm($_SESSION['quote_list']);
+}
+
+function _my_quote() {
+	$html = '';
+	if (isset($_SESSION['quote_list'])) { // isset($_SESSION['quote_email'])
+		foreach($_SESSION['quote_list'] as $t => $v) {
+			$n = node_load($t);
+			$html = '<div>Product: '.$v[0].'</div>
+			<div>Quantity: '.$v[1].'</div>';
+		}
+
+		/*$m = $_SESSION['quote_email'];
+
+		$result = db_query("SELECT * FROM free_quote WHERE email = '$m'");
+		foreach($result as $t) {
+			$html .= '<div class="">
+				Submitted: '.date('m/d/y h:i:s', $t->created).'<br>
+				Email: '.$m.'<br>
+				'.$t->pid.'
+				-------------------------------------
+				<br>
+			</div>';
+		}*/
+	} else {
+		$html = 'Please add products to your <a href="/free-quote">quote</a> first.';
+	}
+
+	return $html;
+}
+
+function free_quote_form_alter(&$form, &$form_state,$form_id ) {
+	if ($form_id == "webform_client_form_30") {	
+		$result = db_query("SELECT * FROM node WHERE type = 'product' AND status = 1 ORDER BY title ASC");
+		$products = array();
+		$products_string = '';
+		foreach($result as $row) {
+			$products[$row->title] = $row->title;
+			$products_string .= trim($row->title).'|'.trim($row->title).PHP_EOL;
+		}
+
+		$form['submitted']['products']['#options'] = $products;
+		$form['submitted']['products']['#webform_component']['extra']['items'] = $products_string;
+		$form['submitted']['products']['#DANGEROUS_SKIP_CHECK'] = TRUE;
+		$form['#node']->webform['components'][1]['extra']['items'] = $products_string;
+	}
+}
+
+function _free_quote_submit() {
+	session_start();
+
+	$owner = variable_get('site_mail', 'info@decodoorware.co.za');
+	//$owner = 'zeroxw@gmail.com';
+	$ids = trim($_POST['ids'], '|');
+	$ids = explode('|', $ids);
+
+	$quantities = trim($_POST['quantities'], '|');
+	$quantities = explode('|', $quantities);
+
+	$products_string = '';
+	
+	/*for($i = 0; $i < count($ids); $i++) {
+		if ($ids[$i] && is_numeric($ids[$i])) {
+			$n = node_load($ids[$i]);
+			$products_string .= 'Product: '.$n->title.' | Quantity: '.$quantities[$i].'<br>';
+		}
+	}*/
+
+	foreach($_SESSION['quote_list'] as $t => $v) {
+		$n = node_load($t);
+		$products_string = '<div>Product: '.$v[0].'</div>
+		<div>Quantity: '.$v[1].'</div>';
+	}
+
+	$param = array();
+	$param['body'] = 'Form submission: Free Quote<br>
+	Submitted: '.date('M d, Y h:i:s', time()).'<br>
+	Full name: '.$_POST['name'].'<br>
+	Email: '.$_POST['email'].'<br>
+	Comment: '.$_POST['comment'].'<br><br>
+	Products:<br>
+	------------------------<br>'.$products_string;
+
+	drupal_mail('free_quote', 'free_quote', $owner, language_default(), $param);
+
+	db_insert('free_quote')
+	->fields(array(
+	  'email' => $_POST['email'],
+	  'created' => time(),
+	  'pid' => $products_string
+	))->execute();
+
+	$_SESSION['quote_email'] = $_POST['email'];
+
+	print 1;
+}
+
+function free_quote_mail($key, &$message, $params) {
+    $language = $message['language'];
+    switch ($key) {
+        case 'free_quote':
+            $message['subject'] = 'Form submission: Free Quote';
+            $message['body'][] = $params['body'];
+            $message['headers']['Content-Type'] = 'text/html; charset=UTF-8; format=flowed';
+        break;
+    }
+}
+
+function _add_to_quote() {
+	session_start();
+	$nid = $_POST['id'];
+	$quantity = $_POST['quantity'];
+
+	if ($nid && $quantity) {
+		if (!isset($_SESSION['quote_list'])) {
+			$_SESSION['quote_list']	= array();
+		}
+
+		$_SESSION['quote_list'][] = array($nid, $quantity);
+		print 1;
+		exit();
+	}
+
+	print 0;
+	exit();
+}
+
+function _submit_quote_list() {
+	if (!isset($_SESSION['quote_list'])) {
+		print 'Please select product and add to quote list.';
+	} else {
+		$products_string = '';
+
+		foreach($_SESSION['quote_list'] as $item) {
+			$n = node_load($item[0]);
+			$products_string .= 'Product: '.$n->title.' | Quantity: '.$item[1].'<br>';
+		}
+
+		$param = array();
+		$param['body'] = 'Form submission: Free Quote<br>
+		Submitted: '.date('M d, Y h:i:s', time()).'<br>
+		Full name: '.$_POST['name'].'<br>
+		Email: '.$_POST['email'].'<br>
+		Comment: '.$_POST['comment'].'<br><br>
+		Products:<br>
+		------------------------<br>'.$products_string;
+		$owner = variable_get('site_mail', 'info@decodoorware.co.za');
+		//$owner = 'zeroxw@gmail.com';
+		drupal_mail('free_quote', 'free_quote', $owner, language_default(), $param);
+
+		unset($_SESSION['quote_list']);
+		print 1;
+	}
+
+	drupal_exit();
+}
+
+
+function free_quote_block_info() {
+	$blocks = array();
+	
+	$blocks['bolts_hooks_subcategories'] = array(
+		'info' => 'Bolts & Hooks Subcategories',
+		'status' => 0,		
+	);
+
+	$blocks['Handles_subcategories'] = array(
+		'info' => 'Handles Subcategories',
+		'status' => 0,		
+	);	
+
+	return $blocks;
+}
+
+function free_quote_block_view($delta = '') {
+	switch ($delta) {
+		case 'bolts_hooks_subcategories':
+			$block = array(
+				'subject' => "Bolts & Hooks Subcategories",
+				'content' => _subcategories(5)
+			);
+			return $block; break;
+
+		case 'Handles_subcategories':
+			$block = array(
+				'subject' => "Bolts & Hooks Subcategories",
+				'content' => _subcategories(2)
+			);
+			return $block; break;
+	}
+}
+
+function _subcategories($term) {
+	$children = taxonomy_get_children($term);
+
+	$html = '<div class="view view-products view-id-products">
+    	<div class="view-content"><table class="views-view-grid cols-4"><tbody>';
+	$index = 0;
+	$row = 1;
+	foreach($children as $t) {
+		$index++;
+
+		if ($index == 1) {
+			$html .= '<tr class="row-'.$row.'">';
+		}
+
+		$uri = 'public://background.png';
+		if (isset($t->field_picture['und'][0]['fid'])) {
+			$uri = $t->field_picture['und'][0]['uri'];
+		}
+
+		$thumb = image_style_url("megamenu", $uri);
+
+		$html .= '<td class="col-'.$index.'">	
+		  	<div class="views-field views-field-field-product-image" style="float: left; width: 100px;">
+				<div class="field-content"><a href="/free-quote?field_category_tid='.$t->tid.'"><img width="50" height="50" alt="" src="'.$thumb.'" typeof="foaf:Image" class="mCS_img_loaded"></a>
+				</div>
+			</div>
+
+			<div class="views-field views-field-title" style="float:left;">
+		  		<span class="field-content"><a href="/free-quote?field_category_tid='.$t->tid.'">'.$t->name.'</a></span>
+		  	</div>
+
+		</td>';
+
+		/*			
+			<div class="views-field views-field-field-product-code">
+				<span class="views-label views-label-field-product-code"></span>
+				<div class="field-content"></div>
+			</div>*/
+
+		if ($index == 1) {
+			$html .= '</tr>';
+			$index = 0;
+		}
+		$row++;
+	}
+
+	$html .= '</tbody></table></div></div>';
+
+	return $html;
+}

@@ -56,53 +56,92 @@ jQuery(document).ready(function() {
 });
 
 // Welcome sweetalert box
-function displayWelcome() {
-	console.log("welcome box");
-	/*if (!sweetalert_content && jQuery('#block-ows-theme-content #welcome-box').length) {
-		sweetalert_content = jQuery('#block-ows-theme-content #welcome-box');
-	}*/
+function displayWelcome(box = false) {
+	if (!box) {
+		console.log("welcome box");
+		/*if (!sweetalert_content && jQuery('#block-ows-theme-content #welcome-box').length) {
+			sweetalert_content = jQuery('#block-ows-theme-content #welcome-box');
+		}*/
 
-	if (!sweetalert_content && jQuery('#block-ows-theme-content #welcome-box').length) {
-		sweetalert_content = jQuery('#block-ows-theme-content #welcome-box');
-	}
+		if (!sweetalert_content && jQuery('#block-ows-theme-content #welcome-box').length) {
+			sweetalert_content = jQuery('#block-ows-theme-content #welcome-box');
+		}
 
-	// remove enter contest button for those who registered
-	if (jQuery.cookie('enter-contest')) {
-		sweetalert_content.find('a#swal-btn-register').remove();
-	}
+		// remove enter contest button for those who registered
+		if (jQuery.cookie('enter-contest')) {
+			sweetalert_content.find('a#swal-btn-register').remove();
+		}
 
-	if (sweetalert_content) {
-		swal({
-			title: 'Welcome to OWS',
-			text: sweetalert_content.html(),
-			html: true,
-			customClass: 'twitter',
-			showConfirmButton: false,
-			allowEscapeKey: true, // turn on for debug only
-			allowOutsideClick: false
-			//allowEscapeKey: false
-		});
+		if (sweetalert_content) {
+			swal({
+				title: 'Welcome to OWS',
+				text: sweetalert_content.html(),
+				html: true,
+				customClass: 'twitter',
+				showConfirmButton: false,
+				allowEscapeKey: true, // turn on for debug only
+				allowOutsideClick: false
+				//allowEscapeKey: false
+			});
 
-		jQuery('.sweet-alert').center();
+			jQuery('.sweet-alert').center();
+			jQuery('.sweet-alert').draggable({ containment: "parent" });
 
-		// ------------------------------
-		// blind click event for button - click this button will trigger drupal button 
-		jQuery('.sweet-alert #swal-btn-register').on('click', function() {
-			swal.close();
-			loader();
-	  		jQuery('.dialog-buttons-wrapper #btn-enter-contest').trigger('click');
-		});
+			// ------------------------------
+			// blind click event for button - click this button will trigger drupal button 
+			jQuery('.sweet-alert #swal-btn-register').on('click', function() {
+				swal.close();
+				loader();
+		  		jQuery('.dialog-buttons-wrapper #btn-enter-contest').trigger('click');
+			});
 
-	    // ------------------------------
-	    // Vote
+		    // ------------------------------
+		    // Vote
 
-	    // ------------------------------
-	    // Browse
-	    jQuery('.sweet-alert #swal-btn-browse').on('click', function() {
-	    	swal.close();
-	    	loader();
-	  		jQuery('.dialog-buttons-wrapper #btn-browse').trigger('click');
-	  	});
+		    // ------------------------------
+		    // Browse
+		    jQuery('.sweet-alert #swal-btn-browse').on('click', function() {
+		    	/*swal.close();
+		    	loader();
+		  		jQuery('.dialog-buttons-wrapper #btn-browse').trigger('click');
+		  		*/
+		  		displayWelcome('browse-box');
+		  	});
+		}
+	} else if (box == 'browse-box') {
+		if (jQuery('#block-ows-theme-content #browse-box').length) {
+			box_content = jQuery('#block-ows-theme-content #browse-box');
+		}
+
+		if (box_content) {
+			swal({
+				title: 'Browse',
+				text: box_content.html(),
+				html: true,
+				customClass: 'twitter',
+				showConfirmButton: false,
+				allowEscapeKey: true, // turn on for debug only
+				allowOutsideClick: false
+				//allowEscapeKey: false
+			});
+
+			jQuery('.sweet-alert').center();
+			jQuery('.sweet-alert').draggable({ containment: "parent" });
+
+			// ------------------------------
+		    // Browse
+		    jQuery('.sweet-alert #swal-btn-men').on('click', function() {
+		    	swal.close();
+		    	loader();
+		  		jQuery('.dialog-buttons-wrapper #btn-men').trigger('click');
+		  	});
+
+		  	jQuery('.sweet-alert #swal-btn-women').on('click', function() {
+		    	swal.close();
+		    	loader();
+		  		jQuery('.dialog-buttons-wrapper #btn-women').trigger('click');
+		  	});
+		}
 	}
 }
 
