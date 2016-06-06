@@ -5,9 +5,9 @@ var callbackInterval = false;
 var scrollOptions = {horizrailenabled: false};
 
 jQuery(document).ready(function() {
-	jQuery("body").vegas({
+	jQuery("body").delay(5000).vegas({
 		overlay: drupalSettings.path.baseUrl+"themes/ows_theme/css/overlays/01.png",
-		transitionDuration: 4000,
+		transitionDuration: 3000,
 		preload: true,
 		delay: 5000,
 	    slides: [
@@ -53,9 +53,38 @@ jQuery(document).ready(function() {
 		dialog_class = jQuery(event.target).parent().attr('class').match(/dialog-[\w-]*\b/);
 		closeOWSDialog(dialog_class.toString());
 	};
+
+	
+	// ---------------------
+	// main menu
+	jQuery('#block-mainmenu a').html('');
+	jQuery('#block-mainmenu .login a').click(function(e) {
+		e.preventDefault();
+		jQuery('#block-userlogin').fadeIn();
+		return;
+	});
+
+	// ---------------------
+	// Login block
+	// make login block draggable
+	jQuery('#block-userlogin').center().draggable({ containment: "html" });
+	// append close button to login
+	jQuery('#block-userlogin').prepend('<span class="button-close"></span>');
+	jQuery('#block-userlogin .button-close').click(function() {
+		jQuery('#block-userlogin').fadeOut();
+	});
+
+	jQuery('#block-mainmenu').parent().append('<a id="nav-toggle" href="#"><span></span></a>');
+	document.querySelector("#nav-toggle")
+  		.addEventListener( "click", function() {
+    	this.classList.toggle( "active" );
+    	jQuery('#block-mainmenu').slideToggle();
+  	});
+
 });
 
 // Welcome sweetalert box
+// Box param: false = Welcome
 function displayWelcome(box = false) {
 	if (!box) {
 		console.log("welcome box");
@@ -74,7 +103,7 @@ function displayWelcome(box = false) {
 
 		if (sweetalert_content) {
 			swal({
-				title: 'Welcome to OWS',
+				title: 'Welcome to OWS <span class="swal-close"></span>',
 				text: sweetalert_content.html(),
 				html: true,
 				customClass: 'twitter',
@@ -97,6 +126,11 @@ function displayWelcome(box = false) {
 
 		    // ------------------------------
 		    // Vote
+		    jQuery('.sweet-alert #swal-btn-vote').on('click', function() {
+		    	swal.close();
+		    	loader();
+		  		jQuery('.dialog-buttons-wrapper #btn-vote').trigger('click');
+		  	});
 
 		    // ------------------------------
 		    // Browse
@@ -115,7 +149,7 @@ function displayWelcome(box = false) {
 
 		if (box_content) {
 			swal({
-				title: 'Browse',
+				title: '<span class="swal-back" title="Back"></span> Browse <span class="swal-close" title="Close"></span>',
 				text: box_content.html(),
 				html: true,
 				customClass: 'twitter',
@@ -143,6 +177,16 @@ function displayWelcome(box = false) {
 		  	});
 		}
 	}
+
+	// swal bind event close event 
+	jQuery('.swal-close').click(function() {
+		swal.close();
+	});
+
+	// swal bind event close event 
+	jQuery('.swal-back').click(function() {
+		displayWelcome();
+	});
 }
 
 function dialogOpened(dialog_class) {
@@ -171,6 +215,16 @@ function openOWSDialog(dialog_class) {
 	
 	scrollbar(dialog_class);
 	loader(false);
+
+	// zindex
+	jQuery(dialog_class).click(function(event) {
+		jQuery(this).css('z-index', jQuery.ui.dialogr.maxZ++);
+	});
+
+	// fullscreen event
+	jQuery('#dialog-maximize span').click(function() {
+		alert(111);
+	});
 }
 
 // open contestant window

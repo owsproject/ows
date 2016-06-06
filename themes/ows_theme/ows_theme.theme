@@ -43,9 +43,11 @@ function ows_theme_preprocess_menu(&$variables, $hook) {
     if ($hook == 'menu') {
         $current_path = \Drupal::request()->getRequestUri();
         $items = $variables['items'];
+
         foreach ($items as $key => $item) {
             $klass = strtolower(str_replace(' ', '-', $item['title']));
             $variables['items'][$key]['attributes']->addClass($klass);
+
             // Set active to dom element if path of menu item matches current path
             if ($item['in_active_trail']) {        
                 // Add active-trail class
