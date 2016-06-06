@@ -53,6 +53,13 @@ ows.enter_contest:
   requirements:
       _access: 'TRUE'
 
+ows.enter_vote:
+  path: '/enter-vote'
+  defaults:
+    _form: '\Drupal\ows\Form\EnterVoteForm'
+  requirements:
+      _access: 'TRUE'
+
 ows.invite_friend:
   path: '/invite-friend'
   defaults:

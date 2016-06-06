@@ -38,9 +38,10 @@ class OWSController extends ControllerBase
 		));
 
 		$dialog_vote = json_encode(array(
-			'title' => 'Vote',
-			'width' => '80%',
+			'title' => 'Register to Vote',
+			'width' => '650',
 			'dialogClass' => 'dialog-vote',
+			'defaultDialog' => true
 		));
 
 		$dialog_browse = json_encode(array(
@@ -61,7 +62,7 @@ class OWSController extends ControllerBase
 		$html .= "<div class='dialog-buttons-wrapper hidden'>
 			<a href='/enter-contest' id='btn-enter-contest' class='button button-red use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_enter_contest."'>Enter the Contest</a>
 
-			<a href='/vote' id='btn-vote' class='button button-red use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_vote."'>Vote in the Contest</a>
+			<a href='/enter-contest?vote' id='btn-vote' class='button button-red use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_vote."'>Vote in the Contest</a>
 
 			<a href='/browse' id='btn-browse' class='button button-red use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_browse."'>Browse the Website</a>
 
@@ -107,19 +108,19 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 		$dialog_men = json_encode(array(
 			'title' => 'Men',
 			'width' => '650',
-			'dialogClass' => 'dialog-men'
+			'dialogClass' => 'dialog-browse dialog-men'
 		));
 
 		$dialog_women = json_encode(array(
 			'title' => 'Women',
 			'width' => '80%',
-			'dialogClass' => 'dialog-women',
+			'dialogClass' => 'dialog-browse dialog-women',
 		));
 
 		$dialog_things = json_encode(array(
 			'title' => 'Things',
 			'width' => '80%',
-			'dialogClass' => 'dialog-things',
+			'dialogClass' => 'dialog-browse dialog-things',
 		));
 
 		// buttons open dialog

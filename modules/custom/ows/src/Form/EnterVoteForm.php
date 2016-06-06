@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Contains \Drupal\ows\Form\EnterContestForm.
+ * Contains \Drupal\ows\Form\EnterVoteForm.
  */
 
 namespace Drupal\ows\Form;
@@ -23,37 +23,24 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  *
  * @package Drupal\ows\Form
  */
-class EnterContestForm extends FormBase {
+class EnterVoteForm extends FormBase {
 
     var $user_empty;
     /**
     * {@inheritdoc}
     */
     public function getFormId() {
-        return 'enter_contest_form';
+        return 'enter_vote_form';
     }
 
     /**
     * {@inheritdoc}
     */
     public function buildForm(array $form, FormStateInterface $form_state) {
-
-        $type = isset($_GET['vote']) ? $_GET['vote'] : "contestant";
-
         //$form['#attached']['library'][] = 'core/drupal.dialog.ajax';
         $form['validator'] = array(
             '#markup' => '<div class="validate error"></div>'
         );
-
-        /*$form['tabs'] = array(
-            '#markup' => '<div class="tabs">
-                <ul class="nav nav-tabs">
-                    <li class="active"><a href="#personal-information" data-toggle="tab">Personal Information</a></li>
-                    <li><a href="#contact-information" data-toggle="tab">Contact Information</a></li>
-                </ul>
-            </div>
-            <div class="clearfix"></div>'
-        );*/
 
         $form['mail'] = array(
             '#type' => 'email',
@@ -104,23 +91,21 @@ class EnterContestForm extends FormBase {
             )
         );
 
-        if ($type == "contestant") {
-            $form['photo'] = array(
-                '#type' => 'file',
-                '#title' => $this->t('Photo'),
-                '#attributes' => array(
-                    //'class' => array('form-control')
-                )
-            );
+        $form['photo'] = array(
+            '#type' => 'file',
+            '#title' => $this->t('Photo'),
+            '#attributes' => array(
+                //'class' => array('form-control')
+            )
+        );
 
-            $form['voice'] = array(
-                '#type' => 'file',
-                '#title' => $this->t('Voice'),
-                '#attributes' => array(
-                    //'class' => array('form-control')
-                )
-            );
-        }
+        $form['voice'] = array(
+            '#type' => 'file',
+            '#title' => $this->t('Voice'),
+            '#attributes' => array(
+                //'class' => array('form-control')
+            )
+        );
 
         $form['gender'] = array(
             '#type' => 'radios',
@@ -132,67 +117,65 @@ class EnterContestForm extends FormBase {
             )
         );
 
-        if ($type == "contestant") {
-            $form['eyes_color'] = array(
-                '#type' => 'select',
-                '#title' => $this->t('Eye Color'),
-                '#options' => $this->getUserFieldValues('field_eyes_color'),
-                '#required' => true,
-                '#attributes' => array(
-                    'class' => array('form-control')
-                )
-            );
+        $form['eyes_color'] = array(
+            '#type' => 'select',
+            '#title' => $this->t('Eye Color'),
+            '#options' => $this->getUserFieldValues('field_eyes_color'),
+            '#required' => true,
+            '#attributes' => array(
+                'class' => array('form-control')
+            )
+        );
 
-            $form['hair_color'] = array(
-                '#type' => 'select',
-                '#title' => $this->t('Hair Color'),
-                '#options' => $this->getUserFieldValues('field_hair_color'),
-                '#attributes' => array(
-                    'class' => array('form-control')
-                )
-            );
+        $form['hair_color'] = array(
+            '#type' => 'select',
+            '#title' => $this->t('Hair Color'),
+            '#options' => $this->getUserFieldValues('field_hair_color'),
+            '#attributes' => array(
+                'class' => array('form-control')
+            )
+        );
 
-            $form['height'] = array(
-                '#type' => 'number',
-                '#title' => $this->t('Height'),
-                '#attributes' => array(
-                    'class' => array('form-control')
-                )
-            );
+        $form['height'] = array(
+            '#type' => 'number',
+            '#title' => $this->t('Height'),
+            '#attributes' => array(
+                'class' => array('form-control')
+            )
+        );
 
-            $form['weight'] = array(
-                '#type' => 'number',
-                '#title' => $this->t('Weight'),
-                '#attributes' => array(
-                    'class' => array('form-control')
-                )
-            );
+        $form['weight'] = array(
+            '#type' => 'number',
+            '#title' => $this->t('Weight'),
+            '#attributes' => array(
+                'class' => array('form-control')
+            )
+        );
 
-            $form['bust'] = array(
-                '#type' => 'number',
-                '#title' => $this->t('Bust'),
-                '#attributes' => array(
-                    'class' => array('form-control')
-                )
-            );
+        $form['bust'] = array(
+            '#type' => 'number',
+            '#title' => $this->t('Bust'),
+            '#attributes' => array(
+                'class' => array('form-control')
+            )
+        );
 
-            $form['waist'] = array(
-                '#type' => 'number',
-                '#title' => $this->t('Waist'),
-                '#attributes' => array(
-                    'class' => array('form-control')
-                )
-            );
+        $form['waist'] = array(
+            '#type' => 'number',
+            '#title' => $this->t('Waist'),
+            '#attributes' => array(
+                'class' => array('form-control')
+            )
+        );
 
-            $form['hips'] = array(
-                '#type' => 'number',
-                '#title' => $this->t('Hips'),
-                '#attributes' => array(
-                    'class' => array('form-control')
-                )
-            );
-        }
-        
+        $form['hips'] = array(
+            '#type' => 'number',
+            '#title' => $this->t('Hips'),
+            '#attributes' => array(
+                'class' => array('form-control')
+            )
+        );
+
         $form['actions']['#type'] = 'actions';
             $form['actions']['submit'] = array(
             '#type' => 'submit',
