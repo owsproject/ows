@@ -44,8 +44,11 @@ jQuery(document).ready(function() {
 		console.log('Dialog Open');
 		// get dialog class to parse for callback
 		dialog_class = jQuery(event.target).parent().attr('class').match(/dialog-[\w-]*\b/);
-		jQuery('.'+dialog_class.toString() + ' .ui-dialog').draggable();
-		openOWSDialog(dialog_class.toString());
+
+		try {
+			jQuery('.'+dialog_class.toString() + ' .ui-dialog').draggable();
+			openOWSDialog(dialog_class.toString());
+		} catch (e) {}
 	};
 
 	drupalSettings.dialog.close = function(event) {
@@ -187,6 +190,10 @@ function displayWelcome(box = false) {
 	jQuery('.swal-back').click(function() {
 		displayWelcome();
 	});
+}
+
+function owsDialogCallback(id) {
+	alert(id);
 }
 
 function dialogOpened(dialog_class) {
