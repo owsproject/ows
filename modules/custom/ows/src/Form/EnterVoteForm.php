@@ -232,7 +232,7 @@ class EnterVoteForm extends FormBase {
     * form submit
     */
     public function submitForm(array &$form, FormStateInterface $form_state) {
-        kint($form_state);
+        // kint($form_state);
     }
 
     function __set_year_range($form_element, $form_values) {

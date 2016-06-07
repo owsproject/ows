@@ -192,7 +192,9 @@ class EnterContestForm extends FormBase {
                 )
             );
         }
-        
+
+        $form['register_type'] = array('#type' => 'hidden', '#value' => $type);
+
         $form['actions']['#type'] = 'actions';
             $form['actions']['submit'] = array(
             '#type' => 'submit',
@@ -249,12 +251,7 @@ class EnterContestForm extends FormBase {
     * form submit
     */
     public function submitForm(array &$form, FormStateInterface $form_state) {
-        kint($form_state);
-    }
-
-    function __set_year_range($form_element, $form_values) {
-        $form_element['year']['#options'] = drupal_map_assoc(range(2007, 2012));
-        return $form_element;
+        // kint($form_state);
     }
 
     // Change method name to avoid duplicate callback
@@ -315,38 +312,46 @@ class EnterContestForm extends FormBase {
         $user->set("preferred_langcode", $language);
         $user->set("preferred_admin_langcode", $language);*/
 
+        $type = $form_state->get('register_type');
         // custom fields
         $user->set("field_gender", $form_state->get('gender'));
         $user->set("field_birthday", $form_state->get('birthday'));
-        $user->set("field_bust", $form_state->get('bust'));
-        $user->set("field_eyes_color", $form_state->get('eyes_color'));
         $user->set("field_first_name", $form_state->get('first_name'));
         $user->set("field_last_name", $form_state->get('last_name'));
-        $user->set("field_waist", $form_state->get('waist'));
-        $user->set("field_weight", $form_state->get('weight'));
-        $user->set("field_gender", "Male");
 
-        // save photo
-        $file = file_save_upload('photo');
-        if ($file) {
-            // set status permanent
-            $file[0]->setPermanent();
-            $file[0]->save();
-            // move file from temporary:// to public://
-            $file = file_move($file[0], 'public://'.$file[0]->getFilename());
-            // set photo to user
-            @$user->set('user_picture', array('target_id' => $file->id()));
-        }
+        // these fields are for contestant only
+        if ($type != "vote") {
+            $user->addRole('contestant');
 
-        $file = file_save_upload('voice');
-        if ($file) {
-            // set status permanent
-            $file[0]->setPermanent();
-            $file[0]->save();
-            // move file from temporary:// to public://
-            $file = file_move($file[0], 'public://'.$file[0]->getFilename());
-            // set photo to user
-            @$user->set('field_voice', array('target_id' => $file->id()));
+            $user->set("field_bust", $form_state->get('bust'));
+            $user->set("field_eyes_color", $form_state->get('eyes_color'));
+            $user->set("field_waist", $form_state->get('waist'));
+            $user->set("field_weight", $form_state->get('weight'));       
+        
+            // save photo
+            $file = file_save_upload('photo');
+            if ($file) {
+                // set status permanent
+                $file[0]->setPermanent();
+                $file[0]->save();
+                // move file from temporary:// to public://
+                $file = file_move($file[0], 'public://'.$file[0]->getFilename());
+                // set photo to user
+                @$user->set('user_picture', array('target_id' => $file->id()));
+            }
+
+            $file = file_save_upload('voice');
+            if ($file) {
+                // set status permanent
+                $file[0]->setPermanent();
+                $file[0]->save();
+                // move file from temporary:// to public://
+                $file = file_move($file[0], 'public://'.$file[0]->getFilename());
+                // set photo to user
+                @$user->set('field_voice', array('target_id' => $file->id()));
+            }
+        } else {
+            $user->addRole('voter');
         }
 
         // $user->activate();
@@ -364,7 +369,7 @@ class EnterContestForm extends FormBase {
         $response->addCommand(new CloseDialogCommand('.dialog-enter-contest'));
         // open message dialog
         $message = 'Please check your email to complete the registration.';
-        $message .= '<script>owsDialogCallback(1);</script>';
+        //$message .= '<script>owsDialogCallback(1);</script>';
         $response->addCommand(new OpenModalDialogCommand('Thank you', $message), ['width' => '700']);
         return $response;
     }
