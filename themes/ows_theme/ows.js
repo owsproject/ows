@@ -2,7 +2,6 @@ var dialogs = 0;
 var dialog_class = '';
 var sweetalert_content = false;
 var callbackInterval = false;
-var scrollOptions = {horizrailenabled: false};
 
 jQuery(document).ready(function() {
 	jQuery("body").delay(5000).vegas({
@@ -18,6 +17,7 @@ jQuery(document).ready(function() {
 	    ]
 	});
 
+	// Prevent event on Home menu
 	jQuery('li.home a').click(function(e) {
 		e.preventDefault();
 		displayWelcome();
@@ -26,7 +26,6 @@ jQuery(document).ready(function() {
 
 jQuery(document).ready(function() {
 	// nice scrollbar
-    // jQuery("html").niceScroll(scrollOptions);
 
 	user_option = jQuery.cookie('user.option');
 	if (user_option === undefined) {
@@ -49,15 +48,26 @@ jQuery(document).ready(function() {
 			jQuery('.'+dialog_class.toString() + ' .ui-dialog').draggable();
 			openOWSDialog(dialog_class.toString());
 		} catch (e) {}
+
+		// date picker, make sure element exist
+		try {
+			if (jQuery("input.form-date").length) {
+				jQuery("input.form-date").attr('readonly', 'readonly').attr('data-language', 'en').datepicker({
+					autoClose: true
+				});
+			}
+		} catch (e) {}
 	};
 
 	drupalSettings.dialog.close = function(event) {
 		console.log('Dialog Close');
 		dialog_class = jQuery(event.target).parent().attr('class').match(/dialog-[\w-]*\b/);
-		closeOWSDialog(dialog_class.toString());
+
+		try {
+			closeOWSDialog(dialog_class.toString());
+		} catch (e) {}
 	};
 
-	
 	// ---------------------
 	// main menu
 	jQuery('#block-mainmenu a').html('');
@@ -192,9 +202,11 @@ function displayWelcome(box = false) {
 	});
 }
 
-function owsDialogCallback(id) {
-	alert(id);
-}
+/*function owsDialogCallback(action, klass) {
+	if (action == "close") {
+		jQuery(klass).dialog().dialog('close');
+	}
+}*/
 
 function dialogOpened(dialog_class) {
 	return jQuery(dialog_class + ' #drupal-modal').length;
@@ -206,7 +218,7 @@ function openOWSDialog(dialog_class) {
 
 	dialogs++;
 	// get dialog object
-	console.log('Dialog Open callback:' + dialog_class);
+	console.log('Dialog open callback:' + dialog_class);
 	
 	// make dialog draggable
 	/*jQuery(dialog_class + ".ui-dialog").draggable({
@@ -226,11 +238,6 @@ function openOWSDialog(dialog_class) {
 	// zindex
 	jQuery(dialog_class).click(function(event) {
 		jQuery(this).css('z-index', jQuery.ui.dialogr.maxZ++);
-	});
-
-	// fullscreen event
-	jQuery('#dialog-maximize span').click(function() {
-		alert(111);
 	});
 }
 
@@ -377,11 +384,10 @@ function openDialog(element, title, data, width = 500, height = 500, is_new = fa
 		open: function( event, ui ) {
 			w = jQuery(element + ' .ui-dialog-content').width();
 			jQuery(element + ' .ui-dialog').width(w);
-			//jQuery(element + ' .ui-dialog-content').niceScroll(scrollOptions);
 			scrollbar(element + ' .ui-dialog-content');
 
 			// execute callback
-			console.log(callback);
+			console.log("Dialogr" + callback);
 			if (callback) eval(callback);
 			dialogs++;
 		},
@@ -400,31 +406,33 @@ function openDialog(element, title, data, width = 500, height = 500, is_new = fa
 // ajax complete event
 jQuery(document).ajaxComplete(function(event, xhr, settings) {
 	// user clicks on pager
-	if (dialog_class.toString() == 'dialog-browse') {
-		browseContestant('.dialog-browse');
+	try {
+		if (dialog_class.toString() == 'dialog-browse') {
+			browseContestant('.dialog-browse');
 
-		/*
-		jQuery('.' + dialog_class.toString() + ' .browse-contestant').on('click', function() {
-			id = jQuery(this).attr('id').replace('contestant-', '');
+			/*
+			jQuery('.' + dialog_class.toString() + ' .browse-contestant').on('click', function() {
+				id = jQuery(this).attr('id').replace('contestant-', '');
 
-			if (!jQuery('.dialog-contestant-'+id).length) {
-				full_name = jQuery(this).find('.views-field-field-first-name .field-content').html() + ' ' + jQuery(this).find('.views-field-field-last-name .field-content').html();
-				
-		    	// browse website
-				jQuery.ajax({
-					url: "/ajax-content",
-					data: {type: "view-contestant", id: id},
-					async: false, 
-					success: function(data) {
-						callback = "scrollbar('.ui-dialog .dialog-contestant-"+id+"', false);";
-						openDialog('.dialog-contestant-'+id, full_name, data, 600, 500, false, callback);
-					}
-				});
-			}
+				if (!jQuery('.dialog-contestant-'+id).length) {
+					full_name = jQuery(this).find('.views-field-field-first-name .field-content').html() + ' ' + jQuery(this).find('.views-field-field-last-name .field-content').html();
+					
+			    	// browse website
+					jQuery.ajax({
+						url: "/ajax-content",
+						data: {type: "view-contestant", id: id},
+						async: false, 
+						success: function(data) {
+							callback = "scrollbar('.ui-dialog .dialog-contestant-"+id+"', false);";
+							openDialog('.dialog-contestant-'+id, full_name, data, 600, 500, false, callback);
+						}
+					});
+				}
 
-	    	swal.close();
-	    });*/
-	}
+		    	swal.close();
+		    });*/
+		}
+	} catch (e) {}
 });
 
 /* jQuery lib */

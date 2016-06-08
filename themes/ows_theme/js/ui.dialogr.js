@@ -219,7 +219,6 @@
 	  },
 	  
 	  close : function(event) {
-		  
 		//code added because if the dialog is minimized then closed
 		//when it opens again it's still with the state minimized		
 		if (window.minimized) {

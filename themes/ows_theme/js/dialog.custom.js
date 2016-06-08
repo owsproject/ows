@@ -92,8 +92,9 @@
       }*/
 
       // use default dialog for form
-      if (settings.defaultDialog) $element.dialog(settings);
-      else {
+      if (settings.defaultDialog == "true") {
+        $element.dialog(settings);
+      } else {
         /*settings.autoResize = true;
         settings.fluid = true;
         settings.minWidth = 470;
@@ -107,7 +108,8 @@
 
     function closeDialog(value) {
       $(window).trigger('dialog:beforeclose', [dialog, $element]);
-      $element.dialogr('close');
+      
+      //$element.dialogr('close');
       dialog.returnValue = value;
       dialog.open = false;
       $(window).trigger('dialog:afterclose', [dialog, $element]);

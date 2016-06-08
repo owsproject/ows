@@ -8,6 +8,7 @@ global-styling:
       css/bootstrap.min.css: {}
       css/jquery.mCustomScrollbar.min.css: {}
       css/vegas.min.css: {}
+      css/datepicker.min.css: {}
       ows.css: {}
   component:
     css/components/ui-dialog.css: {}
@@ -24,6 +25,8 @@ global-styling:
     js/sweetalert.min.js: {}
     js/bootstrap.min.js: {}
     js/jquery.fullscreen-min.js: {}
+    js/datepicker.min.js: {}
+    js/datepicker.en.js: {}
     ows.js: {}
   dependencies:
     - core/jquery
