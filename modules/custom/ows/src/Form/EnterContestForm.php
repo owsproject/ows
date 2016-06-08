@@ -38,7 +38,7 @@ class EnterContestForm extends FormBase {
     */
     public function buildForm(array $form, FormStateInterface $form_state) {
 
-        $type = isset($_GET['vote']) ? $_GET['vote'] : "contestant";
+        $type = isset($_GET['type']) ? $_GET['type'] : "contestant";
 
         //$form['#attached']['library'][] = 'core/drupal.dialog.ajax';
         $form['validator'] = array(
@@ -193,7 +193,7 @@ class EnterContestForm extends FormBase {
             );
         }
 
-        $form['register_type'] = array('#type' => 'hidden', '#value' => $type);
+        // $form['type'] = array('#type' => 'hidden', '#value' => $type);
 
         $form['actions']['#type'] = 'actions';
             $form['actions']['submit'] = array(
@@ -226,7 +226,7 @@ class EnterContestForm extends FormBase {
     public function validateMailCallback(array &$form, FormStateInterface $form_state) {
         // Instantiate an AjaxResponse Object to return.
         $response = new AjaxResponse();
-
+        
         if (!valid_email_address($form_state->getValue('mail'))) {
             $response->addCommand(new HtmlCommand('.form-item-mail .description', 'Invalid email adress!'));
         } else {
@@ -239,6 +239,7 @@ class EnterContestForm extends FormBase {
             }
         }
 
+        $response->addCommand(new CloseDialogCommand('.dialog-enter-contest'));
         return $response;
     }
 
@@ -282,6 +283,9 @@ class EnterContestForm extends FormBase {
             $message[] = 'You must be 18 to enter the contest.';    
         }
 
+        $birthday = $values['birthday'];
+        $year = date('Y-m-d', strtotime($birthday));
+
         // validate gender
         if (!$values['gender']) {
             $message[] = 'Gender is required.';
@@ -312,15 +316,15 @@ class EnterContestForm extends FormBase {
         $user->set("preferred_langcode", $language);
         $user->set("preferred_admin_langcode", $language);*/
 
-        $type = $form_state->get('register_type');
+        $type = $_GET['type']; //$form_state->get('type');
         // custom fields
         $user->set("field_gender", $form_state->get('gender'));
-        $user->set("field_birthday", $form_state->get('birthday'));
+        $user->set("field_birthday", $birthday);
         $user->set("field_first_name", $form_state->get('first_name'));
         $user->set("field_last_name", $form_state->get('last_name'));
 
         // these fields are for contestant only
-        if ($type != "vote") {
+        if ($type != "voter") {
             $user->addRole('contestant');
 
             $user->set("field_bust", $form_state->get('bust'));
@@ -365,12 +369,26 @@ class EnterContestForm extends FormBase {
         // drupal_set_message($this->t('Registration successful. You are now logged in.'));
         // $form_state->setRedirect('');
 
-        // close dialog
-        $response->addCommand(new CloseDialogCommand('.dialog-enter-contest'));
+        
+        
         // open message dialog
         $message = 'Please check your email to complete the registration.';
-        //$message .= '<script>owsDialogCallback(1);</script>';
-        $response->addCommand(new OpenModalDialogCommand('Thank you', $message), ['width' => '700']);
+        // Append script into callback message
+        $script = '<script>
+            swal("Thank you", "We have sent you an email with activation link.", "success");
+            jQuery(".sweet-alert").center();
+        </script>';
+        // $response->addCommand(new OpenModalDialogCommand('Thank you', $message), ['width' => '700', 'clkass' => 'dialog-thanks']);
+        $response->addCommand(new HtmlCommand('.ui-dialog-title', $script));
+
+        // -------------
+        // close dialog
+        if ($type != "voter") {
+            $response->addCommand(new CloseDialogCommand('.dialog-enter-contest'));
+        } else {
+            $response->addCommand(new CloseDialogCommand('.dialog-vote'));
+        }
+
         return $response;
     }
 
