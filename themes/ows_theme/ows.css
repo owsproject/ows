@@ -5,7 +5,7 @@
 
 body {
     background: #000 url("images/background1.png") no-repeat scroll center center;
-    font-family: 'Roboto', sans-serif !important;
+    font-family: 'Lato', sans-serif !important;
     min-height: 700px;
 }
 
@@ -101,7 +101,9 @@ body {
 
 /* --- */
 
-.welcome-wrapper .buttons a {}
+.welcome-wrapper .buttons a {
+    margin-top: 10px;
+}
 
 .welcome-wrapper .buttons a:hover {
     color: #eee;
@@ -124,8 +126,8 @@ Dialog styles
     background: rgba(0, 0, 0, 0.30);
     border-radius: 9px;
     padding: 8px;
-    font-family: 'Roboto', sans-serif !important;
-    width: 600px;
+    max-width: 600px;
+    width: 60%;
     margin-left: 0;
 }
 
@@ -210,7 +212,6 @@ Dialog styles
 }
 
 .ui-dialog * {
-    font-family: "Roboto", sans-serif !important;
     color: #66757f;
 }
 
@@ -244,9 +245,35 @@ Dialog styles
     font-size: 18px;
 }
 
+#dialog-maximize span {
+    background-image: url("images/maximize.png");
+    background-position: 0 0;
+    background-repeat: no-repeat !important;
+}
+
+#dialog-minimize span {
+    background-image: url("images/minimize.png");
+    background-position: 0 0;
+    background-repeat: no-repeat !important;
+}
+
+.ui-dialog .ui-dialog-titlebar-close {
+    background: none;
+}
+
+.ui-dialog-titlebar-close .ui-icon-closethick, .dialog-default .ui-dialog-titlebar-close {
+    background-image: url("images/close2.png") !important;
+    background-position: 0 0;
+    background-repeat: no-repeat !important;
+}
+
+.ui-dialog-titlebar > a {
+    margin-left: 4px;
+}
+
 #block-ows-theme-content .form-item label {
     float: left;
-    width: 120px;
+    width: 150px;
 }
 
 #block-ows-theme-content .form-item input {
@@ -266,7 +293,7 @@ Dialog styles
 }
 
 #join-contest-form #edit-submit {
-    margin-left: 120px;
+    margin-left: 150px;
 }
 
 .ui-dialog h2.dialog-title {
@@ -587,9 +614,6 @@ nav.pager {
 }
 
 .ui-dialog .ui-dialog-titlebar-close {
-    background: url(images/close.png) no-repeat;
-    width: 16px;
-    height: 16px;
     border: none;
 }
 
@@ -613,7 +637,7 @@ nav.pager {
 
 .invite-friend-form .form-item input, 
 .invite-friend-form .form-item textarea {
-    width: 400px;
+    width: 370px;
 
 }
 
@@ -664,7 +688,7 @@ nav.pager {
     height: 32px;
     padding: 0 20px;
     width: auto;
-    margin-left: 76px;
+    margin-left: 86px;
 }
 
 #block-userlogin .form-item {
@@ -674,6 +698,7 @@ nav.pager {
 #block-userlogin label {
     color: #fff;
     margin-right: 10px;
+    width: 70px;
 }
 
 /* menu button */
@@ -741,4 +766,8 @@ nav.pager {
     background: #de0748 none repeat scroll 0 0 !important;
     color: #fff !important;
     border-color: #aaa #aaa transparent;
+}
+
+body > #drupal-modal {
+    display: none !important;
 }

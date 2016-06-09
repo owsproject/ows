@@ -22,6 +22,10 @@ jQuery(document).ready(function() {
 		e.preventDefault();
 		displayWelcome();
 	});
+
+	jQuery(window).resize(function() {
+		jQuery(".sweet-alert, .ui-dialog").center();
+	});
 });
 
 jQuery(document).ready(function() {
@@ -73,7 +77,7 @@ jQuery(document).ready(function() {
 	jQuery('#block-mainmenu a').html('');
 	jQuery('#block-mainmenu .login a').click(function(e) {
 		e.preventDefault();
-		jQuery('#block-userlogin').fadeIn();
+		jQuery('#block-userlogin').center().fadeIn();
 		return;
 	});
 
@@ -272,7 +276,7 @@ function browseContestant(dialog_class) {
 // Invite friend
 function inviteFriendForm(klass) {
 	html = '<div class="form-item form-fullname">';
-	html += '<label for="edit-name">Your friend name</label>';
+	html += '<label for="edit-name">Your friend\'s name</label>';
 	html += '<input type="text" class="form-name" maxlength="254" size="60" value="" name="name" id="edit-name">';
 	html += '</div>';
 
@@ -317,6 +321,7 @@ function inviteFriendForm(klass) {
 }
 
 function closeOWSDialog(dialog_class) {
+	console.log(dialog_class);
 	// dialog_class = "." + dialog_class;
 	if (dialogs > 0) dialogs--;
 	else dialogs = 0;
