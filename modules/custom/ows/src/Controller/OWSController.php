@@ -33,14 +33,14 @@ class OWSController extends ControllerBase
 		$dialog_enter_contest = json_encode(array(
 			'title' => 'Enter the Contest',
 			'width' => '650',
-			'dialogClass' => 'dialog-enter-contest',
+			'dialogClass' => 'dialog-enter-contest dialog-default',
 			'defaultDialog' => true
 		));
 
 		$dialog_vote = json_encode(array(
 			'title' => 'Register to Vote',
 			'width' => '650',
-			'dialogClass' => 'dialog-vote',
+			'dialogClass' => 'dialog-vote dialog-default',
 			'defaultDialog' => true
 		));
 
