@@ -244,8 +244,9 @@ function openOWSDialog(dialog_class) {
 	// for parent dialog
 	if (dialog_class == ".dialog-browse") {
 		jQuery(dialog_class).click(function(event) {
+			tag = jQuery(event.target).prop("tagName");
 			// only incease Zindex if user click on windows but not link to open new dialog
-			if (jQuery(event.target).attr('class') != "field-content") {			
+			if (jQuery(event.target).attr('class') != "field-content" && tag != "IMG") {
 				jQuery.ui.dialogr.maxZ += 1;
 				jQuery(this).css('z-index', jQuery.ui.dialogr.maxZ);
 			}
