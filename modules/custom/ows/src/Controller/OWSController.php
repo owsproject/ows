@@ -351,22 +351,24 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 				$gallery_videos = $user->get('field_videos');
 				for ($i = 0; $i < $gallery_videos->count(); $i++) {
 					$uri = $gallery_videos->get($i)->get('entity')->getTarget()->getValue()->getFileUri();
-					
+					$file_info = pathinfo($uri);
+					$file_name = $file_info['filename'];
 					$source_file = drupal_realpath($uri);
-					$video_screenshot_filename = drupal_realpath('public://').'/screenshot_'.basename($uri);
+					$dest_file = drupal_realpath('public://screenshot_'.$file_name.'.jpg');
 					
-					$FFMPEG_EXE = str_replace('\\', '/', drupal_realpath(drupal_get_path('module', 'ows')).'/ffmpeg/ffmpeg.exe');
-					$command = $FFMPEG_EXE.' -i '.$source_file.' -ss 5 -vframes 50 '.$video_screenshot_filename;
-					dpm($command);
-					$result = exec($command);
+					$thumbnail_uri = 'public://screenshot_'.$file_name.'.jpg';
+					if (!file_exists($thumbnail_uri)) {
+						$FFMPEG_EXE = str_replace('\\', '/', drupal_realpath(drupal_get_path('module', 'ows')).'/ffmpeg/ffmpeg.exe');
+						$command = $FFMPEG_EXE.' -i '.$source_file.' -ss 5 -vframes 50 '.$dest_file;
+						$result = exec($command);
+					}
 
-				    $video_thumbnail = ImageStyle::load('thumbnail')->buildUrl("public://".basename($url));
+				    $video_thumbnail = ImageStyle::load('thumbnail')->buildUrl("public://".basename($thumbnail_uri));
 				    $video_path = Url::fromUri($uri);
 
 					$videos .= '<div class="col-md-4 col-xs-4 item">
-						<a href="'.$video_path.'" class="play-video">'.$uri.'<img src="'.$video_thumbnail.'"></a>
+						<a href="'.$video_path.'" class="play-video"><img src="'.$video_thumbnail.'"></a>
 					</div>';
-					dpm($videos);
 				}
 			}
 
