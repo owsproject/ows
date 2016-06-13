@@ -16,6 +16,7 @@ use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\file\Entity\File;
 use Drupal\image\Entity\ImageStyle;
+use Drupal\Core\Url;
 
 class OWSController extends ControllerBase
 {
@@ -325,10 +326,47 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 				$about_me = $user->get('field_about_me')->value;
 			}
 
+			// gallery
+			$gallery = '';
+			if ($user->get('field_gallery')->count()) {
+				$gallery_photos = $user->get('field_gallery');
+				for ($i = 0; $i < $gallery_photos->count(); $i++) {
+					$uri = $gallery_photos->get($i)->get('entity')->getTarget()->getValue()->getFileUri();
+		
+				    $photo_thumbnail = ImageStyle::load('thumbnail')->buildUrl($uri);
+				    $photo_full = ImageStyle::load('gallery_full')->buildUrl($uri);
+
+					$gallery .= '<div class="col-md-2 col-xs-6 item">
+						<a href="'.$photo_full.'" class="colorbox" rel="gallery-item"><img src="'.$photo_thumbnail.'" /></a>
+					</div>';
+					if ($i == 5) {
+						$gallery .= '<div class="clearfix"></div>';
+					}
+				}
+			}
+
+			// videos
+			$videos = '';
+			if ($user->get('field_videos')->count()) {
+				$gallery_videos = $user->get('field_videos');
+				for ($i = 0; $i < $gallery_videos->count(); $i++) {
+					$uri = $gallery_videos->get($i)->get('entity')->getTarget()->getValue()->getFileUri();
+		
+				    $video_thumbnail = ImageStyle::load('thumbnail')->buildUrl("public://video_thumbnail.png");
+				    $video_path = Url::fromUri($uri);
+
+					$videos .= '<div class="col-md-4 col-xs-4 item">
+						<a href="'.$video_path.'" class="play-video">Play Video '.($i+1).'</a>
+					</div>';
+				}
+			}
+
 	    	$html = '<div class="contestant-info" id="contestant-'.$uid.'">
 	    		<ul class="nav nav-tabs">
 					<li class="active"><a data-toggle="tab" href="#personal-information-'.$uid.'">Personal Information</a></li>
-					<li><a data-toggle="tab" href="#about-me-'.$uid.'">More info about me</a></li>
+					<li><a data-toggle="tab" href="#about-me-'.$uid.'">About me</a></li>
+					<li><a data-toggle="tab" href="#gallery-'.$uid.'">Gallery</a></li>
+					<li><a data-toggle="tab" href="#videos-'.$uid.'">Videos</a></li>
 					<li><a data-toggle="tab" href="#invite-'.$uid.'">Invite</a></li>
 				</ul>
 
@@ -398,6 +436,10 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 						<br>
 						<a href="#invite-friend" id="dialog-btn-invite-friend" class="button button-red invite-friend">Invite Friend</a>
 					</div>
+
+					<div id="gallery-'.$uid.'" class="gallery tab-pane fade in">'.$gallery.'</div>
+
+					<div id="videos-'.$uid.'" class="videos tab-pane fade in">'.$videos.'</div>
 
 					<div id="invite-'.$uid.'" class="invite-friend-form tab-pane fade in"></div>
 				</div>
