@@ -239,14 +239,19 @@ function openOWSDialog(dialog_class) {
 	scrollbar(dialog_class);
 	loader(false);
 
-	// zindex
-	/*jQuery(dialog_class).click(function(event) {
-		console.log(jQuery.ui.dialogr.maxZ++);
-		jQuery(this).css('z-index', jQuery.ui.dialogr.maxZ++);
-	});*/
-
-	jQuery.ui.dialogr.maxZ += 4;
-	jQuery(this).css('z-index', jQuery.ui.dialogr.maxZ);
+	// dialog z-index	
+	if (dialog_class == ".dialog-browse") {
+		jQuery(dialog_class).click(function(event) {
+			// only incease Zindex if user click on windows but not link to open new dialog
+			if (jQuery(event.target).attr('class') != "field-content") {			
+				jQuery.ui.dialogr.maxZ += 1;
+				jQuery(this).css('z-index', jQuery.ui.dialogr.maxZ);
+			}
+		});
+	} 
+	
+	jQuery.ui.dialogr.maxZ += 1;
+	jQuery(dialog_class).css('z-index', jQuery.ui.dialogr.maxZ);
 }
 
 // open contestant window
@@ -266,7 +271,7 @@ function browseContestant(dialog_class) {
 				async: false, 
 				success: function(data) {
 					loader(0);
-					callback = "scrollbar('.ui-dialog .dialog-contestant-"+id+"', false); inviteFriendForm('.dialog-contestant-"+id+" .invite-friend-form'); jQuery('.colorbox').colorbox({rel: 'gallery-item'}); jQuery('.ui-dialog .dialog-contestant-"+id+"').click(function(event) { jQuery(this).css('z-index', jQuery.ui.dialogr.maxZ++);});";
+					callback = "scrollbar('.ui-dialog .dialog-contestant-"+id+"', false); inviteFriendForm('.dialog-contestant-"+id+" .invite-friend-form'); jQuery('.colorbox').colorbox({rel: 'gallery-item'}); jQuery.ui.dialogr.maxZ += 2; jQuery('.dialog-contestant-"+id+"').css('z-index', jQuery.ui.dialogr.maxZ); ";
 					openDialog('.dialog-contestant-'+id, full_name, data, 600, 500, false, callback);
 				}
 			});
