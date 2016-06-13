@@ -239,7 +239,9 @@ function openOWSDialog(dialog_class) {
 	scrollbar(dialog_class);
 	loader(false);
 
+	// --------------------
 	// dialog z-index	
+	// for parent dialog
 	if (dialog_class == ".dialog-browse") {
 		jQuery(dialog_class).click(function(event) {
 			// only incease Zindex if user click on windows but not link to open new dialog
@@ -250,6 +252,7 @@ function openOWSDialog(dialog_class) {
 		});
 	} 
 	
+	// increase zindex for opened windows
 	jQuery.ui.dialogr.maxZ += 1;
 	jQuery(dialog_class).css('z-index', jQuery.ui.dialogr.maxZ);
 }
