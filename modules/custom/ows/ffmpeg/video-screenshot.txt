@@ -1,0 +1,7 @@
+<?php
+
+$video = 'a.m4v';
+exec("ffmpeg -itsoffset -4  -i ".$video." -vcodec mjpeg -vframes 1 -an -f rawvideo -s 120x100 screenshot.jpg");
+
+// gif 
+$gif_cmd = 'ffmpeg -i '.$video.' -vf scale=320:-1 -t 10 -r 10 output.gif';

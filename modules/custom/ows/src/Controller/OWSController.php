@@ -351,13 +351,22 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 				$gallery_videos = $user->get('field_videos');
 				for ($i = 0; $i < $gallery_videos->count(); $i++) {
 					$uri = $gallery_videos->get($i)->get('entity')->getTarget()->getValue()->getFileUri();
-		
-				    $video_thumbnail = ImageStyle::load('thumbnail')->buildUrl("public://video_thumbnail.png");
+					
+					$source_file = drupal_realpath($uri);
+					$video_screenshot_filename = drupal_realpath('public://').'/screenshot_'.basename($uri);
+					
+					$FFMPEG_EXE = str_replace('\\', '/', drupal_realpath(drupal_get_path('module', 'ows')).'/ffmpeg/ffmpeg.exe');
+					$command = $FFMPEG_EXE.' -i '.$source_file.' -ss 5 -vframes 50 '.$video_screenshot_filename;
+					dpm($command);
+					$result = exec($command);
+
+				    $video_thumbnail = ImageStyle::load('thumbnail')->buildUrl("public://".basename($url));
 				    $video_path = Url::fromUri($uri);
 
 					$videos .= '<div class="col-md-4 col-xs-4 item">
-						<a href="'.$video_path.'" class="play-video">Play Video '.($i+1).'</a>
+						<a href="'.$video_path.'" class="play-video">'.$uri.'<img src="'.$video_thumbnail.'"></a>
 					</div>';
+					dpm($videos);
 				}
 			}
 
@@ -439,7 +448,7 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 
 					<div id="gallery-'.$uid.'" class="gallery tab-pane fade in">'.$gallery.'</div>
 
-					<div id="videos-'.$uid.'" class="videos tab-pane fade in">'.$videos.'</div>
+					<div id="videos-'.$uid.'" class="videos tab-pane fade in">'.$videos.'dddd</div>
 
 					<div id="invite-'.$uid.'" class="invite-friend-form tab-pane fade in"></div>
 				</div>
