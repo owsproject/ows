@@ -240,9 +240,13 @@ function openOWSDialog(dialog_class) {
 	loader(false);
 
 	// zindex
-	jQuery(dialog_class).click(function(event) {
+	/*jQuery(dialog_class).click(function(event) {
+		console.log(jQuery.ui.dialogr.maxZ++);
 		jQuery(this).css('z-index', jQuery.ui.dialogr.maxZ++);
-	});
+	});*/
+
+	jQuery.ui.dialogr.maxZ += 4;
+	jQuery(this).css('z-index', jQuery.ui.dialogr.maxZ);
 }
 
 // open contestant window
@@ -262,7 +266,7 @@ function browseContestant(dialog_class) {
 				async: false, 
 				success: function(data) {
 					loader(0);
-					callback = "scrollbar('.ui-dialog .dialog-contestant-"+id+"', false); inviteFriendForm('.dialog-contestant-"+id+" .invite-friend-form');";
+					callback = "scrollbar('.ui-dialog .dialog-contestant-"+id+"', false); inviteFriendForm('.dialog-contestant-"+id+" .invite-friend-form'); jQuery('.colorbox').colorbox({rel: 'gallery-item'}); jQuery('.ui-dialog .dialog-contestant-"+id+"').click(function(event) { jQuery(this).css('z-index', jQuery.ui.dialogr.maxZ++);});";
 					openDialog('.dialog-contestant-'+id, full_name, data, 600, 500, false, callback);
 				}
 			});

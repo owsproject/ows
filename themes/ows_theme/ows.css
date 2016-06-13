@@ -771,3 +771,21 @@ nav.pager {
 body > #drupal-modal {
     display: none !important;
 }
+
+.tab-content .gallery {
+
+}
+
+.tab-content .gallery .item {
+    margin-bottom: 20px;
+}
+
+.tab-content .gallery .item img {
+    max-width: 100%;
+    height: auto;
+}
+
+.tab-content .videos .play-video {
+    color: #fff !important;
+    text-decoration: none;
+}
