@@ -249,12 +249,36 @@ Dialog styles
     background-image: url("images/maximize.png");
     background-position: 0 0;
     background-repeat: no-repeat !important;
+    position: relative;
+    right: 3px;
 }
 
 #dialog-minimize span {
     background-image: url("images/minimize.png");
     background-position: 0 0;
     background-repeat: no-repeat !important;
+    position: relative;
+    right: 3px;
+}
+
+.mCSB_draggerRail {
+    width: 1px;
+}
+
+.mCS-rounded-dark.mCSB_scrollTools .mCSB_draggerRail {
+    background-color: #333;
+}
+
+.mCS-rounded-dark.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar, .mCS-rounded-dots-dark.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar {
+    background: #eee;
+}
+
+.mCS-rounded-dark.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar:hover, .mCS-rounded-dots-dark.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar:hover {
+    background: #de0748;
+}
+
+.mCSB_scrollTools .mCSB_draggerRail {
+    background: #333;
 }
 
 .ui-dialog .ui-dialog-titlebar-close {
@@ -772,20 +796,47 @@ body > #drupal-modal {
     display: none !important;
 }
 
-.tab-content .gallery {
+.contestant-info .tab-content .gallery {
 
 }
 
-.tab-content .gallery .item {
+.contestant-info .tab-content .gallery .item {
     margin-bottom: 20px;
 }
 
-.tab-content .gallery .item img {
+.contestant-info.tab-content .gallery .item img {
     max-width: 100%;
     height: auto;
 }
 
-.tab-content .videos .play-video {
+.contestant-info .tab-content .videos .play-video {
     color: #fff !important;
     text-decoration: none;
+    display: block;
+    position: relative;
+}
+
+.contestant-info .tab-content .videos .play-video span {
+    display: block;
+    background: url(images/play_button.png) no-repeat center center;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.contestant-info .videos > div {
+    width: 99%;
+    margin: 0 auto;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.contestant-info .videos > div img {
+    border-radius: 10px;
+    border: 1px solid #000;
+}
+
+.contestant-info .nav-tabs li a {
+    font-size: 13px;
 }

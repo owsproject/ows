@@ -98,6 +98,12 @@ jQuery(document).ready(function() {
     	jQuery('#block-mainmenu').slideToggle();
   	});
 
+  	jQuery('.play-video.colorbox').colorbox({
+  		inline:true, 
+    	width: "80%", 
+    	height: "auto", 
+    	href: '.video-player-'+jQuery(this).attr('id')
+  	});
 });
 
 // Welcome sweetalert box
