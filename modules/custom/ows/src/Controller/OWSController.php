@@ -16,7 +16,6 @@ use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\file\Entity\File;
 use Drupal\image\Entity\ImageStyle;
-use Drupal\Core\Url;
 
 class OWSController extends ControllerBase
 {
@@ -350,7 +349,9 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 			if ($user->get('field_videos')->count()) {
 				$gallery_videos = $user->get('field_videos');
 				for ($i = 0; $i < $gallery_videos->count(); $i++) {
-					$uri = $gallery_videos->get($i)->get('entity')->getTarget()->getValue()->getFileUri();
+					$file = $gallery_videos->get($i)->get('entity')->getTarget()->getValue();
+					$uri = $file->getFileUri();
+					$video_path = $file->url();				
 					$file_info = pathinfo($uri);
 					$file_name = $file_info['filename'];
 					$source_file = drupal_realpath($uri);
@@ -363,11 +364,19 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 						$result = exec($command);
 					}
 
-				    $video_thumbnail = ImageStyle::load('thumbnail')->buildUrl("public://".basename($thumbnail_uri));
-				    $video_path = Url::fromUri($uri);
+				    $video_thumbnail = ImageStyle::load('video_thumbnail')->buildUrl("public://".basename($thumbnail_uri));				    
+				    $video_mime = 'mp4';
 
-					$videos .= '<div class="col-md-4 col-xs-4 item">
-						<a href="'.$video_path.'" class="play-video"><img src="'.$video_thumbnail.'"></a>
+					$videos .= '<div class="col-md-12 col-xs-12 item">
+						<a href="#'.$video_path.'" class="play-video colorbox" id="video-'.$file->id().'"><img src="'.$video_thumbnail.'"><span></span></a>
+						<div style="display:none">
+							<div class="video-player-video-'.$file->id().'">
+								<video class="video-js vjs-default-skin" controls preload="none" width="598" height="478" poster="'.$video_thumbnail.'" data-setup="{}">
+								    <source src="'.$video_path.'" type="'.$video_mime.'" />
+								    <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
+								</video>
+							</div>
+						</div>
 					</div>';
 				}
 			}
@@ -450,7 +459,7 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 
 					<div id="gallery-'.$uid.'" class="gallery tab-pane fade in">'.$gallery.'</div>
 
-					<div id="videos-'.$uid.'" class="videos tab-pane fade in">'.$videos.'dddd</div>
+					<div id="videos-'.$uid.'" class="videos tab-pane fade in">'.$videos.'</div>
 
 					<div id="invite-'.$uid.'" class="invite-friend-form tab-pane fade in"></div>
 				</div>
