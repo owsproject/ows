@@ -66,3 +66,17 @@ ows.invite_friend:
     _controller: 'Drupal\ows\Controller\OWSController::inviteFriend'
   requirements:
       _access: 'TRUE'
+
+ows.video_play:
+  path: '/video/{id}'
+  defaults:
+    _controller: 'Drupal\ows\Controller\OWSController::playVideo'
+  requirements:
+      _access: 'TRUE'
+
+ows.video_thumbnail:
+  path: '/video/thumbnail/{id}'
+  defaults:
+    _controller: 'Drupal\ows\Controller\OWSController::playThumbnail'
+  requirements:
+      _access: 'TRUE'

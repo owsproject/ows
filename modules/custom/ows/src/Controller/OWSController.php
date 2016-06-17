@@ -113,13 +113,13 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 
 		$dialog_women = json_encode(array(
 			'title' => 'Women',
-			'width' => '80%',
+			'width' => '650',
 			'dialogClass' => 'dialog-browse dialog-women',
 		));
 
 		$dialog_things = json_encode(array(
 			'title' => 'Things',
-			'width' => '80%',
+			'width' => '650',
 			'dialogClass' => 'dialog-browse dialog-things',
 		));
 
@@ -367,16 +367,9 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 				    $video_thumbnail = ImageStyle::load('video_thumbnail')->buildUrl("public://".basename($thumbnail_uri));				    
 				    $video_mime = 'mp4';
 
+				    // <a href="#video-player" data-vidID="contestant_video_player" class="play-video" vid="'.$file->id().'" type="'.$file->getMimeType().'" vfile="'.$file->url().'" rel="video"><img src="'.$video_thumbnail.'"><span></span></a>
 					$videos .= '<div class="col-md-12 col-xs-12 item">
-						<a href="#'.$video_path.'" class="play-video colorbox" id="video-'.$file->id().'"><img src="'.$video_thumbnail.'"><span></span></a>
-						<div style="display:none">
-							<div class="video-player-video-'.$file->id().'">
-								<video class="video-js vjs-default-skin" controls preload="none" width="598" height="478" poster="'.$video_thumbnail.'" data-setup="{}">
-								    <source src="'.$video_path.'" type="'.$video_mime.'" />
-								    <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
-								</video>
-							</div>
-						</div>
+						<div id="video-player-'.$file->id().'" class="video-player" video-id="'.$file->id().'" video-type="'.$file->getMimeType().'" video-file="'.$file->url().'" video-thumb="'.$video_thumbnail.'"></div>
 					</div>';
 				}
 			}
@@ -451,21 +444,28 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 						</div>
 					</div>
 
-					<div id="about-me-'.$uid.'" class="info tab-pane fade in">
-						'.$about_me.'
-						<br>
-						<a href="#invite-friend" id="dialog-btn-invite-friend" class="button button-red invite-friend">Invite Friend</a>
-					</div>
-
+					<div id="about-me-'.$uid.'" class="info tab-pane fade in">'.$about_me.'</div>
 					<div id="gallery-'.$uid.'" class="gallery tab-pane fade in">'.$gallery.'</div>
-
 					<div id="videos-'.$uid.'" class="videos tab-pane fade in">'.$videos.'</div>
-
 					<div id="invite-'.$uid.'" class="invite-friend-form tab-pane fade in"></div>
 				</div>
-	    	</div>';
+	    	</div>'; //<a href="#invite-friend" id="dialog-btn-invite-friend" class="button button-red invite-friend">Invite Friend</a>
     	}
 
     	return array('#type' => 'markup', '#markup' => $html);
+    }
+
+    public function playVideo($id) {
+    	$html = '';
+    	if (is_numeric($id)) {
+    		$file = file_load($id);
+    		$html = $file->url();
+    	}
+
+    	return array('#type' => 'markup', '#markup' => $html);
+    }
+
+    public function playThumbnail($id) {
+    	return $id;
     }
 }
