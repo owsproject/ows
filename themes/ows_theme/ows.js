@@ -24,7 +24,13 @@ jQuery(document).ready(function() {
 	});
 
 	jQuery(window).resize(function() {
-		jQuery(".sweet-alert, .ui-dialog").center();
+		jQuery(".sweet-alert").center();
+
+		jQuery(".ui-dialog").each(function() {
+			if (jQuery(this).width() < 980) {
+				jQuery(this).center();
+			}
+		});
 	});
 
 	videojs.options.flash.swf = "/themes/ows_theme/video-js.swf";
@@ -322,7 +328,7 @@ function browseContestant(dialog_class) {
 // Invite friend
 function inviteFriendForm(klass) {
 	html = '<div class="form-item form-fullname">';
-	html += '<label for="edit-name">Your friend\'s name</label>';
+	html += '<label for="edit-name">Friend\'s name</label>';
 	html += '<input type="text" class="form-name" maxlength="254" size="60" value="" name="name" id="edit-name">';
 	html += '</div>';
 
@@ -388,7 +394,8 @@ function scrollbar(klass, is_dialog = true) {
 	jQuery(klass).mCustomScrollbar({
 		live:true,
 		//theme:"inset-dark"
-		theme:"rounded-dark"
+		theme:"rounded-dark",
+		scrollInertia: 4
 	});
 }
 

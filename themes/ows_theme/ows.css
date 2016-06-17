@@ -115,6 +115,7 @@ Dialog styles
 
 #drupal-modal {
     overflow: hidden;
+    width: 100% !important;
 }
 
 #welcome-box {
@@ -250,6 +251,10 @@ Dialog styles
     height: 16px !important;
 }
 
+.ui-dialog .ui-dialog-titlebar-close {
+    background: none;
+}
+
 #dialog-minimize {
     right: 46px;
 }
@@ -263,10 +268,12 @@ Dialog styles
     background-position: 0 0;
     background-repeat: no-repeat !important;
     position: relative;
+    transition: all 0.5s;
 }
 
 #dialog-maximize:hover span {
     background-image: url("images/max-hover.png") !important;
+    transition: all 0.5s;
 }
 
 #dialog-minimize span {
@@ -274,28 +281,45 @@ Dialog styles
     background-position: 0 0;
     background-repeat: no-repeat !important;
     position: relative;
+    transition: all 0.5s;
 }
 
 #dialog-minimize:hover span  {
     background-image: url("images/min-hover.png") !important;
-}
-
-.ui-dialog .ui-dialog-titlebar-close {
-    background: none;
+    transition: all 0.5s;
 }
 
 .ui-dialog-titlebar-close .ui-icon-closethick, .dialog-default .ui-dialog-titlebar-close {
     background-image: url("images/close-normal.png") !important;
     background-position: 0 0;
     background-repeat: no-repeat !important;
+    transition: all 0.5s;
 }
 
 .ui-dialog-titlebar-close .ui-icon-closethick:hover, .dialog-default .ui-dialog-titlebar-close:hover {
     background-image: url("images/close-hover.png") !important;
+    transition: all 0.5s;
 }
 
-.mCSB_draggerRail {
-    width: 1px;
+.ui-dialog-titlebar #dialog-restore {
+    right: 26px !important;
+}
+
+.ui-dialog-titlebar #dialog-restore span {
+    background-image: url("images/max-normal.png") !important;
+    position: relative;
+    display: block;
+    background-position: center;
+    transition: all 0.5s;
+}
+
+.ui-dialog-titlebar #dialog-restore:hover span {
+    background-image: url("images/restore-hover.png") !important;
+    transition: all 0.5s;
+}
+
+.mCSB_scrollTools .mCSB_draggerRail {
+    width: 1px !important;
 }
 
 .mCS-rounded-dark.mCSB_scrollTools .mCSB_draggerRail {
@@ -471,7 +495,7 @@ Dialog styles
 
 .enter-contest-form .form-item-gender input {
     width: 20px;
-    margin-left: 68px;
+    margin-left: 114px;
 }
 
 .enter-contest-form .fieldgroup legend {
@@ -530,8 +554,7 @@ background: -moz-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(246,246,246,1
 background: -webkit-linear-gradient(top, rgba(255,255,255,1) 0%,rgba(246,246,246,1) 47%,rgba(237,237,237,1) 100%); /* Chrome10-25,Safari5.1-6 */
 background: linear-gradient(to bottom, rgba(255,255,255,1) 0%,rgba(246,246,246,1) 47%,rgba(237,237,237,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
-copy
-
+    z-index: 99999;
 }
 
 #block-mainmenu ul {
@@ -693,7 +716,7 @@ nav.pager {
 }
 
 .invite-friend-form .form-submit {
-    margin-left: 120px;
+    margin-left: 150px;
 }
 
 .ui-widget-overlay {
@@ -803,6 +826,7 @@ nav.pager {
 
 .nav-tabs {
     margin-bottom: 14px;
+    border-bottom: 1px solid #999;
 }
 
 .nav-tabs > li > a {
@@ -812,7 +836,7 @@ nav.pager {
 .nav-tabs .active a, .nav-tabs > li > a:hover {
     background: #de0748 none repeat scroll 0 0 !important;
     color: #fff !important;
-    border-color: #aaa #aaa transparent;
+    border-color: #999 #999 transparent;
 }
 
 body > #drupal-modal {
@@ -875,8 +899,18 @@ body > #drupal-modal {
     width: 32px !important;
 }
 
+.vjs-icon-play::before, .video-js .vjs-big-play-button::before, .video-js .vjs-play-control::before {
+    content: "" !important;
+}
+
 .video-js .vjs-play-control:before {
     top:20% !important;
     background: url(images/play_button.png) no-repeat;
     font-size: 48px;
+    content: "" !important;
+}
+
+.contestant-info .video-player {
+    width: 400px;
+    margin: 0 auto;
 }
