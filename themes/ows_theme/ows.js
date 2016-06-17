@@ -26,6 +26,8 @@ jQuery(document).ready(function() {
 	jQuery(window).resize(function() {
 		jQuery(".sweet-alert, .ui-dialog").center();
 	});
+
+	videojs.options.flash.swf = "/themes/ows_theme/video-js.swf";
 });
 
 jQuery(document).ready(function() {
@@ -96,15 +98,40 @@ jQuery(document).ready(function() {
   		.addEventListener( "click", function() {
     	this.classList.toggle( "active" );
     	jQuery('#block-mainmenu').slideToggle();
+  	});	
+});
+
+function contestant_video() {
+  	jQuery(".video-player").each(function() {
+  		_id = jQuery(this).attr('video-id');
+		_type = jQuery(this).attr('video-type');
+		_file = jQuery(this).attr('video-file');
+		_thumb = jQuery(this).attr('video-thumb')
+  		var appendVideo = '<video id="contestant_video_player_'+_id+'" class="video-js vjs-default-skin" controls preload="none" width="400" height="300" poster="'+_thumb+'" data-setup="{ "html5":{"nativeTextTracks":false}}"><source src="'+_file+'" type="'+_type+'" /><p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p></video>';
+            jQuery("#video-player-"+_id).append(appendVideo);
+        videojs('contestant_video_player_'+_id);
   	});
 
-  	jQuery('.play-video.colorbox').colorbox({
-  		inline:true, 
-    	width: "80%", 
-    	height: "auto", 
-    	href: '.video-player-'+jQuery(this).attr('id')
-  	});
-});
+	/*jQuery('.play-video.colorbox').colorbox({
+		width: "650px", 
+		height: "274",
+		inline: true,
+		rel: 'video',
+		onLoad: function() {
+			vid = jQuery(this).attr('vid');
+				vtype = jQuery(this).attr('type');
+				vfile = jQuery(this).attr('vfile');
+            var appendVideo = '<video id="contestant_video_player" class="video-js vjs-default-skin" controls preload="none" width="598" height="478" poster="/video/thumbnail/'+vid+'" data-setup="{ "html5":{"nativeTextTracks":false}}"><source src="'+vfile+'" type="'+vtype+'" /><p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p></video>';
+            jQuery("#video-player").append(appendVideo);
+        },
+        onComplete: function() {
+            videojs('contestant_video_player');
+        },
+        onClosed: function() {
+            videojs('contestant_video_player').dispose();
+        }
+	});*/
+}
 
 // Welcome sweetalert box
 // Box param: false = Welcome
@@ -281,7 +308,7 @@ function browseContestant(dialog_class) {
 				async: false, 
 				success: function(data) {
 					loader(0);
-					callback = "scrollbar('.ui-dialog .dialog-contestant-"+id+"', false); inviteFriendForm('.dialog-contestant-"+id+" .invite-friend-form'); jQuery('.colorbox').colorbox({rel: 'gallery-item'}); jQuery.ui.dialogr.maxZ += 2; jQuery('.dialog-contestant-"+id+"').css('z-index', jQuery.ui.dialogr.maxZ); ";
+					callback = "scrollbar('.ui-dialog .dialog-contestant-"+id+"', false); inviteFriendForm('.dialog-contestant-"+id+" .invite-friend-form'); jQuery('.colorbox').colorbox({rel: 'gallery-item'}); jQuery.ui.dialogr.maxZ += 2; jQuery('.dialog-contestant-"+id+"').css('z-index', jQuery.ui.dialogr.maxZ); contestant_video(); ";
 					openDialog('.dialog-contestant-'+id, full_name, data, 600, 500, false, callback);
 				}
 			});

@@ -10,6 +10,7 @@ global-styling:
       css/vegas.min.css: {}
       css/datepicker.min.css: {}
       css/colorbox.css: {}
+      css/video-js.min.css: {}
       ows.css: {}
   component:
     css/components/ui-dialog.css: {}
@@ -29,6 +30,7 @@ global-styling:
     js/datepicker.min.js: {}
     js/datepicker.en.js: {}
     js/jquery.colorbox-min.js: {}
+    js/video.min.js: {}
     ows.js: {}
   dependencies:
     - core/jquery
