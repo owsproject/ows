@@ -289,16 +289,22 @@ Dialog styles
     transition: all 0.5s;
 }
 
-.ui-dialog-titlebar-close .ui-icon-closethick, .dialog-default .ui-dialog-titlebar-close {
+.ui-dialog-titlebar-close .ui-icon-closethick, .ui-dialog-titlebar-close {
     background-image: url("images/close-normal.png") !important;
     background-position: 0 0;
     background-repeat: no-repeat !important;
     transition: all 0.5s;
 }
 
-.ui-dialog-titlebar-close .ui-icon-closethick:hover, .dialog-default .ui-dialog-titlebar-close:hover {
+.ui-dialog-titlebar-close .ui-icon-closethick:hover, .ui-dialog-titlebar-close:hover {
     background-image: url("images/close-hover.png") !important;
     transition: all 0.5s;
+}
+
+.ui-dialog-titlebar-close {
+    height: 16px !important;
+    margin-top: -9px !important;
+    width: 16px !important;
 }
 
 .ui-dialog-titlebar #dialog-restore {

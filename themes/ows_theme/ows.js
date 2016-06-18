@@ -1,7 +1,6 @@
 var dialogs = 0;
 var dialog_class = '';
 var sweetalert_content = false;
-var callbackInterval = false;
 
 jQuery(document).ready(function() {
 	jQuery("body").delay(5000).vegas({
@@ -292,9 +291,216 @@ function openOWSDialog(dialog_class) {
 		});
 	} 
 	
+	// --------------
 	// increase zindex for opened windows
 	jQuery.ui.dialogr.maxZ += 1;
 	jQuery(dialog_class).css('z-index', jQuery.ui.dialogr.maxZ);
+
+	// --------------
+	// append minimize, maximize for default dialog
+	if (jQuery(dialog_class).hasClass('dialog-default')) {
+		maximize = '<a class="ui-dialog-titlebar-max" id="dialog-maximize" href="#"><span>Max</span></a>';
+		minimize = '<a class="ui-dialog-titlebar-min" id="dialog-minimize" href="#"><span>Min</span></a>';
+		restore = '<a class="ui-dialog-titlebar-rest" id="dialog-restore" href="#" style="display: none;"><span>Restore</span></a>';
+		jQuery(dialog_class + ' .ui-dialog-titlebar').append(maximize + minimize + restore);
+
+		// bind event for new icons.
+		jQuery(dialog_class + ' .ui-dialog-titlebar-max').click(function(event) {
+			dialog_maximize(dialog_class);
+		});
+
+		jQuery(dialog_class + ' .ui-dialog-titlebar-min').click(function(event) {
+			dialog_minimize(dialog_class);
+		});
+
+		jQuery(dialog_class + ' .ui-dialog-titlebar-rest').click(function(event) {
+			dialog_restore(dialog_class);
+		});
+	}
+}
+
+// -------------------
+// Dialog custom events
+function dialog_restore(dialog_class) {
+	window.maximized = false; /* reset both states (restored) */
+	window.minimized = false;
+	$this = jQuery(dialog_class);
+	$this.find('.ui-dialog-content').show();
+	jQuery('.ui-dialog-titlebar-rest', $this).hide();
+	jQuery('.ui-dialog-titlebar-max', $this).show();
+	jQuery('.ui-dialog-titlebar-min', $this).show();
+		
+	_width = 650;
+	_height = 400;
+
+	if ($this.attr('dialog_width')) _width = $this.attr('dialog_width');
+	if ($this.attr('dialog_height')) _height = $this.attr('dialog_height');
+
+	$this.css( {
+		position : 'absolute',
+		width : _width,
+		height : _height
+	});
+
+	// set height for #drupal-modal incase there is submit button
+	if (jQuery(dialog_class).find('.ui-dialog-buttonpane').length) {
+		_h = _height - (jQuery(dialog_class).find('.ui-dialog-buttonpane').height() + 70);
+		$this.find('.ui-dialog-content').css('height', _h + 'px');
+	}
+
+	// $this.position(this.options.position);
+	$this.center();
+	$this.find('#dialog-restore').css('right', '1.5em');
+	//$this._setOption("resizable", true);
+	//$this._setOption("draggable", true);
+	$this.removeClass("dialogr-minimized");
+	//$('.ui-dialog-titlebar ').css('background', 'none repeat scroll 0 0 #FFFFFF');
+	
+	/* Temporary close
+	$this.originalSize();
+	$this.changeTheSize();
+	$this.adjustScrollContent();
+	$this.moveToTop(true);*/
+
+	/*
+	* FORMALTIS :
+	* auto position minimized windows (taskbar style).
+	* eventually resize windows
+	*/
+	// total width available
+	var tw = $this.parent().width();
+	// Compute windows' width
+	var nb = jQuery('.dialogr-minimized:visible').size();
+	var w = Math.min((tw - 2 * 10 - (nb - 1) * 5) / nb, 250);
+	// and do it !
+	var left = 10;
+	jQuery('.dialogr-minimized:visible').each(function() {
+	  var $t = $(this);
+	  $t.width(w);
+	  $t.css('left', left);
+	  left += w + 5;
+	});
+	/* end */
+}
+	  
+	  /* Minimize to a custom position */
+function dialog_minimize(dialog_class) {
+	window.minimized = true; /* save the current state: minimized */
+	window.maximized = false;
+	$this = jQuery(dialog_class);
+	$this.find('.ui-dialog-content').hide();
+	//this._setOption("resizable", false);
+	//this._setOption("draggable", false);
+	$this.addClass("dialogr-minimized");
+	jQuery('.ui-dialog-titlebar-rest', $this).show();
+	jQuery('.ui-dialog-titlebar-max', $this).show();
+	jQuery('.ui-dialog-titlebar-min', $this).hide();
+	jQuery('.ui-dialog-titlebar-rest', $this).css('right', '2.8em');
+	$this.css('top', 'auto'); /* needed because top has a default value and this breaks bottom value */
+	$this.size();
+
+	$this.css({
+		position : "absolute",
+		left : 10,
+		width : 250,
+		height : 100,
+		bottom : "-60px"
+	});
+
+	$this.css('position', 'fixed'); /* sticky the dialog at the page to avoid scrolling */
+	jQuery('.ui-dialog-titlebar-rest', $this).css('display', 'block');
+
+	/*
+	* FORMALTIS :
+	* auto position minimized windows (taskbar style).
+	* eventually resize windows
+	*/
+	// total width available
+	var tw = $this.parent().width();
+	// Compute windows' width
+	var nb = jQuery('.dialogr-minimized:visible').size();
+	var w = Math.min((tw - 2 * 10 - (nb - 1) * 5) / nb, 250);
+	// and do it !
+	var left = 10;
+	jQuery('.dialogr-minimized:visible').each(function() {
+	  var $t = jQuery(this);
+	  $t.width(w);
+	  $t.css('left', left);
+	  left += w + 5;
+	});
+}
+
+function dialog_maximize(dialog_class) {
+	window.maximized = true; /* save the current state: maximized */
+	window.minimized = false;
+	$this = jQuery(dialog_class);
+	$this.find('.ui-dialog-content').show();
+
+	// store size of current dialog
+	$this.attr('dialog_width', $this.width());
+	$this.attr('dialog_height', $this.height());
+
+	/* A different width and height for each browser...wondering why? */
+	marginHDialog = 25;
+	marginWDialog = 25;
+	if (jQuery.browser.msie && $.browser.version == 8) {
+	  marginHDialog = 25;
+	  marginWDialog = 52;
+	}
+	marginHDialog = jQuery(window).height() - marginHDialog;
+	marginWDialog = jQuery('body').width() - marginWDialog;
+	//console.log('maximize to '+marginWDialog+", $('body').width() : "+$('body').width());
+	$this.css( {
+		left : 10,
+		top : jQuery(document).scrollTop() + 5,
+		width : marginWDialog + "px",
+		height : marginHDialog + "px"
+	});
+
+	// set height for #drupal-modal incase there is submit button
+	if (jQuery(dialog_class).find('.ui-dialog-buttonpane').length) {
+		_h = marginHDialog - (jQuery(dialog_class).find('.ui-dialog-buttonpane').height() + 70);
+		$this.find('.ui-dialog-content').css('height', _h + 'px');
+	}
+
+	if (jQuery.ui.dialogr.maxZ < 9999) jQuery.ui.dialogr.maxZ = 10000;
+
+	$this.css('z-index', jQuery.ui.dialogr.maxZ);
+	console.log($this.css('z-index'));
+
+	//$('.ui-dialog').trigger("resize");
+	$this.removeClass("dialogr-minimized");
+	//$('.ui-dialog-titlebar ').css('background', 'none repeat scroll 0 0 #FFFFFF');
+
+	jQuery('.ui-dialog-titlebar-rest', $this).show();
+	jQuery('.ui-dialog-titlebar-max', $this).show();
+	jQuery('.ui-dialog-titlebar-min', $this).show();
+
+	jQuery('.ui-dialog-titlebar-rest', this).css('right', '1.5em');
+
+	$this.size();
+	$this.css('position', 'absolute');
+	// this.adjustScrollContent();
+	//this.moveToTop(true);
+
+	/*
+	* FORMALTIS :
+	* auto position minimized windows (taskbar style).
+	* eventually resize windows
+	*/
+	// total width available
+	var tw = $this.parent().width();
+	// Compute windows' width
+	var nb = jQuery('.dialogr-minimized:visible').size();
+	var w = Math.min((tw - 2 * 10 - (nb - 1) * 5) / nb, 250);
+	// and do it !
+	var left = 10;
+	jQuery('.dialogr-minimized:visible').each(function() {
+	  var $t = jQuery(this);
+	  $t.width(w);
+	  $t.css('left', left);
+	  left += w + 5;
+	});
 }
 
 // open contestant window
