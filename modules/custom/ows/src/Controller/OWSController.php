@@ -108,13 +108,15 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 		$dialog_men = json_encode(array(
 			'title' => 'Men',
 			'width' => '650',
-			'dialogClass' => 'dialog-browse dialog-men'
+			'dialogClass' => 'dialog-browse dialog-men dialog-default',
+			'defaultDialog' => true
 		));
 
 		$dialog_women = json_encode(array(
 			'title' => 'Women',
 			'width' => '650',
-			'dialogClass' => 'dialog-browse dialog-women',
+			'dialogClass' => 'dialog-browse dialog-women dialog-default',
+			'defaultDialog' => true
 		));
 
 		$dialog_things = json_encode(array(
