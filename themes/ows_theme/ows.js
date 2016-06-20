@@ -3,6 +3,10 @@ var dialog_class = '';
 var sweetalert_content = false;
 
 jQuery(document).ready(function() {
+	if (jQuery.ui.dialogr.maxZ == 0) {
+		jQuery.ui.dialogr.maxZ = 1000;
+	}
+
 	jQuery("body").delay(5000).vegas({
 		overlay: drupalSettings.path.baseUrl+"themes/ows_theme/css/overlays/01.png",
 		transitionDuration: 3000,

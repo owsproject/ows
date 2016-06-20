@@ -560,7 +560,7 @@ background: -moz-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(246,246,246,1
 background: -webkit-linear-gradient(top, rgba(255,255,255,1) 0%,rgba(246,246,246,1) 47%,rgba(237,237,237,1) 100%); /* Chrome10-25,Safari5.1-6 */
 background: linear-gradient(to bottom, rgba(255,255,255,1) 0%,rgba(246,246,246,1) 47%,rgba(237,237,237,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
-    z-index: 99999;
+    z-index: 999;
 }
 
 #block-mainmenu ul {
@@ -791,6 +791,7 @@ nav.pager {
     -webkit-box-shadow: 0px 10px 33px -9px rgba(0,0,0,0.75);
     -moz-box-shadow: 0px 10px 33px -9px rgba(0,0,0,0.75);
     box-shadow: 0px 10px 33px -9px rgba(0,0,0,0.75);
+    z-index: 9999;
 }
 #nav-toggle { cursor: pointer; padding: 10px 35px 16px 0px; }
 #nav-toggle span, #nav-toggle span:before, #nav-toggle span:after {
@@ -847,6 +848,10 @@ nav.pager {
 
 body > #drupal-modal {
     display: none !important;
+}
+
+#drupal-modal .row {
+    margin: 0;
 }
 
 .contestant-info .tab-content .gallery {
@@ -919,4 +924,8 @@ body > #drupal-modal {
 .contestant-info .video-player {
     width: 400px;
     margin: 0 auto;
+}
+
+.datepickers-container {
+    z-index: 99999;
 }
