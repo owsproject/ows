@@ -32,28 +32,28 @@ class OWSController extends ControllerBase
 		// dialog property
 		$dialog_enter_contest = json_encode(array(
 			'title' => 'Enter the Contest',
-			'width' => '650',
+			'width' => '680',
 			'dialogClass' => 'dialog-enter-contest dialog-default',
 			'defaultDialog' => true
 		));
 
 		$dialog_vote = json_encode(array(
 			'title' => 'Register to Vote',
-			'width' => '650',
+			'width' => '680',
 			'dialogClass' => 'dialog-vote dialog-default',
 			'defaultDialog' => true
 		));
 
 		$dialog_browse = json_encode(array(
 			'title' => 'Browse',
-			'width' => '80%',
+			'width' => '680',
 			'dialogClass' => 'dialog-browse',
 		));
 
 		// invite friend
 		$dialog_invite = json_encode(array(
 			'title' => 'Invite Friend',
-			'width' => '60%',
+			'width' => '680',
 			'dialogClass' => 'dialog-invite',
 			'defaultDialog' => true
 		));
@@ -107,21 +107,21 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 		// dialog property
 		$dialog_men = json_encode(array(
 			'title' => 'Men',
-			'width' => '650',
+			'width' => '680',
 			'dialogClass' => 'dialog-browse dialog-men dialog-default',
 			'defaultDialog' => true
 		));
 
 		$dialog_women = json_encode(array(
 			'title' => 'Women',
-			'width' => '650',
+			'width' => '680',
 			'dialogClass' => 'dialog-browse dialog-women dialog-default',
 			'defaultDialog' => true
 		));
 
 		$dialog_things = json_encode(array(
 			'title' => 'Things',
-			'width' => '650',
+			'width' => '680',
 			'dialogClass' => 'dialog-browse dialog-things',
 		));
 
