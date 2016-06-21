@@ -7,16 +7,20 @@ jQuery(document).ready(function() {
 		jQuery.ui.dialogr.maxZ = 1000;
 	}
 
+	// set height 100%;
+	jQuery('body').css('height', jQuery(window).height());
+
 	jQuery("body").delay(5000).vegas({
 		overlay: drupalSettings.path.baseUrl+"themes/ows_theme/css/overlays/01.png",
 		transitionDuration: 3000,
 		preload: true,
 		delay: 5000,
 	    slides: [
-	        { src: drupalSettings.path.baseUrl+"themes/ows_theme/css/sliders/slide1.jpg" },
-	        { src: drupalSettings.path.baseUrl+"themes/ows_theme/css/sliders/slide2.jpg" },
-	        { src: drupalSettings.path.baseUrl+"themes/ows_theme/css/sliders/slide3.jpg" },
-	        { src: drupalSettings.path.baseUrl+"themes/ows_theme/css/sliders/slide4.jpg" },
+	        { src: drupalSettings.path.baseUrl+"themes/ows_theme/css/sliders/slider1.jpg" },
+	        { src: drupalSettings.path.baseUrl+"themes/ows_theme/css/sliders/slider2.jpg" },
+	        { src: drupalSettings.path.baseUrl+"themes/ows_theme/css/sliders/slider3.jpg" },
+	        { src: drupalSettings.path.baseUrl+"themes/ows_theme/css/sliders/slider4.jpg" },
+	        { src: drupalSettings.path.baseUrl+"themes/ows_theme/css/sliders/slider5.jpg" }
 	    ]
 	});
 
@@ -26,10 +30,12 @@ jQuery(document).ready(function() {
 		displayWelcome();
 	});
 
+	// -------------
+	// window resize
 	jQuery(window).resize(function() {
 		jQuery(".sweet-alert").center();
 
-		jQuery(".ui-dialog").each(function() {
+		jQuery(".ui-dialog").not(".dialogr-minimized").each(function() {
 			if (jQuery(this).width() < 980) {
 				jQuery(this).center();
 			}
@@ -88,8 +94,14 @@ jQuery(document).ready(function() {
 	jQuery('#block-mainmenu a').html('');
 	jQuery('#block-mainmenu .login a').click(function(e) {
 		e.preventDefault();
-		jQuery('#block-userlogin').center().fadeIn();
+		jQuery.ui.dialogr.maxZ += 1;
+		jQuery('#block-userlogin').css('z-index', jQuery.ui.dialogr.maxZ).center().fadeIn();
 		return;
+	});
+
+	jQuery('#block-userlogin').click(function() {
+		jQuery.ui.dialogr.maxZ += 1;
+		jQuery('#block-userlogin').css('z-index', jQuery.ui.dialogr.maxZ);
 	});
 
 	// ---------------------
@@ -107,7 +119,13 @@ jQuery(document).ready(function() {
   		.addEventListener( "click", function() {
     	this.classList.toggle( "active" );
     	jQuery('#block-mainmenu').slideToggle();
-  	});	
+  	});
+
+	// menu click
+	jQuery('#block-mainmenu li a').click(function(e) {
+		e.preventDefault();
+		openStaticPage(jQuery(this));
+	});		
 });
 
 function contestant_video() {
@@ -173,7 +191,7 @@ function displayWelcome(box = false) {
 			});
 
 			jQuery('.sweet-alert').center();
-			jQuery('.sweet-alert').draggable({ containment: "parent" });
+			jQuery('.sweet-alert').draggable({ containment: "html" });
 
 			// ------------------------------
 			// blind click event for button - click this button will trigger drupal button 
@@ -507,6 +525,23 @@ function dialog_maximize(dialog_class) {
 	});
 }
 
+function openStaticPage(obj) {
+	page = obj.attr('data-drupal-link-system-path').replace('node/', '');
+
+	if (!jQuery('.page-'+page).length) {
+		jQuery.ajax({
+			url: "/ajax-content",
+			data: {type: "view-page", page: page},
+			async: false, 
+			success: function(data) {
+				loader(0);
+				callback = "scrollbar('.ui-dialog .page-"+page+"', false); jQuery.ui.dialogr.maxZ += 2; jQuery('.page-"+page+"').css('z-index', jQuery.ui.dialogr.maxZ);";
+				openDialog('.page-'+page,  obj.attr('href').replace('/', '').capitalize(), data, 600, 500, false, callback);
+			}
+		});
+	}
+}
+
 // open contestant window
 function browseContestant(dialog_class) {
 	// -----------------
@@ -721,4 +756,8 @@ jQuery.fn.center = function () {
     this.css("left", Math.max(0, ((jQuery(window).width() - jQuery(this).outerWidth()) / 2) + 
                                                 jQuery(window).scrollLeft()) + "px");
     return this;
+}
+
+String.prototype.capitalize = function() {
+    return this.charAt(0).toUpperCase() + this.slice(1);
 }

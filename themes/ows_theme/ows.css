@@ -6,7 +6,7 @@
 body {
     background: #000 url("images/background1.png") no-repeat scroll center center;
     font-family: 'Lato', sans-serif !important;
-    min-height: 700px;
+    /*min-height: 700px;*/
 }
 
 #ascrail2000 {
@@ -134,6 +134,12 @@ Dialog styles
 .sweet-alert .sweet-content-wrapper {
     padding: 55px 15px 15px;
     background: #fff;
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+1,f7f7f7+100 */
+    background: rgb(255,255,255); /* Old browsers */
+    background: -moz-linear-gradient(top,  rgba(255,255,255,1) 1%, rgba(247,247,247,1) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top,  rgba(255,255,255,1) 1%,rgba(247,247,247,1) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom,  rgba(255,255,255,1) 1%,rgba(247,247,247,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f7f7f7',GradientType=0 ); /* IE6-9 */
 }
 
 .sweet-alert h2 {
@@ -286,6 +292,11 @@ Dialog styles
 
 #dialog-minimize:hover span  {
     background-image: url("images/min-hover.png") !important;
+    transition: all 0.5s;
+}
+
+.dialogr-minimized #dialog-minimize:hover span {
+    background-image: url("images/minimized-hover.png") !important;
     transition: all 0.5s;
 }
 
