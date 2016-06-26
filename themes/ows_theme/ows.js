@@ -43,6 +43,42 @@ jQuery(document).ready(function() {
 	});
 
 	videojs.options.flash.swf = "/themes/ows_theme/video-js.swf";
+
+	// Cookie popup
+	jQuery("body").addClass('eupopup eupopup-top');
+	jQuery("document").euCookieLawPopup().init({
+		cookiePolicyUrl : '/cookie-policy',
+		popupPosition : 'top',
+		colorStyle : 'default',
+		compactStyle : false,
+		popupTitle : 'This website is using cookies',
+		popupText : 'We use cookies to ensure that we give you the best experience on our website. If you continue without changing your settings, we\'ll assume that you are happy to receive all cookies on this website.',
+		buttonContinueTitle : 'Continue',
+		buttonLearnmoreTitle : 'Learn more',
+		buttonLearnmoreOpenInNewWindow : true,
+		agreementExpiresInDays : 30,
+		autoAcceptCookiePolicy : false,
+		htmlMarkup : null
+	});
+
+	// cookie info
+	jQuery(".eupopup-buttons .eupopup-button_2").click(function(e) {
+		swal.close();
+		obj = jQuery(this);
+		e.preventDefault();
+		loader();
+		page = 6;
+		jQuery.ajax({
+			url: "/ajax-content",
+			data: {type: "view-page", page: page, r: Math.random()},
+			async: false, 
+			success: function(data) {
+				loader(0);
+				callback = "scrollbar('.ui-dialog .page-"+page+"', false); jQuery.ui.dialogr.maxZ += 2; jQuery('.page-"+page+"').css('z-index', jQuery.ui.dialogr.maxZ);";
+				openDialog('.page-'+page,  obj.attr('href').replace('/', '').capitalize(), data, 600, 500, false, callback);
+			}
+		});
+	});
 });
 
 jQuery(document).ready(function() {
@@ -123,8 +159,11 @@ jQuery(document).ready(function() {
 
 	// menu click
 	jQuery('#block-mainmenu li a').click(function(e) {
-		e.preventDefault();
-		openStaticPage(jQuery(this));
+		// skip logout
+		if (jQuery(this).attr('href') != "/user/logout") {
+			e.preventDefault();
+			openStaticPage(jQuery(this));
+		}
 	});		
 });
 
@@ -529,9 +568,10 @@ function openStaticPage(obj) {
 	page = obj.attr('data-drupal-link-system-path').replace('node/', '');
 
 	if (!jQuery('.page-'+page).length) {
+		loader();
 		jQuery.ajax({
 			url: "/ajax-content",
-			data: {type: "view-page", page: page},
+			data: {type: "view-page", page: page, r: Math.random()},
 			async: false, 
 			success: function(data) {
 				loader(0);
@@ -555,7 +595,7 @@ function browseContestant(dialog_class) {
 	    	// browse website
 			jQuery.ajax({
 				url: "/ajax-content",
-				data: {type: "view-contestant", id: id},
+				data: {type: "view-contestant", id: id, r: Math.random()},
 				async: false, 
 				success: function(data) {
 					loader(0);
@@ -622,7 +662,7 @@ function closeOWSDialog(dialog_class) {
 	// dialog_class = "." + dialog_class;
 	if (dialogs > 0) dialogs--;
 	else dialogs = 0;
-	if (dialogs == 0) displayWelcome();
+	//if (dialogs == 0) displayWelcome();
 }
 
 function anyDialogActive() {
