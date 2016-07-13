@@ -71,6 +71,7 @@ jQuery(document).ready(function() {
 		jQuery.ajax({
 			url: "/ajax-content",
 			data: {type: "view-page", page: page, r: Math.random()},
+			type: "POST",
 			async: false, 
 			success: function(data) {
 				loader(0);
@@ -350,6 +351,11 @@ function openOWSDialog(dialog_class) {
 				jQuery(this).css('z-index', jQuery.ui.dialogr.maxZ);
 			}
 		});
+
+		// Add ghost text for filters
+		jQuery('.dialog-browse .form-item-field-country-value option:first-child').text("- Country -");
+		jQuery('.dialog-browse .form-item-field-eyes-color-value option:first-child').text("- Eyes Color -");
+		jQuery('.dialog-browse .form-item-field-hair-color-value option:first-child').text("- Hair Color -");
 	} 
 	
 	// --------------
@@ -571,6 +577,7 @@ function openStaticPage(obj) {
 		loader();
 		jQuery.ajax({
 			url: "/ajax-content",
+			type: "POST",
 			data: {type: "view-page", page: page, r: Math.random()},
 			async: false, 
 			success: function(data) {
@@ -595,6 +602,7 @@ function browseContestant(dialog_class) {
 	    	// browse website
 			jQuery.ajax({
 				url: "/ajax-content",
+				type: "POST",
 				data: {type: "view-contestant", id: id, r: Math.random()},
 				async: false, 
 				success: function(data) {

@@ -21,7 +21,4 @@
  */
 #}
 
-{% set n = 'now'|date('Y') %}
-{% set b = view.field.field_birthday.original_value.__toString()  %}
-
-{{ (n - b) }}
+<span class="flag flag-{{ view.field.field_country.original_value|lower }}" style="background:url(/themes/ows_theme/images/flags/{{ view.field.field_country.original_value|replace({' ': "-"}) }}.png);"></span>

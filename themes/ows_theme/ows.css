@@ -36,7 +36,10 @@ body {
 
 .load-container {
     background: rgba(0, 0, 0, 0.3) none repeat scroll 0 0;
-    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.11), 0 6px 30px rgba(0, 0, 0, 0.14);
+   /* -webkit-box-shadow: 0px 0px 23px -2px rgba(0,0,0,0.75);
+-moz-box-shadow: 0px 0px 23px -2px rgba(0,0,0,0.75);
+box-shadow: 0px 0px 23px -2px rgba(0,0,0,0.75);
+*/
     border-radius: 10px;
     box-sizing: border-box;
     float: left;
@@ -115,6 +118,10 @@ Dialog styles
 
 #drupal-modal {
     overflow: hidden;
+    width: 100% !important;
+}
+
+.ui-dialog .ui-dialog-content {
     width: 100% !important;
 }
 
@@ -939,4 +946,46 @@ body > #drupal-modal {
 
 .datepickers-container {
     z-index: 99999;
+}
+
+/* Browse filter */
+.ui-dialog .views-exposed-form {
+    border-bottom: 1px solid #444;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+}
+
+.ui-dialog .views-exposed-form .form-item {
+    /*margin: 10px 0;*/
+    padding: 0 6px;
+    text-align: center;
+    width: 30%;
+    float: left;
+}
+
+.ui-dialog .views-exposed-form .form-item label {
+    width: 120px;
+    color: #666;
+    display: none;
+}
+
+.ui-dialog .views-exposed-form .form-item select {
+    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+    border: 1px solid #444;
+    padding: 4px;
+    /*width: 250px;*/
+    width: 100%;
+}
+
+.ui-dialog .browse-contestant .views-field-user-picture img {
+    height: 60px;
+}
+
+.ui-dialog .browse-contestant .views-field-field-country .flag {
+    background-position: center center !important;
+    background-repeat: no-repeat !important;
+    background-size: 100% auto !important;
+    display: block;
+    height: 32px;
+    width: 32px;
 }
