@@ -25,7 +25,8 @@ class OWSController extends ControllerBase
 		$html = ''; //<div class="load-container"><div class="load-wrapper"><div class="loader">Loading...</div></div></div>
 
 		// user not logged
-		if (!empty($account->uid)) {
+		if (!empty($account->id())) {
+
 		}
 
 		// -------------------
@@ -387,6 +388,21 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 				}
 			}
 
+			// Voting slider
+			$vote_slider = '';
+			$account = \Drupal::currentUser();
+			// user not logged
+			if (!empty($account->id())) {
+				if (in_array('voter', $account->getRoles())) {
+					$vote_slider = '<div class="clearfix"></div>
+					<div class="voting-contestant">
+						<h4 class="conestant">Vote for '.$full_name.'</h4>
+						<div class="voting-container"></div>
+					</div>';
+				}
+			}
+
+
 	    	$html = '<div class="contestant-info" id="contestant-'.$uid.'">
 	    		<ul class="nav nav-tabs">
 					<li class="active"><a data-toggle="tab" href="#personal-information-'.$uid.'">Personal Information</a></li>
@@ -398,63 +414,68 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 
 				<div class="tab-content">
 					<div id="personal-information-'.$uid.'" class="info personal-information tab-pane fade in active">
-						<div class="photo"><img src="'.$image_url.'"/></div>
+						<div class="photo">
+							<img class="country-flag flag-'.strtolower($country).'" src="themes/ows_theme/images/flags/'.$country.'.png" />
+							<img src="'.$image_url.'" />
+						</div>
 						<div class="detail">
 							<div class="item">
-								<span class="name">Full name</span>
+								<span class="name full-name">Full name: </span>
 								<span class="name value">'.$full_name.'</span>
 							</div>
 
-							<div class="item">
-								<span class="name">Country</span>
+							<div class="item country" style="display:none;">
+								<span class="name">Country: </span>
 								<span class="name value">'.$country.'</span>
 							</div>
 
-							<div class="item">
-								<span class="name">Date of Birth</span>
+							<div class="item birthday">
+								<span class="name">Date of Birth: </span>
 								<span class="name value">'.$birthday.'</span>
 							</div>
 
-							<div class="item">
-								<span class="name">Age</span>
+							<div class="item age">
+								<span class="name">Age: </span>
 								<span class="name value">'.$age.'</span>
 							</div>
 
-							<div class="item">
-								<span class="name">Hip</span>
+							<div class="item hip">
+								<span class="name">Hip: </span>
 								<span class="name value">'.$hip.'</span>
 							</div>
 
-							<div class="item">
-								<span class="name">Height</span>
+							<div class="item height">
+								<span class="name">Height: </span>
 								<span class="name value">'.$height.'</span>
 							</div>
 
-							<div class="item">
-								<span class="name">Weight</span>
+							<div class="item weight">
+								<span class="name">Weight: </span>
 								<span class="name value">'.$weight.'</span>
 							</div>
 
-							<div class="item">
-								<span class="name">Burst</span>
+							<div class="item burst">
+								<span class="name">Burst: </span>
 								<span class="name value">'.$bust.'</span>
 							</div>
 
-							<div class="item">
-								<span class="name">Hair Color</span>
+							<div class="item hair">
+								<span class="name">Hair Color: </span>
 								<span class="name value">'.$hair.'</span>
 							</div>
 
-							<div class="item">
-								<span class="name">Eye Color</span>
+							<div class="item eye">
+								<span class="name">Eye Color: </span>
 								<span class="name value">'.$eyes.'</span>
 							</div>
 
 							<div class="item">
-								<span class="name">Measurements</span>
+								<span class="name">Measurements: </span>
 								<span class="name value">'.$measurements.'</span>
 							</div>
 						</div>
+
+						'.$vote_slider.'
 					</div>
 
 					<div id="about-me-'.$uid.'" class="info tab-pane fade in">'.$about_me.'</div>
