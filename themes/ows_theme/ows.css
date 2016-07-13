@@ -724,6 +724,11 @@ nav.pager {
 	float: left;
 }
 
+.contestant-info .detail {
+    float: left;
+    margin-left: 20px;
+}
+
 /* Invite friend */
 .invite-friend-form {
 
@@ -986,6 +991,42 @@ body > #drupal-modal {
     background-repeat: no-repeat !important;
     background-size: 100% auto !important;
     display: block;
-    height: 32px;
+    height: 22px;
     width: 32px;
+}
+
+.contestant-info .country-flag .flag {
+    background-position: center center !important;
+    background-repeat: no-repeat !important;
+    background-size: 100% auto !important;
+    display: block;
+    height: 32px;
+    width: 32px;   
+}
+
+.browse-contestant .views-field-field-country {
+    position: absolute;
+    right: -9px;
+    top: -1px;
+    width: 32px;
+    height: 22px;
+}
+
+.contestant-info .photo {
+    position: relative;
+}
+
+.contestant-info .photo .country-flag {
+    position: absolute;
+    right: -2px;
+    top: -10px;
+    height: 48px;
+}
+
+.contestant-info .item.country {
+    display: none;
+}
+
+.contestant-info h4.conestant {
+    color: #fff;
 }

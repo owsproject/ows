@@ -607,7 +607,7 @@ function browseContestant(dialog_class) {
 				async: false, 
 				success: function(data) {
 					loader(0);
-					callback = "scrollbar('.ui-dialog .dialog-contestant-"+id+"', false); inviteFriendForm('.dialog-contestant-"+id+" .invite-friend-form'); jQuery('.colorbox').colorbox({rel: 'gallery-item'}); jQuery.ui.dialogr.maxZ += 2; jQuery('.dialog-contestant-"+id+"').css('z-index', jQuery.ui.dialogr.maxZ); contestant_video(); ";
+					callback = "scrollbar('.ui-dialog .dialog-contestant-"+id+"', false); inviteFriendForm('.dialog-contestant-"+id+" .invite-friend-form'); jQuery('.colorbox').colorbox({rel: 'gallery-item'}); jQuery.ui.dialogr.maxZ += 2; jQuery('.dialog-contestant-"+id+"').css('z-index', jQuery.ui.dialogr.maxZ); contestant_video(); voting('.dialog-contestant-"+id+"');";
 					openDialog('.dialog-contestant-'+id, full_name, data, 600, 500, false, callback);
 				}
 			});
@@ -615,6 +615,22 @@ function browseContestant(dialog_class) {
 
 		swal.close();
 	});
+}
+
+function voting(klass) {
+	// append voting slider
+	jQuery(klass + ' .voting-contestant .voting-container').append('<input class="voting-slider" type="text" data-slider="true" value="0" data-slider-highlight="true" data-slider-theme="volume">');
+
+	// add output
+	jQuery(".voting-slider").each(function () {
+		var input = jQuery(this);
+		jQuery("<span>").addClass("output").insertAfter(jQuery(this));
+    }).bind("slider:ready slider:changed", function (event, data) {
+		jQuery(this).nextAll(".output:first").html(data.value.toFixed(3));
+    });
+
+    // activate voting slider
+    jQuery(".voting-slider").simpleSlider();
 }
 
 
