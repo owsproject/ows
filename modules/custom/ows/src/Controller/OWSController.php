@@ -187,7 +187,7 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 
     public function ajaxContent() {
     	$type = $_REQUEST['type'];
-
+    	
 		if ($type == "register") {
 	    	// get user register form
 	    	$entity = \Drupal::entityManager()->getStorage('user')->create(array());
@@ -233,12 +233,23 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 			// Get browse views
 			$view = \Drupal::service('renderer')->render(views_embed_view('browse', 'default'));
 			if ($view) $html = $view->__toString();
-		    return array('#type' => 'markup', '#markup' => '$html');
+		    return array('#type' => 'markup', '#markup' => $html);
 		} else if ($type == "view-contestant") {
 			return $this->contestantInfo($_REQUEST['id']);
-		}
+		} else if ($type == "view-page") {
+			// load a static page
+			$nid = str_replace('node/', '', $_REQUEST['page']);
+			$html = 'Page not found!';
+			if (($nid)) {
+				$node = node_load($nid);
+				if ($node->id()) {
+					$body = $node->get('body')->value;
+					$html = $body;
+				}
+			}
 
-		return array('#type' => 'markup', '#markup' => 'Hello');
+			return array('#type' => 'markup', '#markup' => $html);
+		}
     }
 
     public function content() {
