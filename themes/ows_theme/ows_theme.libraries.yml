@@ -12,8 +12,7 @@ global-styling:
       css/colorbox.css: {}
       css/video-js.min.css: {}
       css/jquery-eu-cookie-law-popup.css: {}
-      css/simple-slider.css: {}
-      css/simple-slider-volume.css: {}
+      css/jquery.range.css: {}
       ows.css: {}
   component:
     css/components/ui-dialog.css: {}
@@ -35,7 +34,7 @@ global-styling:
     js/jquery.colorbox-min.js: {}
     js/video.min.js: {}
     js/jquery-eu-cookie-law-popup.js: {}
-    js/simple-slider.min.js: {}
+    js/jquery.range-min.js: {}
     ows.js: {}
   dependencies:
     - core/jquery

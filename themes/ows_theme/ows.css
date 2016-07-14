@@ -1030,3 +1030,40 @@ body > #drupal-modal {
 .contestant-info h4.conestant {
     color: #fff;
 }
+
+.contestant-info .voting-container .slider {
+    float: left;
+    width: 70%;
+}
+
+.contestant-info .voting-container .output {
+    float: left;
+}
+
+.voting-container {
+    margin-top: 30px;
+}
+
+.voting-container .slider-container {
+    height: 30px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+}
+
+.voting-container .slider-container .back-bar .pointer-label {
+    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+    color: #de0748;
+    font-size: 14px;
+    font-weight: bold;
+    top: -22px;
+}
+
+.slider-container .back-bar .selected-bar {
+    background: #de0748;
+}
+
+.slider-container .scale ins {
+    font-size: 12px;
+    left: -2px;
+    top: 6px;
+}

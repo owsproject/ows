@@ -619,18 +619,34 @@ function browseContestant(dialog_class) {
 
 function voting(klass) {
 	// append voting slider
-	jQuery(klass + ' .voting-contestant .voting-container').append('<input class="voting-slider" type="text" data-slider="true" value="0" data-slider-highlight="true" data-slider-theme="volume">');
+	jQuery(klass + ' .voting-contestant .voting-container').append('<input class="voting-slider" type="hidden" value="0" />');
+	
+	jQuery('.voting-slider').jRange({
+	    from: 1,
+	    to: 100,
+	    step: 1,
+	    scale: [0,25,50,75,100],
+	    format: '%s',
+	    showLabels: true,
+	    snap: true
+	});
+	
+	jQuery(klass + ' .voting-contestant .voting-container').append('<button type="button" value="Vote" id="vote-button" class="button">Vote</button>');
+	jQuery('#vote-button').click(function() {
+		jQuery.ajax({
+			url: "/voting",
+			data: {voter: voter, contestant: contestant, score: score},
+			async: false, 
+			success: function(data) {
+				loader(0);
+				if (data == 1) {
+					
+				} else {
 
-	// add output
-	jQuery(".voting-slider").each(function () {
-		var input = jQuery(this);
-		jQuery("<span>").addClass("output").insertAfter(jQuery(this));
-    }).bind("slider:ready slider:changed", function (event, data) {
-		jQuery(this).nextAll(".output:first").html(data.value.toFixed(3));
-    });
-
-    // activate voting slider
-    jQuery(".voting-slider").simpleSlider();
+				}
+			}
+		});
+	});
 }
 
 
