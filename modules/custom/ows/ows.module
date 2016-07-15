@@ -28,9 +28,17 @@ function ows_mail($key, &$message, $params) {
 	);
 
 	switch ($key) {
-		case 'invit_friend':
+		case 'invite_friend':
 			$message['from'] = \Drupal::config('system.site')->get('mail');
 			$message['subject'] = t('Article created: @title', array('@title' => $params['node_title']), $options);
+			$message['body'][] = $params['message'];
+		break;
+	}
+
+	switch ($key) {
+		case 'add_me':
+			$message['from'] = \Drupal::config('system.site')->get('mail');
+			$message['subject'] = t('OWS - @title', array('@title' => $params['title']), $options);
 			$message['body'][] = $params['message'];
 		break;
 	}

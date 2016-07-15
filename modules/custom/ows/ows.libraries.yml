@@ -5,11 +5,3 @@ ows:
   dependencies:
     - core/jquery
     - core/ajax
-
-recaptcha:
-  remote: https://www.google.com/
-  license:
-    name: MIT
-    gpl-compatible: false
-  js:
-    https://www.google.com/recaptcha/api.js: { type: external, minified: true }

@@ -22,37 +22,59 @@ class OWSController extends ControllerBase
 	public function homepage() {
 		// -------------------
 		// close site, only show message and a form for user to enter email, name
+		// remember to add block Main menu to header on live
 		$site_close = true;
 		if ($site_close) {
 			// -------------------
 			// dialog property
 			$dialog_add_me = json_encode(array(
-				'title' => 'Add Me',
-				'width' => '680',
+				'title' => 'Add my name',
+				'width' => '500',
+				'height' => '300',
 				'dialogClass' => 'dialog-add-me dialog-default',
 				'defaultDialog' => true
 			));
 			
 			// buttons open dialog
 			$html .= "<div class='dialog-buttons-wrapper hidden'>
-				<a href='/add-me' id='btn-add-me' class='button button-red use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_add_me."'>Add Me</a>
+				<a href='/add-me' id='btn-add-me' class='button button-red use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_add_me."'>Add my name</a>
 
 			</div>";
 
 			// sweet alert box
 			$html .= '
-			<div id="welcome-box" class="hidden" title="Welcome to OWS">
+			<div id="welcome-box" class="swal-add-me" class="hidden" title="Welcome to The Official World’s Sexiest Contest">
 				<div class="welcome-wrapper">
-	  				<div class="welcome-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-	tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-	quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-	consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-	cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-	proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
+	  				<div class="welcome-text add-me-text">
+					<h4>Introduction</h4>
+					<p>
+					The Official World’s Sexiest contest is the official worldwide contest to find the sexiest (most attractive) man and woman on this planet. We do not care where you come from, what schools you went to, whether or not you’ve been married before, what your social status is or even if you’ve been to jail before. We only care about what you look like and sound like. Any man or woman over the age of 18 may enter the contest and the world will decide who goes to the finals. At the finals a group of judges along with the world will decide on who is crowned the sexiest two people in the world for that year. The contest will be conducted every year for the rest of time.
+					</p>
+
+					<h4>The Website</h4>
+					<p>
+					We have created the sexiest website ever and it is in its final stages of completion. The website will be 100% completed and fully operation at the end of July 2016. We are then going to do all the things necessary to make this the most exciting contest the world will ever see. All conducted in good taste and all filled with loads of fun.
+					</p>
+
+					<h4>The Rules</h4>
+					<p>
+					The rules are really simple and everything will be explained in detail, when the website goes live in December 2016. The most important rule of all is that we are not allowing any nudity whatsoever. We would like the world to participate in the voting and we really do not want to offend anybody. The second and equally important rule is that you must prove who you claim to be. Because of the nature of the Internet and for the legitimacy of the contest, we must ensure that people who enter the contest, are who they say they are. We also have software in place to detect if images have been digitally altered. The other rules are simple and easy to understand. All the rules will be available on the live website in December 2016.
+					</p>
+
+					<h4>The Prizes</h4>
+					<p>
+					We are working on getting as many prizes together as possible. It all takes time and we want to really award the winners with some great prizes. All will be announced when the website goes live in December 2016.
+					</p>
+					
+					<h4>Stay up to date</h4>
+					<p>
+					We have a VIP list and we already have a number of people on that list. The people on the VIP list will receive all the latest news and the day when start having events, we are going to send these people special invites. To become a part of our VIP list, you need to send us your name and email address. Click on the button below to add your name to our list. By clicking on the button you agree to receive information from us.
+					</p>
+	  			</div>';
 
 			$html .= "
 	  				<div class='buttons'>
-	  					<a href='#add-me' id='swal-btn-add-me' class='button button-red'>Add Me</a>
+	  					<a href='#add-me' id='swal-btn-add-me' class='button button-red'>Add my name</a>
 	  				</div>
 	  			</div>
 			</div>";
@@ -114,7 +136,7 @@ class OWSController extends ControllerBase
 
 		// sweet alert box
 		$html .= '
-		<div id="welcome-box" class="hidden" title="Welcome to OWS">
+		<div id="welcome-box" class="hidden" title="Welcome to OWS" class="ows-welcome">
 			<div class="welcome-wrapper">
   				<div class="welcome-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
 tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,

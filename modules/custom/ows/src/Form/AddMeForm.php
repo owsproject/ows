@@ -39,9 +39,17 @@ class AddMeForm extends FormBase {
     public function buildForm(array $form, FormStateInterface $form_state) {
         //$form['#attached']['library'][] = 'core/drupal.dialog.ajax';
         $form['validator'] = array(
-            '#markup' => '<div class="validate error"></div>'
+            '#markup' => '<div class="validate error"></div>
+            <div class="form-item">Please provide us with your full name and email address and we will add your name to our VIP list</div>'
         );
 
+        $form['name'] = array(
+            '#type' => 'textfield',
+            '#title' => $this->t('Name'),
+            '#attributes' => array(
+                'class' => array('form-control')
+            )
+        );
         $form['mail'] = array(
             '#type' => 'email',
             '#title' => $this->t('Email'),
@@ -66,22 +74,16 @@ class AddMeForm extends FormBase {
             )
         );
 
-        $form['name'] = array(
-            '#type' => 'textfield',
-            '#title' => $this->t('Name'),
-            '#attributes' => array(
-                'class' => array('form-control')
-            )
-        );
+        
 
-        $form['captcha'] = array(
+        /*$form['captcha'] = array(
             '#markup' => '<div class="form-item"><div class="g-recaptcha" data-sitekey="6LeJJCUTAAAAAFMG5QlQHzoguSOI1kmMAjIsMiAL"></div></div>',
             '#attached' => array(
                 'library' =>  array(      
                     'https://www.google.com/recaptcha/api.js', ''
                 ),
             ),
-        );
+        );*/
 
         $form['actions']['#type'] = 'actions';
             $form['actions']['submit'] = array(
@@ -140,6 +142,23 @@ class AddMeForm extends FormBase {
         $fields = array('name' => $form_state->getValue('name'), 'mail' => $form_state->getValue('mail'), 'created' => time());
         db_insert('add_me')->fields($fields)->execute();
 
+        // send email
+        $module = 'ows';
+        $key = 'add_me';
+        $to = 'contact@officialworldssexiest.com';
+        $params['title'] = 'OWS Add Me Submission';
+        $params['message'] = 'Name:' . $form_state->getValue('name');
+        $params['message'] .= '<br>Email:' . $form_state->getValue('mail');
+        
+        $mailManager = \Drupal::service('plugin.manager.mail');
+        $langcode = \Drupal::currentUser()->getPreferredLangcode();
+        $send = true;
+        $result = $mailManager->mail($module, $key, $to, $langcode, $params, NULL, $send);
+
+        if ($result['result'] !== true) {
+            $message = t('There was a problem sending your email notification to @email for creating node @id.', array('@email' => $to, '@id' => $entity->id()));
+            drupal_set_message($message, 'error');
+        }
         // $message .= '<script>owsDialogCallback(1);</script>';
         $response->addCommand(new OpenModalDialogCommand('Thank you', $message), ['width' => '700']);
         return $response;
