@@ -75,10 +75,10 @@ class AddMeForm extends FormBase {
         );
 
         $form['captcha'] = array(
-            '#markup' => '<div class="g-recaptcha" data-sitekey="6LeJJCUTAAAAAFMG5QlQHzoguSOI1kmMAjIsMiAL"></div>',
+            '#markup' => '<div class="form-item"><div class="g-recaptcha" data-sitekey="6LeJJCUTAAAAAFMG5QlQHzoguSOI1kmMAjIsMiAL"></div></div>',
             '#attached' => array(
                 'library' =>  array(      
-                    'https://www.google.com/recaptcha/api.jss', ''
+                    'https://www.google.com/recaptcha/api.js', ''
                 ),
             ),
         );
@@ -121,7 +121,6 @@ class AddMeForm extends FormBase {
     * form submit
     */
     public function submitForm(array &$form, FormStateInterface $form_state) {
-        kint($form_state);
     }
 
     // Change method name to avoid duplicate callback
@@ -134,10 +133,14 @@ class AddMeForm extends FormBase {
         $values = $form_state->getValues();
 
         // close dialog
-        $response->addCommand(new CloseDialogCommand('.dialog-enter-contest'));
+        $response->addCommand(new CloseDialogCommand('.dialog-add-me'));
         // open message dialog
-        $message = 'Please check your email to complete the registration.';
-        $message .= '<script>owsDialogCallback(1);</script>';
+        $message = 'Your name has been added to our VIP list and you should receive information from us soon.';
+
+        $fields = array('name' => $form_state->getValue('name'), 'mail' => $form_state->getValue('mail'), 'created' => time());
+        db_insert('add_me')->fields($fields)->execute();
+
+        // $message .= '<script>owsDialogCallback(1);</script>';
         $response->addCommand(new OpenModalDialogCommand('Thank you', $message), ['width' => '700']);
         return $response;
     }
