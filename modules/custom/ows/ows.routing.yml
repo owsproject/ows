@@ -40,23 +40,30 @@ ows.homepage_settings:
 
 ows.join_contest_form:
   path: /join-contest
-  defualts:
-      _form: 'Drupal\ows\JoinContestForm'
+  defaults:
+      _form: 'Drupal\ows\Form\JoinContestForm'
       _title: 'Join Contest'
   requirements:
       _permission: 'access content'
 
+ows.add_me_form:
+  path: /add-me
+  defaults:
+    _form: 'Drupal\ows\Form\AddMeForm'
+  requirements:
+      _access: 'TRUE'
+
 ows.enter_contest:
   path: '/enter-contest'
   defaults:
-    _form: '\Drupal\ows\Form\EnterContestForm'
+    _form: 'Drupal\ows\Form\EnterContestForm'
   requirements:
       _access: 'TRUE'
 
 ows.enter_vote:
   path: '/enter-vote'
   defaults:
-    _form: '\Drupal\ows\Form\EnterVoteForm'
+    _form: 'Drupal\ows\Form\EnterVoteForm'
   requirements:
       _access: 'TRUE'
 

@@ -16,11 +16,11 @@ jQuery(document).ready(function() {
 		preload: true,
 		delay: 5000,
 	    slides: [
-	        { src: drupalSettings.path.baseUrl+"themes/ows_theme/css/sliders/slider1.jpg" },
-	        { src: drupalSettings.path.baseUrl+"themes/ows_theme/css/sliders/slider2.jpg" },
+	        { src: drupalSettings.path.baseUrl+"themes/ows_theme/css/sliders/slider1.jpg" }
+	        /*{ src: drupalSettings.path.baseUrl+"themes/ows_theme/css/sliders/slider2.jpg" },
 	        { src: drupalSettings.path.baseUrl+"themes/ows_theme/css/sliders/slider3.jpg" },
 	        { src: drupalSettings.path.baseUrl+"themes/ows_theme/css/sliders/slider4.jpg" },
-	        { src: drupalSettings.path.baseUrl+"themes/ows_theme/css/sliders/slider5.jpg" }
+	        { src: drupalSettings.path.baseUrl+"themes/ows_theme/css/sliders/slider5.jpg" }*/
 	    ]
 	});
 
@@ -257,6 +257,14 @@ function displayWelcome(box = false) {
 		  		jQuery('.dialog-buttons-wrapper #btn-browse').trigger('click');
 		  		*/
 		  		displayWelcome('browse-box');
+		  	});
+
+		  	// ------------------------------
+		    // Add Me
+		    jQuery('.sweet-alert #swal-btn-add-me').on('click', function() {
+		    	swal.close();
+		    	loader();
+		  		jQuery('.dialog-buttons-wrapper #btn-add-me').trigger('click');
 		  	});
 		}
 	} else if (box == 'browse-box') {

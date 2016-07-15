@@ -20,6 +20,48 @@ use Drupal\image\Entity\ImageStyle;
 class OWSController extends ControllerBase
 {
 	public function homepage() {
+		// -------------------
+		// close site, only show message and a form for user to enter email, name
+		$site_close = true;
+		if ($site_close) {
+			// -------------------
+			// dialog property
+			$dialog_add_me = json_encode(array(
+				'title' => 'Add Me',
+				'width' => '680',
+				'dialogClass' => 'dialog-add-me dialog-default',
+				'defaultDialog' => true
+			));
+			
+			// buttons open dialog
+			$html .= "<div class='dialog-buttons-wrapper hidden'>
+				<a href='/add-me' id='btn-add-me' class='button button-red use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_add_me."'>Add Me</a>
+
+			</div>";
+
+			// sweet alert box
+			$html .= '
+			<div id="welcome-box" class="hidden" title="Welcome to OWS">
+				<div class="welcome-wrapper">
+	  				<div class="welcome-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+	tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+	quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+	consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+	cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+	proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
+
+			$html .= "
+	  				<div class='buttons'>
+	  					<a href='#add-me' id='swal-btn-add-me' class='button button-red'>Add Me</a>
+	  				</div>
+	  			</div>
+			</div>";
+			
+			return array('#type' => 'markup', '#markup' => $html);
+		}
+
+		// -------------------
+		// normal site
 		$account = \Drupal::currentUser();
 
 		$html = ''; //<div class="load-container"><div class="load-wrapper"><div class="loader">Loading...</div></div></div>
