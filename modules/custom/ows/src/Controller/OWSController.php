@@ -17,13 +17,15 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\file\Entity\File;
 use Drupal\image\Entity\ImageStyle;
 
+use Symfony\Component\HttpFoundation\JsonResponse;
+
 class OWSController extends ControllerBase
 {
 	public function homepage() {
 		// -------------------
 		// close site, only show message and a form for user to enter email, name
 		// remember to add block Main menu to header on live
-		$site_close = true;
+		$site_close = false;
 		if ($site_close) {
 			// -------------------
 			// dialog property
@@ -53,7 +55,7 @@ class OWSController extends ControllerBase
 
 					<h4>The Website</h4>
 					<p>
-					We have created the sexiest website ever and it is in its final stages of completion. The website will be 100% completed and fully operation at the end of July 2016. We are then going to do all the things necessary to make this the most exciting contest the world will ever see. All conducted in good taste and all filled with loads of fun.
+					We have created the sexiest website ever and it is in its final stages of completion. The website will be 100% completed and fully operational at the end of July 2016. We are then going to do all the things necessary to make this the most exciting contest the world will ever see. All conducted in good taste and all filled with loads of fun.
 					</p>
 
 					<h4>The Rules</h4>
@@ -254,6 +256,8 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
     	$type = $_REQUEST['type'];
     	
 		if ($type == "register") {
+
+			// ========================
 	    	// get user register form
 	    	$entity = \Drupal::entityManager()->getStorage('user')->create(array());
 	    	$formObject = \Drupal::entityManager()->getFormObject('user', 'register')->setEntity($entity);
@@ -293,15 +297,24 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 			// custom form
 			$form = \Drupal::formBuilder()->getForm('\Drupal\ows\JoinContestForm');
 			return $form;
+
 		} elseif ($type == "browse") {
+
 			// ========================
 			// Get browse views
 			$view = \Drupal::service('renderer')->render(views_embed_view('browse', 'default'));
 			if ($view) $html = $view->__toString();
 		    return array('#type' => 'markup', '#markup' => $html);
+
 		} else if ($type == "view-contestant") {
+
+			// ========================
+			// View a contestant
 			return $this->contestantInfo($_REQUEST['id']);
+
 		} else if ($type == "view-page") {
+
+			// ========================
 			// load a static page
 			$nid = str_replace('node/', '', $_REQUEST['page']);
 			$html = 'Page not found!';
@@ -314,6 +327,16 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 			}
 
 			return array('#type' => 'markup', '#markup' => $html);
+
+		} elseif ($type == "voting") {
+
+			// ========================
+			// Voter voting a contestant
+			$score = $_POST['score'];
+			$contestant = $_POST['contestant'];
+			$result = $this->votingContestant($contestant, $score);			
+
+			return new JsonResponse($result);
 		}
     }
 
@@ -455,17 +478,34 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 			// Voting slider
 			$vote_slider = '';
 			$account = \Drupal::currentUser();
+
+			$voting_score = 0;
+			$query = db_select('vote', 'v');
+			$query->fields('v');
+			$query->condition('v.contestant', $uid);
+		    $result = $query->execute();
+		    $total_vote = 0;
+		    $voted_score = 0;
+		    foreach($result as $r) {
+		    	$voting_score += $r->score;
+		    	$total_vote++;
+		    	if ($r->uid == $account->id()) {
+		    		$voted_score = $r->score;
+		    	}
+		    }
+
+		    $voting_score = $voting_score / $total_vote;
+
 			// user not logged
 			if (!empty($account->id())) {
 				if (in_array('voter', $account->getRoles())) {
 					$vote_slider = '<div class="clearfix"></div>
 					<div class="voting-contestant">
 						<h4 class="conestant">Vote for '.$full_name.'</h4>
-						<div class="voting-container"></div>
+						<div class="voting-container" score="'.$voted_score.'"></div>
 					</div>';
 				}
-			}
-
+			}			
 
 	    	$html = '<div class="contestant-info" id="contestant-'.$uid.'">
 	    		<ul class="nav nav-tabs">
@@ -481,6 +521,7 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 						<div class="photo">
 							<img class="country-flag flag-'.strtolower($country).'" src="themes/ows_theme/images/flags/'.$country.'.png" />
 							<img src="'.$image_url.'" />
+							<div class="vote-score">Voting Score: <span>'.$voting_score.'<span></div>
 						</div>
 						<div class="detail">
 							<div class="item">
@@ -551,6 +592,70 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
     	}
 
     	return array('#type' => 'markup', '#markup' => $html);
+    }
+
+    public function votingContestant($contestant, $score) {
+    	$voter = \Drupal::currentUser();
+    	$contestant = user_load($contestant);
+    	$gender = $contestant->get('field_gender')->value;
+    	$message = '';
+    	$code = 1;
+    	$case = 'insert';
+    	// check exist vote
+    	$query = db_select('vote', 'v');
+		$query->fields('v');
+		$query->condition('v.uid', $voter->id());
+		$query->condition('v.contestant', $contestant->id());
+	    $result = $query->execute();
+
+	    foreach($result as $r) {
+	    	$fields = array('uid' => $voter->id(), 'contestant' => $contestant->id(), 'score' => $score, 'created' => time());
+    		$query = db_update('vote')->fields($fields);
+    		$query->condition('uid', $voter->id());
+			$query->condition('contestant', $contestant->id());
+			$query->execute();
+
+    		$case = 'update';
+    		$message = 'Vote store has been updated.';
+	    }
+
+	    if ($case == "insert") {
+	    	// score 100
+			if ($score == 100) {
+				// each voter can vote 100 for one Men and one Woman
+				$query = db_select('vote', 'v');
+				$query->fields('v');
+				$query->condition('v.uid', $voter->id());
+				$query->condition('v.score', $score);
+			    $result = $query->execute();
+			    
+			    $voted_result = array();
+			    foreach($result as $r) {
+			    	// $voted_result[] = $r;
+
+			    	$u = user_load($r->contestant);
+			    	$u_gender = $u->get('field_gender')->value;
+			    	if ($u_gender == $gender) {
+			    		$name = $u->get('field_first_name')->value.' '.$u->get('field_last_name')->value;
+			    		$message = "You have voted score 100 for $name, you can only voted 100 for one Men and one Woman only. Do you want to replace score of $name to 99?";
+			    		$code = 2;
+			    	}
+			    } 
+
+			    // OK insert vote data
+			    if ($code == 0) {
+			    	$fields = array('uid' => $voter->id(), 'contestant' => $contestant->id(), 'score' => $score, 'created' => time());
+	        		db_insert('vote')->fields($fields)->execute();
+	        		$message = 'Vote store has been recorded.';
+			    }
+			} else {
+				$fields = array('uid' => $voter->id(), 'contestant' => $contestant->id(), 'score' => $score, 'created' => time());
+	        	db_insert('vote')->fields($fields)->execute();
+	        	$message = 'Vote store has been recorded.';
+			}			
+		}
+
+		return array('code' => $code, 'message' => $message);
     }
 
     public function playVideo($id) {

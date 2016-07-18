@@ -39,8 +39,8 @@ class AddMeForm extends FormBase {
     public function buildForm(array $form, FormStateInterface $form_state) {
         //$form['#attached']['library'][] = 'core/drupal.dialog.ajax';
         $form['validator'] = array(
-            '#markup' => '<div class="validate error"></div>
-            <div class="form-item">Please provide us with your full name and email address and we will add your name to our VIP list</div>'
+            '#markup' => '<div class="form-item">Please provide us with your full name and email address and we will add your name to our VIP list</div>
+            <div class="validate error"></div>'
         );
 
         $form['name'] = array(
@@ -50,6 +50,7 @@ class AddMeForm extends FormBase {
                 'class' => array('form-control')
             )
         );
+
         $form['mail'] = array(
             '#type' => 'email',
             '#title' => $this->t('Email'),
@@ -68,7 +69,7 @@ class AddMeForm extends FormBase {
                 ),
             ),
             '#description' => ' ',
-            '#required' => true,
+            /*'#required' => true,*/
             '#attributes' => array(
                 'class' => array('form-control')
             )
@@ -102,8 +103,14 @@ class AddMeForm extends FormBase {
     * validate email field
     */
     public function validateMailCallback(array &$form, FormStateInterface $form_state) {
-        // Instantiate an AjaxResponse Object to return.
+        /*// Instantiate an AjaxResponse Object to return.
         $response = new AjaxResponse();
+
+        if (!$form_state->getValue('name')) {
+            $response->addCommand(new HtmlCommand('.form-item-name .description', 'Please enter your full name!'));
+        } else {
+            $response->addCommand(new HtmlCommand('.form-item-name .description', ''));
+        }
 
         if (!valid_email_address($form_state->getValue('mail'))) {
             $response->addCommand(new HtmlCommand('.form-item-mail .description', 'Invalid email adress!'));
@@ -111,7 +118,7 @@ class AddMeForm extends FormBase {
             $response->addCommand(new HtmlCommand('.form-item-mail .description', ''));
         }
 
-        return $response;
+        return $response;*/
     }
 
     // validate form
@@ -133,6 +140,22 @@ class AddMeForm extends FormBase {
         $debug = false;
         $message = array();
         $values = $form_state->getValues();
+
+        if (!$values['name']) {
+            $message[] = 'Please enter your full name.';
+        }
+
+        // validate email
+        if (!valid_email_address($values['mail'])) {
+            $message[] = 'Invalid email adress.';
+        }
+
+        // validate flag
+        if (count($message)) {
+            $message = implode('<br>', $message);
+            $response->addCommand(new HtmlCommand('.validate', $message));
+            return $response;
+        }
 
         // close dialog
         $response->addCommand(new CloseDialogCommand('.dialog-add-me'));
@@ -156,9 +179,9 @@ class AddMeForm extends FormBase {
         $result = $mailManager->mail($module, $key, $to, $langcode, $params, NULL, $send);
 
         if ($result['result'] !== true) {
-            $message = t('There was a problem sending your email notification to @email for creating node @id.', array('@email' => $to, '@id' => $entity->id()));
-            drupal_set_message($message, 'error');
+
         }
+
         // $message .= '<script>owsDialogCallback(1);</script>';
         $response->addCommand(new OpenModalDialogCommand('Thank you', $message), ['width' => '700']);
         return $response;
