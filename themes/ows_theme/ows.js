@@ -1,6 +1,8 @@
 var dialogs = 0;
 var dialog_class = '';
+var sweetalert_title = false;
 var sweetalert_content = false;
+var sweetalert_class = false;
 
 jQuery(document).ready(function() {
 	if (jQuery.ui.dialogr.maxZ == 0) {
@@ -153,12 +155,14 @@ jQuery(document).ready(function() {
 		jQuery('#block-userlogin').fadeOut();
 	});
 
-	jQuery('#block-mainmenu').parent().append('<a id="nav-toggle" href="#"><span></span></a>');
-	document.querySelector("#nav-toggle")
-  		.addEventListener( "click", function() {
-    	this.classList.toggle( "active" );
-    	jQuery('#block-mainmenu').slideToggle();
-  	});
+	try {
+		jQuery('#block-mainmenu').parent().append('<a id="nav-toggle" href="#"><span></span></a>');
+		document.querySelector("#nav-toggle")
+	  		.addEventListener( "click", function() {
+	    	this.classList.toggle( "active" );
+	    	jQuery('#block-mainmenu').slideToggle();
+	  	});2691
+	} catch(e) {}
 
 	// menu click
 	jQuery('#block-mainmenu li a').click(function(e) {
@@ -210,9 +214,11 @@ function displayWelcome(box = false) {
 		/*if (!sweetalert_content && jQuery('#block-ows-theme-content #welcome-box').length) {
 			sweetalert_content = jQuery('#block-ows-theme-content #welcome-box');
 		}*/
-
+		
 		if (!sweetalert_content && jQuery('#block-ows-theme-content #welcome-box').length) {
+			sweetalert_title = jQuery('#block-ows-theme-content #welcome-box').attr('title');
 			sweetalert_content = jQuery('#block-ows-theme-content #welcome-box');
+			sweetalert_class = jQuery('#block-ows-theme-content #welcome-box').attr('class');
 		}
 
 		// remove enter contest button for those who registered
@@ -221,8 +227,12 @@ function displayWelcome(box = false) {
 		}
 
 		if (sweetalert_content) {
+			if (sweetalert_class != "swal-add-me") {
+				sweetalert_title + ' <span class="swal-close"></span>';
+			}
+
 			swal({
-				title: 'Welcome to OWS <span class="swal-close"></span>',
+				title: sweetalert_title,
 				text: sweetalert_content.html(),
 				html: true,
 				customClass: 'twitter',
@@ -231,6 +241,8 @@ function displayWelcome(box = false) {
 				allowOutsideClick: false
 				//allowEscapeKey: false
 			});
+
+			scrollbar('.welcome-text', false);
 
 			jQuery('.sweet-alert').center();
 			jQuery('.sweet-alert').draggable({ containment: "html" });
@@ -273,6 +285,8 @@ function displayWelcome(box = false) {
 		if (jQuery('#block-ows-theme-content #browse-box').length) {
 			box_content = jQuery('#block-ows-theme-content #browse-box');
 		}
+
+		console.log(box_content.html());
 
 		if (box_content) {
 			swal({
@@ -346,7 +360,11 @@ function openOWSDialog(dialog_class) {
 	// contestant detail event, already binded in ajaxcompleted
 	// if (dialog_class == '.dialog-browse') { browseContestant(dialog_class); }
 	
-	scrollbar(dialog_class);
+	// skip scrollbar
+	if (dialog_class != ".dialog-add-me") {
+		scrollbar(dialog_class);
+	}
+
 	loader(false);
 
 	// --------------------
@@ -393,6 +411,10 @@ function openOWSDialog(dialog_class) {
 		jQuery(dialog_class + ' .ui-dialog-titlebar-rest').click(function(event) {
 			dialog_restore(dialog_class);
 		});
+	}
+
+	if (dialog_class == ".dialog-add-me") {
+
 	}
 }
 
@@ -617,7 +639,7 @@ function browseContestant(dialog_class) {
 				async: false, 
 				success: function(data) {
 					loader(0);
-					callback = "scrollbar('.ui-dialog .dialog-contestant-"+id+"', false); inviteFriendForm('.dialog-contestant-"+id+" .invite-friend-form'); jQuery('.colorbox').colorbox({rel: 'gallery-item'}); jQuery.ui.dialogr.maxZ += 2; jQuery('.dialog-contestant-"+id+"').css('z-index', jQuery.ui.dialogr.maxZ); contestant_video(); voting('.dialog-contestant-"+id+"');";
+					callback = "scrollbar('.ui-dialog .dialog-contestant-"+id+"', false); inviteFriendForm('.dialog-contestant-"+id+" .invite-friend-form'); jQuery('.colorbox').colorbox({rel: 'gallery-item'}); jQuery.ui.dialogr.maxZ += 2; jQuery('.dialog-contestant-"+id+"').css('z-index', jQuery.ui.dialogr.maxZ); contestant_video(); voting('.dialog-contestant-"+id+"', "+id+");";
 					openDialog('.dialog-contestant-'+id, full_name, data, 600, 500, false, callback);
 				}
 			});
@@ -627,7 +649,7 @@ function browseContestant(dialog_class) {
 	});
 }
 
-function voting(klass) {
+function voting(klass, contestant) {
 	// append voting slider
 	jQuery(klass + ' .voting-contestant .voting-container').append('<input class="voting-slider" type="hidden" value="0" />');
 	
@@ -638,26 +660,35 @@ function voting(klass) {
 	    scale: [0,25,50,75,100],
 	    format: '%s',
 	    showLabels: true,
-	    snap: true
+	    snap: true,
 	});
+	
+	jQuery('.voting-slider').jRange('setValue', jQuery(".voting-container").attr("score"));
 	
 	jQuery(klass + ' .voting-contestant .voting-container').append('<button type="button" value="Vote" id="vote-button" class="button">Vote</button>');
 	jQuery('#vote-button').click(function() {
 		jQuery.ajax({
-			url: "/voting",
-			data: {voter: voter, contestant: contestant, score: score},
+			url: "/ajax-content",
+			data: {type: "voting", contestant: contestant, score: jQuery('.voting-slider').val(), r: Math.random()},
+			type: "POST",
+			dataType: "json",
 			async: false, 
 			success: function(data) {
 				loader(0);
-				if (data == 1) {
-					
-				} else {
+				console.log(data);
+				if (data == "1") {
 
 				}
+				//callback = "scrollbar('.ui-dialog .page-"+page+"', false); jQuery.ui.dialogr.maxZ += 2; jQuery('.page-"+page+"').css('z-index', jQuery.ui.dialogr.maxZ);";
+				//openDialog('.page-'+page,  obj.attr('href').replace('/', '').capitalize(), data, 600, 500, false, callback);
 			}
 		});
 	});
 }
+
+/*function voting_contestant() {
+	vote-button
+}*/
 
 
 // Invite friend
@@ -851,3 +882,4 @@ jQuery.fn.center = function () {
 String.prototype.capitalize = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
 }
+

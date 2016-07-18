@@ -136,6 +136,7 @@ Dialog styles
     max-width: 600px;
     width: 60%;
     margin-left: 0;
+    height: auto;
 }
 
 .sweet-alert .sweet-content-wrapper {
@@ -151,12 +152,12 @@ Dialog styles
 
 .sweet-alert h2 {
     margin: 0 8px;
-    padding-top: 8px;
+    padding: 10px 0;
     text-align: center;
     font-weight: bold;
     font-size: 18px;
     cursor: move;
-    height: 46px;  
+    height: 54px;  
 }
 
 .sweet-alert a:visited {
@@ -355,6 +356,10 @@ Dialog styles
 }
 
 .mCS-rounded-dark.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar:hover, .mCS-rounded-dots-dark.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar:hover {
+    background: #de0748;
+}
+
+.welcome-text.add-me-text .mCS-rounded-dark.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar {
     background: #de0748;
 }
 
@@ -1082,4 +1087,46 @@ body > #drupal-modal {
 .add-me-form .form-item input{
     float: left;
     width: 200px;
+}
+
+.welcome-text.add-me-text {
+    height: 220px;
+    overflow: hidden;
+    text-align: left !important;
+}
+
+.welcome-text.add-me-text h4 {
+    color: #de0748;
+    font-weight: bold;
+    text-align: left !important;
+}
+
+.welcome-text.add-me-text p {
+    text-align: left !important;
+}
+
+.dialog-add-me .ui-dialog-titlebar-close, .dialog-add-me #dialog-maximize, .dialog-add-me #dialog-minimize {
+    display: none !important;
+}
+
+.validate.error {
+    margin-bottom: 10px;
+}
+
+.validate.error div {
+    color: #de0748;
+}
+
+/* Vote */
+.vote-score {
+    margin-top: 6px;
+}
+
+.vote-score span {
+    font-weight: bold;
+    color: #de0748;
+}
+
+.welcome-text .mCustomScrollBox {
+    max-height: 100% !important;
 }
