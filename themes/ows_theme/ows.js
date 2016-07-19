@@ -676,9 +676,20 @@ function voting(klass, contestant) {
 			success: function(data) {
 				loader(0);
 				console.log(data);
-				if (data == "1") {
-
+				if (data.code == 2) {
+					if (confirm(data.message)) {
+						jQuery.ajax({
+							url: "/ajax-content",
+							data: {type: "voting-update", contestant: contestant, score: jQuery('.voting-slider').val(), r: Math.random()},
+							type: "POST",
+							dataType: "json",
+							async: false, 
+							success: function(data) {
+							}
+						});
+					}
 				}
+
 				//callback = "scrollbar('.ui-dialog .page-"+page+"', false); jQuery.ui.dialogr.maxZ += 2; jQuery('.page-"+page+"').css('z-index', jQuery.ui.dialogr.maxZ);";
 				//openDialog('.page-'+page,  obj.attr('href').replace('/', '').capitalize(), data, 600, 500, false, callback);
 			}

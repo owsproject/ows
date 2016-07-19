@@ -337,6 +337,11 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 			$result = $this->votingContestant($contestant, $score);			
 
 			return new JsonResponse($result);
+		} elseif ($type == "voting-update") {
+			$score = $_POST['score'];
+			$contestant = $_POST['contestant'];
+			$result = $this->votingContestantUpdate($contestant, $score);
+			return new JsonResponse($result);
 		}
     }
 
@@ -616,7 +621,7 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 			$query->execute();
 
     		$case = 'update';
-    		$message = 'Vote store has been updated.';
+    		$message = 'Vote score has been updated.';
 	    }
 
 	    if ($case == "insert") {
@@ -632,13 +637,14 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 			    $voted_result = array();
 			    foreach($result as $r) {
 			    	// $voted_result[] = $r;
-
 			    	$u = user_load($r->contestant);
-			    	$u_gender = $u->get('field_gender')->value;
-			    	if ($u_gender == $gender) {
-			    		$name = $u->get('field_first_name')->value.' '.$u->get('field_last_name')->value;
-			    		$message = "You have voted score 100 for $name, you can only voted 100 for one Men and one Woman only. Do you want to replace score of $name to 99?";
-			    		$code = 2;
+			    	if ($u->id()) {
+				    	$u_gender = $u->get('field_gender')->value;
+				    	if ($u_gender == $gender) {
+				    		$name = $u->get('field_first_name')->value.' '.$u->get('field_last_name')->value;
+				    		$message = "You have voted score 100 for $name, you can only vote 100 for one Men and one Woman only. Do you want to replace score of $name to 99?";
+				    		$code = 2;
+				    	}
 			    	}
 			    } 
 
@@ -656,6 +662,32 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 		}
 
 		return array('code' => $code, 'message' => $message);
+    }
+
+    public function votingContestantUpdate($contestant, $score) {
+    	$voter = \Drupal::currentUser();
+    	$contestant = user_load($contestant);
+
+    	// get previous contestant to set as 99
+    	$query = db_select('vote', 'v');
+		$query->fields('v');
+		$query->condition('v.uid', $voter->id());
+		$query->condition('v.score', $score);
+	    $result = $query->execute();
+
+	    $voted_result = array();
+	    foreach($result as $r) {
+	    	$fields = array('score' => 99, 'created' => time());
+    		$query = db_update('vote')->fields($fields);
+    		$query->condition('id', $r->id);
+			$query->execute();
+	    }
+
+	    // insert new record
+		$fields = array('uid' => $voter->id(), 'contestant' => $contestant->id(), 'score' => $score, 'created' => time());
+	     	db_insert('vote')->fields($fields)->execute();
+
+	    return array('code' => 1, 'message' => 'Vote score has been updated.');
     }
 
     public function playVideo($id) {
