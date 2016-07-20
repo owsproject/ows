@@ -39,8 +39,8 @@ class AddMeForm extends FormBase {
     public function buildForm(array $form, FormStateInterface $form_state) {
         //$form['#attached']['library'][] = 'core/drupal.dialog.ajax';
         $form['validator'] = array(
-            '#markup' => '<div class="form-item">Please provide us with your full name and email address and we will add your name to our VIP list</div>
-            <div class="validate error"></div>'
+            '#markup' => '<div class="validate error"></div>
+            <br>' // <div class="form-item">Please provide us with your full name and email address and we will add your name to our VIP list</div>
         );
 
         $form['name'] = array(
@@ -74,8 +74,6 @@ class AddMeForm extends FormBase {
                 'class' => array('form-control')
             )
         );
-
-        
 
         /*$form['captcha'] = array(
             '#markup' => '<div class="form-item"><div class="g-recaptcha" data-sitekey="6LeJJCUTAAAAAFMG5QlQHzoguSOI1kmMAjIsMiAL"></div></div>',
@@ -141,9 +139,9 @@ class AddMeForm extends FormBase {
         $message = array();
         $values = $form_state->getValues();
 
-        if (!$values['name']) {
+        /*if (!$values['name']) {
             $message[] = 'Please enter your full name.';
-        }
+        }*/
 
         // validate email
         if (!valid_email_address($values['mail'])) {
