@@ -87,8 +87,6 @@ jQuery(document).ready(function() {
 });
 
 jQuery(document).ready(function() {
-	// nice scrollbar
-
 	user_option = jQuery.cookie('user.option');
 	if (user_option === undefined) {
 		if (jQuery('body').hasClass('path-frontpage')) {
@@ -209,6 +207,14 @@ function contestant_video() {
 // Welcome sweetalert box
 // Box param: false = Welcome
 function displayWelcome(box = false) {
+
+	// show login window
+	if (jQuery.urlParam('login')) {
+		jQuery.ui.dialogr.maxZ += 1;
+		jQuery('#block-userlogin').css('z-index', jQuery.ui.dialogr.maxZ).center().fadeIn();
+		return;
+	}
+
 	if (!box) {
 		console.log("welcome box");
 		/*if (!sweetalert_content && jQuery('#block-ows-theme-content #welcome-box').length) {
@@ -244,8 +250,8 @@ function displayWelcome(box = false) {
 
 			scrollbar('.welcome-text', false);
 
-			jQuery('.sweet-alert').center();
 			jQuery('.sweet-alert').draggable({ containment: "html" });
+			jQuery('.sweet-alert').center();
 
 			// ------------------------------
 			// blind click event for button - click this button will trigger drupal button 
@@ -274,7 +280,7 @@ function displayWelcome(box = false) {
 		  	});
 
 		  	// ------------------------------
-		    // Add Me
+		    // Add my name
 		    jQuery('.sweet-alert #swal-btn-add-me').on('click', function() {
 		    	swal.close();
 		    	loader();
@@ -285,8 +291,6 @@ function displayWelcome(box = false) {
 		if (jQuery('#block-ows-theme-content #browse-box').length) {
 			box_content = jQuery('#block-ows-theme-content #browse-box');
 		}
-
-		console.log(box_content.html());
 
 		if (box_content) {
 			swal({
@@ -882,15 +886,22 @@ jQuery.fn.isBound = function(type, fn) {
 };
 
 jQuery.fn.center = function () {
-    this.css("position","absolute");
-    this.css("top", Math.max(0, ((jQuery(window).height() - jQuery(this).outerHeight()) / 2) + 
-                                                jQuery(window).scrollTop()) + "px");
-    this.css("left", Math.max(0, ((jQuery(window).width() - jQuery(this).outerWidth()) / 2) + 
-                                                jQuery(window).scrollLeft()) + "px");
-    return this;
+   this.css("position","absolute");
+   this.css("top", ( jQuery(window).height() - this.height() ) / 2  + "px");
+   this.css("left", ( jQuery(window).width() - this.width() ) / 2 + "px");
+   return this;
 }
 
 String.prototype.capitalize = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
 }
 
+jQuery.urlParam = function(name) {
+    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+    if (results==null){
+       return null;
+    }
+    else{
+       return results[1] || 0;
+    }
+}

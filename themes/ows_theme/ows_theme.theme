@@ -4,11 +4,19 @@
  * @file
  * Functions to support theming in the OWS theme.
  */
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 function ows_theme_preprocess_page(&$variables)
 {
-    $user = \Drupal::currentUser();
+    //$user = \Drupal::currentUser();
     // if ($user->id()) {}
+
+    // Disable login page, user login window on homepage instead.
+    if (\Drupal::routeMatch()->getRouteName() == 'user.login') {
+        $response = new RedirectResponse("/home?login=window");
+        $response->send();
+        return;
+    }
 }
 
 // function ows_theme_css_alter(&$css, \Drupal\Core\Asset\AttachedAssetsInterface $assets) {}

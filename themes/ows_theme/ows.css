@@ -136,7 +136,7 @@ Dialog styles
     max-width: 600px;
     width: 60%;
     margin-left: 0;
-    height: auto;
+    margin-top: 0 !important;
 }
 
 .sweet-alert .sweet-content-wrapper {
@@ -1117,6 +1117,14 @@ body > #drupal-modal {
     color: #de0748;
 }
 
+.eupopup-container-top, .eupopup-container-fixedtop {
+    position: fixed;
+}
+
+.site-introduction .heading {
+    color: #de0748;
+}
+
 /* Vote */
 .vote-score {
     margin-top: 6px;
@@ -1129,4 +1137,10 @@ body > #drupal-modal {
 
 .welcome-text .mCustomScrollBox {
     max-height: 100% !important;
+}
+
+.mCSB_dragger_bar {
+    width: 18px !important;
+    height: 17px !important;
+    right: 3px;
 }
