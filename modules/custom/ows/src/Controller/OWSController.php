@@ -394,6 +394,7 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 		    	//'<a data-dialog-type="modal" data-accepts="application/vnd.drupal-modal" id="contestant-'.$value['contestant'].'" class="browse-contestant" href="#contestant/'.$value['contestant'].'">'
 		    }
 
+
 		    $content['table'] = array(
 		    	'#type' => 'table',
 		    	'#header' => $headers,
