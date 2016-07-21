@@ -1,0 +1,45 @@
+<?php
+
+function ows_preprocess_html(&$variables) {
+	$variables['page']['#attached']['library'][] = 'modal/modal';
+	$variables['page']['#attached']['library'][] = 'core/drupal.ajax';
+}
+
+function ows_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+	if($form_id == "user_register_form") {
+		//kint($form);
+		/*$form['#attached']['library'][] = 'core/drupal.dialog.ajax';
+		
+		$form['actions'] = array();
+		$form['actions']['#type'] = 'actions';
+        $form['actions']['submit'] = array(
+            '#type' => 'submit',
+            '#value' => 'Register',
+            '#ajax' => array(
+                //'callback' => '::submitForm'
+            )
+        );*/
+	}
+}
+
+function ows_mail($key, &$message, $params) {
+	$options = array(
+		'langcode' => $message['langcode'],
+	);
+
+	switch ($key) {
+		case 'invite_friend':
+			$message['from'] = \Drupal::config('system.site')->get('mail');
+			$message['subject'] = t('Article created: @title', array('@title' => $params['node_title']), $options);
+			$message['body'][] = $params['message'];
+		break;
+	}
+
+	switch ($key) {
+		case 'add_me':
+			$message['from'] = \Drupal::config('system.site')->get('mail');
+			$message['subject'] = t('OWS - @title', array('@title' => $params['title']), $options);
+			$message['body'][] = $params['message'];
+		break;
+	}
+}

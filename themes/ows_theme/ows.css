@@ -1,0 +1,1149 @@
+@import url("https://fonts.googleapis.com/css?family=Lato:400,700");
+*, a, div, html {
+    outline: none !important;
+}
+
+body {
+    background: #000 url("images/background1.png") no-repeat scroll center center;
+    font-family: 'Lato', sans-serif !important;
+    /*min-height: 700px;*/
+}
+
+#ascrail2000 {
+    border: 1px solid #444;
+}
+
+#splashScreen img {
+    margin: 0 auto;
+}
+
+#splashScreen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #252525;
+    background-repeat: no-repeat;
+    text-align: center;
+}
+
+#toolbar-administration {
+    z-index: 100;
+}
+
+/* loading */
+
+.load-container {
+    background: rgba(0, 0, 0, 0.3) none repeat scroll 0 0;
+   /* -webkit-box-shadow: 0px 0px 23px -2px rgba(0,0,0,0.75);
+-moz-box-shadow: 0px 0px 23px -2px rgba(0,0,0,0.75);
+box-shadow: 0px 0px 23px -2px rgba(0,0,0,0.75);
+*/
+    border-radius: 10px;
+    box-sizing: border-box;
+    float: left;
+    opacity: 0.9;
+    overflow: hidden;
+    position: absolute;
+    z-index: 99999;
+    margin: 0 auto;
+    display: none;
+    padding: 10px;
+}
+
+.load-wrapper {
+    border-radius: 4px;
+    padding: 20px;
+}
+
+.loader {
+    margin: 0 auto;
+    font-size: 10px;
+    position: relative;
+    text-indent: -9999em;
+    border-top: 1.1em solid rgba(229, 22, 75, 0.2);
+    border-right: 1.1em solid rgba(229, 22, 75, 0.2);
+    border-bottom: 1.1em solid rgba(229, 22, 75, 0.2);
+    border-left: 1.1em solid #e5164b;
+    -webkit-transform: translateZ(0);
+    -ms-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-animation: load8 1.1s infinite linear;
+    animation: load8 1.1s infinite linear;
+}
+
+.loader, .loader:after {
+    border-radius: 50%;
+    width: 5em;
+    height: 5em;
+}
+
+@-webkit-keyframes load8 {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes load8 {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+/* --- */
+
+.welcome-wrapper .buttons a {
+    margin-top: 10px;
+}
+
+.welcome-wrapper .buttons a:hover {
+    color: #eee;
+}
+
+
+/*
+Dialog styles
+*/
+
+#drupal-modal {
+    overflow: hidden;
+    width: 100% !important;
+}
+
+.ui-dialog .ui-dialog-content {
+    width: 100% !important;
+}
+
+#welcome-box {
+    display: none;
+}
+
+.sweet-alert {
+    background: rgba(0, 0, 0, 0.30);
+    border-radius: 9px;
+    padding: 8px;
+    max-width: 600px;
+    width: 60%;
+    margin-left: 0;
+    margin-top: 0 !important;
+}
+
+.sweet-alert .sweet-content-wrapper {
+    padding: 55px 15px 15px;
+    background: #fff;
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+1,f7f7f7+100 */
+    background: rgb(255,255,255); /* Old browsers */
+    background: -moz-linear-gradient(top,  rgba(255,255,255,1) 1%, rgba(247,247,247,1) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top,  rgba(255,255,255,1) 1%,rgba(247,247,247,1) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom,  rgba(255,255,255,1) 1%,rgba(247,247,247,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f7f7f7',GradientType=0 ); /* IE6-9 */
+}
+
+.sweet-alert h2 {
+    margin: 0 8px;
+    padding: 10px 0;
+    text-align: center;
+    font-weight: bold;
+    font-size: 18px;
+    cursor: move;
+    height: 54px;  
+}
+
+.sweet-alert a:visited {
+    color: #fff;
+}
+
+.sweet-alert .swal-close {
+    background: url(images/close-red.png) no-repeat;
+    width: 32px;
+    height: 32px;
+    position: absolute;
+    right: 0;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.sweet-alert .swal-back {
+    background: url(images/back.png) no-repeat;
+    width: 32px;
+    height: 32px;
+    position: absolute;
+    left: 0;
+    margin-top: 10px;
+    cursor: pointer;
+    margin-left: 12px;
+}
+
+.button {
+    width: 30px;
+    height: 50px;
+    border-radius: 4px;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.45);
+    color: #fff;
+    padding: 6px 12px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 16px;
+    margin: 0 2px;
+}
+
+.button-red {
+    background: url(images/button-red.png);
+}
+
+.buttons a {
+    display: inline-block;
+    height: auto;
+    width: auto;
+}
+
+.welcome-text {
+    font-size: 14px;
+}
+
+
+/* Dialogr css */
+
+.ui-dialog {
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
+    border-width: 1px;
+    border-radius: 8px;
+    border-color: #252525;
+    background: rgba(7, 16, 20, 0.8) none repeat scroll 0 0;
+}
+
+.ui-dialog * {
+    color: #66757f;
+}
+
+.ui-dialog label {
+    color: #eee;
+}
+
+.ui-dialog .button {
+    display: inline-block;
+    height: auto;
+    width: auto;
+    background: rgba(0, 0, 0, 0) url("images/button-red.png") repeat scroll 0 0;
+    text-shadow: none;
+    color: #fff;
+    border: none;
+}
+
+.ui-dialog .ui-dialog-titlebar {
+    background: transparent none repeat scroll 0 0;
+    border: medium none;
+}
+
+.ui-dialog .ui-dialog-titlebar {
+    border-bottom: 1px solid #444 !important;
+    border-radius: 0;
+    margin: 0 6px;
+}
+
+.ui-dialog .ui-dialog-titlebar span {
+    color: #fff !important;
+    font-size: 18px;
+}
+
+.ui-dialog-titlebar > a,
+.ui-dialog-titlebar > a > span {
+    width: 16px !important;
+    height: 16px !important;
+}
+
+.ui-dialog .ui-dialog-titlebar-close {
+    background: none;
+}
+
+#dialog-minimize {
+    right: 46px;
+}
+
+#dialog-maximize {
+    right: 25px;
+}
+
+#dialog-maximize span {
+    background-image: url("images/max-normal.png");
+    background-position: 0 0;
+    background-repeat: no-repeat !important;
+    position: relative;
+    transition: all 0.5s;
+}
+
+#dialog-maximize:hover span {
+    background-image: url("images/max-hover.png") !important;
+    transition: all 0.5s;
+}
+
+#dialog-minimize span {
+    background-image: url("images/min-normal.png");
+    background-position: 0 0;
+    background-repeat: no-repeat !important;
+    position: relative;
+    transition: all 0.5s;
+}
+
+#dialog-minimize:hover span  {
+    background-image: url("images/min-hover.png") !important;
+    transition: all 0.5s;
+}
+
+.dialogr-minimized #dialog-minimize:hover span {
+    background-image: url("images/minimized-hover.png") !important;
+    transition: all 0.5s;
+}
+
+.ui-dialog-titlebar-close .ui-icon-closethick, .ui-dialog-titlebar-close {
+    background-image: url("images/close-normal.png") !important;
+    background-position: 0 0;
+    background-repeat: no-repeat !important;
+    transition: all 0.5s;
+}
+
+.ui-dialog-titlebar-close .ui-icon-closethick:hover, .ui-dialog-titlebar-close:hover {
+    background-image: url("images/close-hover.png") !important;
+    transition: all 0.5s;
+}
+
+.ui-dialog-titlebar-close {
+    height: 16px !important;
+    margin-top: -9px !important;
+    width: 16px !important;
+}
+
+.ui-dialog-titlebar #dialog-restore {
+    right: 26px !important;
+}
+
+.ui-dialog-titlebar #dialog-restore span {
+    background-image: url("images/max-normal.png") !important;
+    position: relative;
+    display: block;
+    background-position: center;
+    transition: all 0.5s;
+}
+
+.ui-dialog-titlebar #dialog-restore:hover span {
+    background-image: url("images/restore-hover.png") !important;
+    transition: all 0.5s;
+}
+
+.mCSB_scrollTools .mCSB_draggerRail {
+    width: 1px !important;
+}
+
+.mCS-rounded-dark.mCSB_scrollTools .mCSB_draggerRail {
+    background-color: #333;
+}
+
+.mCS-rounded-dark.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar, .mCS-rounded-dots-dark.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar {
+    background: #eee;
+}
+
+.mCS-rounded-dark.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar:hover, .mCS-rounded-dots-dark.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar:hover {
+    background: #de0748;
+}
+
+.welcome-text.add-me-text .mCS-rounded-dark.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar {
+    background: #de0748;
+}
+
+.mCSB_scrollTools .mCSB_draggerRail {
+    background: #333;
+}
+
+.ui-dialog-titlebar > a {
+    margin-left: 4px;
+}
+
+#block-ows-theme-content .form-item label {
+    float: left;
+    width: 150px;
+}
+
+#block-ows-theme-content .form-item input {
+    float: left;
+    width: 300px;
+}
+
+#block-ows-theme-content .form-item {
+    float: left;
+    margin: 5px 0;
+    width: 100%;
+}
+
+#join-contest-form #edit-terms, #join-contest-form #edit-rule {
+    float: none;
+    width: auto;
+}
+
+#join-contest-form #edit-submit {
+    margin-left: 150px;
+}
+
+.ui-dialog h2.dialog-title {
+    display: none;
+}
+
+.nicescroll-rails > div {
+    border-color: #888 !important;
+}
+
+
+/* Enter contest form styles */
+
+.ui-dialog .user-register-form div.description {
+    display: none;
+}
+
+.ui-dialog .user-register-form .js-form-type-managed input.js-form-file {
+    font-size: 11px;
+    font-weight: normal;
+    padding: 4px;
+    width: auto;
+}
+
+.ui-dialog .user-register-form .form-item .description, .ui-dialog .user-register-form .form-file {
+    font-size: 11px;
+}
+
+.ui-dialog .user-register-form, .ui-dialog .user-register-form .field--type-datetime h4 {
+    font-size: 12px;
+    font-weight: normal;
+    color: #eee;
+}
+
+.ui-dialog .user-register-form .form-managed-file .form-submit {
+    /*margin-left: 120px;
+    margin-top: 6px;*/
+    margin-left: 10px;
+}
+
+.ui-dialog .user-register-form .field--name-field-voice.form-wrapper .description {
+    display: none;
+}
+
+.ui-dialog .user-register-form .field--type-datetime h4 {
+    float: left;
+    width: 120px;
+    margin: 6px 0 0;
+}
+
+.ui-dialog .field--name-field-birthday > div {
+    float: left;
+}
+
+.ui-dialog .user-register-form .form-checkbox {
+    float: none !important;
+    width: auto !important;
+}
+
+.ui-dialog .user-register-form #edit-actions #edit-submit {
+    margin-left: 120px;
+}
+
+.ui-dialog .user-register-form .form-number {}
+
+.ui-dialog .user-register-form .form-select {
+    width: 126px !important;
+}
+
+.ui-dialog .user-register-form #edit-field-voice-wrapper .form-file, .ui-dialog .user-register-form #edit-user-picture-wrapper .form-file {
+    width: 150px;
+}
+
+.ui-dialog .user-register-form .form-item label {
+    float: left;
+    width: 120px;
+}
+
+.ui-dialog .user-register-form .form-item {
+    margin: 6px 0;
+}
+
+.ui-dialog .user-register-form input {
+    width: 120px;
+}
+
+.ui-dialog .form-wrapper {
+    clear: both;
+}
+
+.ui-dialog-buttonpane {
+    position: relative;
+    z-index: 9999;
+    background: transparent none repeat scroll 0 0;
+    border-top: 1px solid #666;
+}
+
+.ui-dialog-buttonpane button.button--primary .ui-button-text {
+    color: #fff !important;
+}
+
+#ui-datepicker-div {
+    z-index: 9999 !important;
+}
+
+.hidden {
+    display: none !important;
+}
+
+
+/* Enter contest form */
+
+.enter-contest-form .form-item {
+    float: left;
+    width: 100%;
+    margin: 4px 0;
+}
+
+.enter-contest-form label {
+    float: left;
+    width: 120px;
+}
+
+.enter-contest-form input {
+    float: left;
+    width: 200px;
+}
+
+.enter-contest-form .form-item-gender input {
+    width: 20px;
+    margin-left: 114px;
+}
+
+.enter-contest-form .fieldgroup legend {
+    color: #fff;
+    float: left;
+}
+
+.enter-contest-form .fieldgroup .fieldset-wrapper {
+    float: left;
+}
+
+.enter-contest-form .form-number {
+    width: 108px !important;
+}
+
+.enter-contest-form .form-select {
+    width: 108px !important;
+}
+
+.enter-contest-form .description {
+    color: #fff !important;
+    display: block;
+    float: left;
+    padding-left: 10px;
+    margin-top: 4px;
+}
+
+.enter-contest-form .description > div {
+    color: #ff0000;
+}
+
+.validator.error {
+    color: #ff0000;
+    margin-bottom: 10px;
+}
+
+.js-form-submit.form-submit span {
+    color: #fff;
+    font-weight: bold;
+}
+
+.menu-bar, #block-mainmenu {
+    background: #fff none repeat scroll 0 0;
+    bottom: 0;
+    height: 90px;
+    left: 0;
+    position: fixed;
+    width: 100%;
+    -webkit-box-shadow: 0px -5px 17px 0px rgba(0, 0, 0, 0.4);
+    -moz-box-shadow: 0px -5px 17px 0px rgba(0, 0, 0, 0.4);
+    box-shadow: 0px -5px 17px 0px rgba(0, 0, 0, 0.4);
+
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,f6f6f6+47,ededed+100;White+3D+%231 */
+background: rgb(255,255,255); /* Old browsers */
+background: -moz-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%); /* FF3.6-15 */
+background: -webkit-linear-gradient(top, rgba(255,255,255,1) 0%,rgba(246,246,246,1) 47%,rgba(237,237,237,1) 100%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(to bottom, rgba(255,255,255,1) 0%,rgba(246,246,246,1) 47%,rgba(237,237,237,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
+    z-index: 999;
+}
+
+#block-mainmenu ul {
+    list-style: outside none none;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+#block-mainmenu ul li {
+    display: inline-block;
+    margin: 0 10px;
+}
+
+#block-mainmenu ul li a {
+    width: 60px;
+    height: 80px;
+    margin: 10px auto 0;
+    color: #fff;
+    display: block;
+    background-size: 80%;
+}
+
+#block-mainmenu .home a {
+    background: url(images/ows-home.png) no-repeat scroll center center / 100% auto;
+    min-width: 80px;
+}
+
+#block-mainmenu .prizes a {
+    background: url(images/ows-prizes.png) no-repeat scroll center center / 100% auto;   
+}
+
+#block-mainmenu .rules a {
+    background: url(images/ows-rules.png) no-repeat scroll center center / 100% auto;
+}
+
+#block-mainmenu .sponsors a {
+    background: url(images/ows-sponsors.png) no-repeat scroll center center / 100% auto;
+}
+
+#block-mainmenu .about a {
+    background: url(images/ows-about.png) no-repeat scroll center center / 100% auto;
+}
+
+#block-mainmenu .login a {
+    background: url(images/ows-login.png) no-repeat scroll center center / 100% auto;
+}
+
+#block-mainmenu .logout a {
+    background: url(images/ows-logout.png) no-repeat scroll center center / 100% auto;
+}
+
+#block-mainmenu .events a {
+    background: url(images/ows-events.png) no-repeat scroll center center / 100% auto;
+}
+
+.user-logged-in #block-mainmenu .login {
+    display: none !important;
+}
+
+/* ---------- */
+.menu-bar a.home {
+    display: block;
+    width: 100px;
+    height: 100px;
+    background: url(images/home.png) no-repeat;
+    margin: 10px auto 0;
+    color: #fff;
+}
+
+
+/* Browse */
+
+.dialog-browse .views-row {
+    margin: 0 10px;
+    min-height: 84px;
+    margin-bottom: 10px;
+}
+
+.col-xs-15, .col-sm-15, .col-md-15, .col-lg-15 {
+    position: relative;
+    min-height: 1px;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+.col-xs-15 {
+    width: 20%;
+    float: left;
+}
+
+@media (min-width: 768px) {
+    .col-sm-15 {
+        width: 20%;
+        float: left;
+    }
+}
+
+@media (min-width: 992px) {
+    .col-md-15 {
+        width: 20%;
+        float: left;
+    }
+}
+
+@media (min-width: 1200px) {
+    .col-lg-15 {
+        width: 20%;
+        float: left;
+    }
+}
+
+nav.pager {
+    margin-bottom: 0;
+    clear: both;
+}
+
+.pager li > a, .pager li > span {
+    padding: 2px 8px;
+    background-color: #666;
+    border: 1px solid #333;
+    color: #000;
+}
+
+.pager .pager__item span {
+    color: #000;
+}
+
+.ui-dialog .ui-dialog-titlebar-close {
+    border: none;
+}
+
+.views-browse .views-field.views-field-user-picture {
+    float: left;
+    width: 100px;
+}
+
+.contestant-info {
+
+}
+
+.contestant-info .photo {
+	float: left;
+}
+
+.contestant-info .detail {
+    float: left;
+    margin-left: 20px;
+}
+
+/* Invite friend */
+.invite-friend-form {
+
+}
+
+.invite-friend-form .form-item input, 
+.invite-friend-form .form-item textarea {
+    width: 370px;
+
+}
+
+.invite-friend-form .form-item textarea {
+    height: 200px;
+}
+
+.invite-friend-form .form-submit {
+    margin-left: 150px;
+}
+
+.ui-widget-overlay {
+    background: none !important;
+}
+
+.sweet-overlay {
+    background: rgba(41, 47, 51, 0.5) none repeat scroll 0 0;
+}
+
+#block-userlogin {
+    background: rgba(0, 0, 0, 0.3) none repeat scroll 0 0;
+    border: 2px solid #000;
+    border-radius: 6px;
+    padding: 20px;
+    width: 300px;
+    cursor: move;
+    display: none;
+}
+
+#block-userlogin .button-close {
+    background: url(images/close-red.png) no-repeat;
+    display: block;
+    width: 32px;
+    height: 32px;
+    position: absolute;
+    right: 0;
+    top: 10px;
+    cursor: pointer;
+}
+
+#block-userlogin ul {
+    display: none;
+}
+
+#block-userlogin .form-submit {
+    background: rgba(0, 0, 0, 0) url("images/button-red.png") repeat scroll 0 0;
+    border: 0 none;
+    height: 32px;
+    padding: 0 20px;
+    width: auto;
+    margin-left: 86px;
+}
+
+#block-userlogin .form-item {
+    margin: 10px 0;
+}
+
+#block-userlogin label {
+    color: #fff;
+    margin-right: 10px;
+    width: 70px;
+}
+
+/* menu button */
+#block-mainmenu {
+    display: none;
+}
+#nav-toggle { 
+    bottom: 14px;
+    position: fixed;
+    right: 30px;
+    background: rgba(230, 0, 0, 0.9);
+    border-radius: 50%;
+    padding: 20px 24px 26px !important;
+    -webkit-box-shadow: 0px 10px 33px -9px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 10px 33px -9px rgba(0,0,0,0.75);
+    box-shadow: 0px 10px 33px -9px rgba(0,0,0,0.75);
+    z-index: 9999;
+}
+#nav-toggle { cursor: pointer; padding: 10px 35px 16px 0px; }
+#nav-toggle span, #nav-toggle span:before, #nav-toggle span:after {
+  cursor: pointer;
+  border-radius: 1px;
+  height: 5px;
+  width: 20px;
+  background: white;
+  position: absolute;
+  display: block;
+  content: '';
+  left: 15px;
+}
+
+#nav-toggle span:before {
+  top: -8px; 
+  left: 0;
+}
+#nav-toggle span:after {
+  bottom: -8px;
+  left: 0;
+}
+
+#nav-toggle span, #nav-toggle span:before, #nav-toggle span:after {
+  transition: all 500ms ease-in-out;
+}
+#nav-toggle.active span {
+  background-color: transparent;
+}
+#nav-toggle.active span:before, #nav-toggle.active span:after {
+  top: 0;
+}
+#nav-toggle.active span:before {
+  transform: rotate(45deg);
+}
+#nav-toggle.active span:after {
+  transform: rotate(-45deg);
+}
+
+.nav-tabs {
+    margin-bottom: 14px;
+    border-bottom: 1px solid #999;
+}
+
+.nav-tabs > li > a {
+    color: #fff;
+}
+
+.nav-tabs .active a, .nav-tabs > li > a:hover {
+    background: #de0748 none repeat scroll 0 0 !important;
+    color: #fff !important;
+    border-color: #999 #999 transparent;
+}
+
+body > #drupal-modal {
+    display: none !important;
+}
+
+#drupal-modal .row {
+    margin: 0;
+}
+
+.contestant-info .tab-content .gallery {
+
+}
+
+.contestant-info .tab-content .gallery .item {
+    margin-bottom: 20px;
+}
+
+.contestant-info.tab-content .gallery .item img {
+    max-width: 100%;
+    height: auto;
+}
+
+.contestant-info .tab-content .videos .play-video {
+    color: #fff !important;
+    text-decoration: none;
+    display: block;
+    position: relative;
+}
+
+.contestant-info .tab-content .videos .play-video span {
+    display: block;
+    background: url(images/play_button.png) no-repeat center center;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.contestant-info .videos > div {
+    width: 99%;
+    margin: 0 auto;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.contestant-info .videos > div img {
+    border-radius: 10px;
+    border: 1px solid #000;
+}
+
+.contestant-info .nav-tabs li a {
+    font-size: 13px;
+}
+
+.video-js .vjs-big-play-button {
+    background: transparent url("images/play_button.png") no-repeat scroll 0 0 !important;
+    border: medium none !important;
+    border-radius: 0 !important;
+    content: "" !important;
+    height: 32px !important;
+    left: 42% !important;
+    top: 46% !important;
+    width: 32px !important;
+}
+
+.vjs-icon-play::before, .video-js .vjs-big-play-button::before, .video-js .vjs-play-control::before {
+    content: "" !important;
+}
+
+.video-js .vjs-play-control:before {
+    top:20% !important;
+    background: url(images/play_button.png) no-repeat;
+    font-size: 48px;
+    content: "" !important;
+}
+
+.contestant-info .video-player {
+    width: 400px;
+    margin: 0 auto;
+}
+
+.datepickers-container {
+    z-index: 99999;
+}
+
+/* Browse filter */
+.ui-dialog .views-exposed-form {
+    border-bottom: 1px solid #444;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+}
+
+.ui-dialog .views-exposed-form .form-item {
+    /*margin: 10px 0;*/
+    padding: 0 6px;
+    text-align: center;
+    width: 30%;
+    float: left;
+}
+
+.ui-dialog .views-exposed-form .form-item label {
+    width: 120px;
+    color: #666;
+    display: none;
+}
+
+.ui-dialog .views-exposed-form .form-item select {
+    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+    border: 1px solid #444;
+    padding: 4px;
+    /*width: 250px;*/
+    width: 100%;
+}
+
+.ui-dialog .browse-contestant .views-field-user-picture img {
+    height: 60px;
+}
+
+.ui-dialog .browse-contestant .views-field-field-country .flag {
+    background-position: center center !important;
+    background-repeat: no-repeat !important;
+    background-size: 100% auto !important;
+    display: block;
+    height: 22px;
+    width: 32px;
+}
+
+.contestant-info .country-flag .flag {
+    background-position: center center !important;
+    background-repeat: no-repeat !important;
+    background-size: 100% auto !important;
+    display: block;
+    height: 32px;
+    width: 32px;   
+}
+
+.browse-contestant .views-field-field-country {
+    position: absolute;
+    right: -9px;
+    top: -1px;
+    width: 32px;
+    height: 22px;
+}
+
+.contestant-info .photo {
+    position: relative;
+}
+
+.contestant-info .photo .country-flag {
+    position: absolute;
+    right: -2px;
+    top: -10px;
+    height: 48px;
+}
+
+.contestant-info .item.country {
+    display: none;
+}
+
+.contestant-info h4.conestant {
+    color: #fff;
+}
+
+.contestant-info .voting-container .slider {
+    float: left;
+    width: 70%;
+}
+
+.contestant-info .voting-container .output {
+    float: left;
+}
+
+.voting-container {
+    margin-top: 30px;
+}
+
+.voting-container .slider-container {
+    height: 30px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+}
+
+.voting-container .slider-container .back-bar .pointer-label {
+    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+    color: #de0748;
+    font-size: 14px;
+    font-weight: bold;
+    top: -22px;
+}
+
+.slider-container .back-bar .selected-bar {
+    background: #de0748;
+}
+
+.slider-container .scale ins {
+    font-size: 12px;
+    left: -2px;
+    top: 6px;
+}
+
+.add-me-form .form-item {
+    width: 100%;
+    float: left;    
+    margin-bottom: 20px;
+}
+
+.add-me-form .form-item label {
+    float: left;
+    width: 120px;
+}
+
+.add-me-form .form-item input{
+    float: left;
+    width: 200px;
+}
+
+.welcome-text.add-me-text {
+    height: 230px;
+    overflow: hidden;
+    text-align: left !important;
+}
+
+.welcome-text.add-me-text h4 {
+    color: #de0748;
+    font-weight: bold;
+    text-align: left !important;
+}
+
+.welcome-text.add-me-text p {
+    text-align: left !important;
+}
+
+.dialog-add-me .ui-dialog-titlebar-close, .dialog-add-me #dialog-maximize, .dialog-add-me #dialog-minimize {
+    display: none !important;
+}
+
+.validate.error {
+    margin-bottom: 10px;
+}
+
+.validate.error div {
+    color: #de0748;
+}
+
+.eupopup-container-top, .eupopup-container-fixedtop {
+    position: fixed;
+}
+
+.site-introduction .heading {
+    color: #de0748;
+}
+
+/* Vote */
+.vote-score {
+    margin-top: 6px;
+}
+
+.vote-score span {
+    font-weight: bold;
+    color: #de0748;
+}
+
+.welcome-text .mCustomScrollBox {
+    max-height: 100% !important;
+}
+
+.mCSB_dragger_bar {
+    width: 18px !important;
+    height: 17px !important;
+    right: 3px;
+}
+
+.vote-result {
+    color: #de0748;
+}

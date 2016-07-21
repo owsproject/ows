@@ -1,0 +1,96 @@
+<?php
+
+/**
+ * @file
+ * Functions to support theming in the OWS theme.
+ */
+use Symfony\Component\HttpFoundation\RedirectResponse;
+
+function ows_theme_preprocess_page(&$variables)
+{
+    //$user = \Drupal::currentUser();
+    // if ($user->id()) {}
+
+    // Disable login page, user login window on homepage instead.
+    /*if (\Drupal::routeMatch()->getRouteName() == 'user.login') {
+        $response = new RedirectResponse("/home?login=window");
+        $response->send();
+        return;
+    }*/
+}
+
+// function ows_theme_css_alter(&$css, \Drupal\Core\Asset\AttachedAssetsInterface $assets) {}
+
+function ows_theme_theme_suggestions_alter(array &$suggestions, array $variables, $hook)
+{
+    // $path_args = \Drupal::routeMatch()->getRouteName();
+    // if ($path_args == "ows.ajax_content") {}
+    // $suggestions[] = $hook . '__' . 'logged_in';
+}
+
+function ows_theme_page_attachments_alter(array &$attachments)
+{
+    $user = \Drupal::currentUser();
+
+    // attach uid to javascript
+    if ($user->id()) {
+        $attachments['#attached']['drupalSettings']['user']['id'] = $user->id();
+    }
+}
+
+function ows_theme_theme_suggestions_page_alter(&$suggestions, &$vars)
+{
+
+    //$request = \Drupal::routeMatch()->getRouteObject()->getDefault('view_id');
+}
+
+/**
+* Implements hook_preprocess_menu() for menu.html.twig.
+*/
+function ows_theme_preprocess_menu(&$variables, $hook) {
+    if ($hook == 'menu') {
+        $current_path = \Drupal::request()->getRequestUri();
+        $items = $variables['items'];
+
+        foreach ($items as $key => $item) {
+            $klass = strtolower(str_replace(' ', '-', $item['title']));
+            $variables['items'][$key]['attributes']->addClass($klass);
+
+            // Set active to dom element if path of menu item matches current path
+            if ($item['in_active_trail']) {        
+                // Add active-trail class
+                $item['attributes']->addClass('active-trail');
+                if ($item['url']->toString() == $current_path) {
+                    // Add active class
+                    $variables['items'][$key]['attributes']->addClass('active');
+                } elseif (count($item['below'])) { // Process if sub-menu tree exists
+                    _menu_process_submenu($item['below'], $current_path);
+                } else {
+                    // Set active to dom element if path of menu item matches first part of current path          
+                    $url_fragments = explode('/', $current_path);
+                    if (count($url_fragments) > 1 AND '/' . $url_fragments[1] == $item['url']->toString()) {
+                        $variables['items'][$key]['attributes']->addClass('active');
+                    }
+                }
+            }
+        }
+    }
+}
+
+/**
+ * Set active and active-trail class for sub-menus recursively.
+ */
+function _menu_process_submenu(&$submenu, $current_path) {
+    foreach ($submenu as $item) {
+        if ($item['in_active_trail']) {
+            // Add active-trail class
+            $item['attributes']->addClass('active-trail');
+            if ($item['url']->toString() == $current_path) {
+                // Add active class
+                $item['attributes']->addClass('active');
+            } elseif (count($item['below'])) { // Process if sub-menu tree exists
+                _menu_process_submenu($item['below'], $current_path);
+            }
+        }
+    }
+}

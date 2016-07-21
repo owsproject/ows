@@ -1,0 +1,46 @@
+global-styling:
+  version: VERSION
+  css:
+    base:
+      css/sweetalert.css: {}
+      css/twitter/twitter.css: {}
+      css/jquery.dialogr.css: {}
+      css/bootstrap.min.css: {}
+      css/jquery.mCustomScrollbar.min.css: {}
+      css/vegas.min.css: {}
+      css/datepicker.min.css: {}
+      css/colorbox.css: {}
+      css/video-js.min.css: {}
+      css/jquery-eu-cookie-law-popup.css: {}
+      css/jquery.range.css: {}
+      ows.css: {}
+  component:
+    css/components/ui-dialog.css: {}
+  js:
+    js/jquery.browser.min.js: {}
+    # js/jquery.nicescroll.min.js: {}
+    # js/jquery.nicescroll.plus.js: {}
+    # js/jquery.splashscreen.js: {}
+    js/jquery.mCustomScrollbar.js: {}
+    js/vegas.min.js: {}
+    js/ui.dialogr.js: {}
+    js/dialog.custom.js: {}
+    js/jquery.cookie.js: {}
+    js/sweetalert.min.js: {}
+    js/bootstrap.min.js: {}
+    js/jquery.fullscreen-min.js: {}
+    js/datepicker.min.js: {}
+    js/datepicker.en.js: {}
+    js/jquery.colorbox-min.js: {}
+    js/video.min.js: {}
+    js/jquery-eu-cookie-law-popup.js: {}
+    js/jquery.range-min.js: {}
+    ows.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal.ajax
+    - core/drupal
+    - core/jquery.ui.dialog
+    - core/drupal.dialog.ajax
+    - core/jquery.ui.widget
+    - core/drupalSettings

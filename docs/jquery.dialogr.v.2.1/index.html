@@ -1,0 +1,232 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>jQuery Dialogr</title>
+<script type="text/javascript" src="js/jquery-1.4.4.min.js"></script>
+<script type="text/javascript" src="js/jquery-ui-1.8.6.custom.min.js"></script>
+<script type="text/javascript" src="js/ui.dialogr.js"></script>
+<script type="text/javascript" src="js/typeface-0.14.js"></script>
+<script type="text/javascript" src="js/museo_700.typeface.js"></script>
+<link href="css/ui-lightness/jquery-ui-1.8.6.custom.css" rel="stylesheet" type="text/css" />
+<link href="css/jquery.dialogr.css" rel="stylesheet" type="text/css" />
+
+    
+<script type="text/javascript">
+
+$(function() {
+	$("#dialog1").dialogr({ autoOpen: false, minHeight: 140, minWidth: 310, height: 160, width: 330 });
+	$("#dialog2").dialogr({ autoOpen: false, minHeight: 140, minWidth: 310, height: 160, width: 330 });
+	$("#dialog3").dialogr({ autoOpen: false, minHeight: 140, minWidth: 310, height: 160, width: 330 });
+	//$("#dialog").dialog({maximized:true,minimized:true});
+	//$("#dialog").dialog({maximized:true,minimized:false});
+	//$("#dialog").dialog({maximized:false,minimized:true});
+	//$("#dialog").dialog({maximized:false,minimized:false});
+	$("#open-btn1").click(function () { 
+		$("#dialog1").dialogr( 'open' );
+	});
+	$("#open-btn2").click(function () { 
+		$("#dialog2").dialogr( 'open' );
+	});
+	$("#open-btn3").click(function () { 
+		$("#dialog3").dialogr( 'open' );
+	});
+});
+
+</script>
+<style type="text/css">
+<!--
+/* This CSS is only for this html, it's not related to jQuery Dialogr Plugin */
+
+body {
+	font-family:"Trebuchet MS", "Helvetica", "Arial", "Verdana", "sans-serif";
+	color: #666;
+	margin: 0px;
+	padding: 0px;
+	background-color: #eee;
+	font-size:16px;
+}
+h1, h2, h3, h4, h5 {
+	font-family:"Museo","Trebuchet MS";
+	color:#444;
+	font-weight:normal;
+}
+h1 {
+	font-size:80px;
+	font-weight:normal;
+	background-color: #FFF;
+	padding: 15px;
+	margin: 0px;
+}
+h3 {
+	font-size: 24px;
+	margin:15px 0 25px;
+}
+h2 {
+	margin-bottom:15px;
+	margin-top:30px;
+}
+h3.big {
+	color: #F90;
+}
+h4 {
+	margin-bottom:5px;
+	margin-top:25px;
+}
+a {
+	color: #F90;
+	text-decoration: none;
+	font-weight: bold;
+}
+ul {
+	list-style-position: outside;
+	list-style-type: none;
+	list-style-image: url(img/1265223430_tick.png);
+	margin: 0px;
+	padding-top: 0px;
+	padding-right: 0px;
+	padding-bottom: 0px;
+	padding-left: 25px;
+	margin-right:15px;
+}
+li {
+	padding-left: 5px;
+	margin-top: -2px;
+	margin-bottom: 8px;
+}
+p {
+	margin:8px 0;
+}
+
+pre {
+	background-color: #F3F3F3;
+	padding: 20px;
+	color: #999;
+	font-size:12px;
+}
+#container {
+	position:relative;
+	width: 1000px;
+	background-color: #FFF;
+	border-right-width: 1px;
+	border-left-width: 1px;
+	border-right-style: solid;
+	border-left-style: solid;
+	border-right-color: #FFF;
+	padding: 25px;
+	margin-top: 0;
+	margin-right: auto;
+	margin-bottom: 0;
+	margin-left: auto;
+	border-left-color: #FFF;
+}
+#header {
+	text-align: right;
+}
+#icon img {
+	margin-right:10px;
+	border:0;
+}
+.note {
+	font-size:12px;
+}
+.open-btn {
+	background-color:#F90;
+	color:#fff;
+	padding:8px 15px;
+	-moz-border-radius:10px;
+	-webkit-border-radius:10px;
+}
+
+span.open {
+	background:url("css/ui-lightness/images/ui-icons_ffffff_256x240.png") repeat-x scroll 50% 50% transparent;
+	background-position:-50px -193px;
+	width:16px;
+	height:16px;
+	display:block;
+}
+span.open.ui-icon {
+	display:inline-block;
+	vertical-align:middle;
+	margin-right:5px;
+	*display: inline;
+}
+-->
+</style>
+</head>
+<body>
+<div id="dialog1" title="jQuery Dialogr Example 1">
+  <p>This dialog window can be moved, resized, maximized, minimized, restored and closed with the 'x' icon.</p>
+</div>
+<div id="dialog2" title="jQuery Dialogr Example 2">
+  <p>This dialog window can be moved, resized, maximized, minimized, restored and closed with the 'x' icon.</p>
+</div>
+<div id="dialog3" title="jQuery Dialogr Example 3">
+  <p>This dialog window can be moved, resized, maximized, minimized, restored and closed with the 'x' icon.</p>
+</div>
+<div id="container">
+  <div id="header">
+    <h1>jQuery Dialogr 2.1</h1>
+    <h3 class="big">Maximize. Minimize. Restore.</h3>
+  </div>
+  <div id="info"  style="text-align:center">
+    <p><img src="img/bar.png" width="900" height="38" /></p>
+    <p>This plugin is a modified copy of <a href="http://jqueryui.com/demos/dialog" target="_blank">jQuery UI Dialog</a> widget, adding minimize, restore and maximize buttons.</p>
+    <p style="margin-top:30px;">
+			<a href="#" id="open-btn1" class="open-btn"><span class="open ui-icon ui-icon-newwin"></span>Open Dialogr 1</a>
+			<a href="#" id="open-btn2" class="open-btn"><span class="open ui-icon ui-icon-newwin"></span>Open Dialogr 2</a>
+			<a href="#" id="open-btn3" class="open-btn"><span class="open ui-icon ui-icon-newwin"></span>Open Dialogr 3</a>
+		</p>
+    <p><img src="img/bar.png" width="900" height="38" /></p>
+  </div>
+  <h2>Usage</h2>
+  <p>Well, use it as any normal dialog, but with one extra "r" at the end:</p>
+  <pre>$(#dialog).dialog<strong>r</strong>();</pre>
+  <p> You can use it with all jQuery UI Dialog options! </p>
+  <p>But jQuery Master Dialog adds two other options (when false the button doesn't appear):</p>
+  <pre>$("#dialog").dialogr({maximized:false,minimized:false});</pre>
+  <p>Off course, without minimize and restore buttons, it'll be the original UI Dialog again.</p>
+  <h2>Download</h2>
+  <p><a href="jquery.dialogr.v.2.1.rar"><img src="img/1265223172_ark2.png" alt="Download" width="48" height="48" border="0" align="absmiddle" /> jQuery Dialogr  2.1</a> (updated: December  2010)</p>
+  <h2>Plugin requirements </h2>
+  <ul>
+    <li><a href="http://jquery.com/" target="_blank">jQuery 1.4.4</a> </li>
+    <li><a href="http://jqueryui.com" target="_blank">jQuery UI 1.8.6</a></li>
+  </ul>
+  <h2>Socialize</h2>
+  <p id="icon"><a href="http://delicious.com/save?jump=yes&amp;v=4&amp;partner=[partner]&amp;noui&amp;url=http://carvalhar.com/componente/jQueryDialogr/index.html;title=jQuery Dialogr" target="_blank"><img src="img/social/delicious-32x32.png" alt="Delicious" width="32" height="32" border="0" /></a><a href="http://www.facebook.com/sharer.php?u=http://carvalhar.com/componente/jQueryDialogr/index.html&amp;t=jQuery Dialogr" target="_blank"><img src="img/social/facebook-32x32.png" alt="Facebook" width="32" height="32" border="0" /></a><a href="http://twitter.com/home?status=http://carvalhar.com/componente/jQueryDialogr/index.html+(via+@carvalhar)" target="_blank"><img src="img/social/twitter-32x32.png" alt="Twitter" width="32" height="32" border="0" /></a><a href="http://www.stumbleupon.com/submit?url=http://carvalhar.com/componente/jQueryDialogr/index.html&amp;title=jQuery Dialogr" target="_blank"><img src="img/social/stumbleupon-32x32.png" alt="Stumble Upon" width="32" height="32" border="0" /></a><a href="http://technorati.com/cosmos/search.html?url=http://carvalhar.com/componente/jQueryDialogr/index.html" target="_blank"><img src="img/social/technorati-32x32.png" alt="Technorati" width="32" height="32" border="0" /></a><a href="#" target="_blank"></a><a href="http://digg.com/submit?phase=2&amp;url=&quot;+linkSite" target="_blank"><img src="img/social/digg-32x32.png" alt="Digg" width="32" height="32" border="0" /></a><a href="http://www.facebook.com/sharer.php?u=http://carvalhar.com/componente/jQueryDialogr/index.html&amp;t=jQuery Dialogr" target="_blank"></a><a href="http://www.google.com/bookmarks/mark?op=add&amp;bkmk=http://carvalhar.com/componente/jQueryDialogr/index.html&amp;title=jQuery Dialogr" target="_blank"><img src="img/social/google-32x32.png" alt="Google" width="32" height="32" border="0" /></a><a href="http://reddit.com/submit?urlhttp://carvalhar.com/componente/jQueryDialogr/index.html&amp;title=jQuery Dialogr" target="_blank"><img src="img/social/reddit-32x32.png" alt="Redd It" width="32" height="32" border="0" /></a></p>
+  <h2>Credits</h2>
+<p>Developed by <a href="http://carvalhar.com" target="_blank">Carlos Carvalhar</a> with the help of <a href="http://voxelmidia.com.br" target="_blank">Ciro Anunciação</a>,  when they were working at <a href="http://pixfly.com.br" target="_blank">PixFly</a>, Brazil. Updated by <a href="mailto:arl@formaltis.fr">Arnaud Lorenzi</a> from <a href="http://www.formaltis.fr/" target="_blank">Formaltis</a>.</p>
+  <h2>Old Versions</h2>
+  <p><a href="jquery.dialogr.v.2.0.rar">jQuery Dialogr 2.0</a> (jQuery 1.3.2 and jQuery UI 1.7.2)</p>
+<p><a href="jquery.dialogr.v.1.0.rar">jQuery Dialogr 1.0</a> (jQuery 1.3.2 and jQuery UI 1.7.2)</p>
+  <br />
+  <p>Known Bugs</p>
+<div class="note">
+      <p>1) Variables window.minimized and window.maximized should be stored at Dialogr instance, not at window object.</p>
+      <p>2) If you minimize the Dialogr and then close it, when you open it again the content height isn't calculated correctly.</p>
+  </div>
+  <p>Fixed Bugs</p>
+  <div class="note">
+    <p>1) Passed options for Dialogr were not working at all. Fixed by Joseph Knapp</p>
+</div>
+  <p>Notes</p>
+  <div class="note">
+    <p>This plugin works with IE7, IE8, Chrome, Safari and Mozilla/Firefox. Don't ask about IE6, we don't care anymore.</p>
+    <p>This code was based in two resources:</p>
+    <p><a href="http://www.profissionaisti.com.br/2008/11/jquery-dialog-melhorias-interessantes" target="_blank">jQuery Dialog – Melhorias Interessantes/Improvements</a> (by Jackson Caset)</p>
+    <p><a href="http://old.nabble.com/How-to-%22properly%22-extend-the-jQuery-UI-Dialog-widget-----td24182676s27240.html" target="_blank">How to &quot;properly&quot; extend the jQuery UI Dialog widget?</a> (by Marv4 and Scott González)</p>
+    <p>There is also another plugin that maybe you'd like to check:</p>
+    <p><a href="http://hernan.amiune.com/labs/jQuery-Windows-Engine-Plugin/jQuery-Windows-Engine-Plugin.html" target="_blank">http://hernan.amiune.com/labs/jQuery-Windows-Engine-Plugin/jQuery-Windows-Engine-Plugin.html</a>  (by Hernan Amiune)</p>
+  </div>
+</div>
+ <script type="text/javascript">
+	var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+	document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+	</script>
+	<script type="text/javascript">
+	var pageTracker = _gat._getTracker("UA-2874888-2");
+	pageTracker._initData();
+</script>
+</body>
+</html>

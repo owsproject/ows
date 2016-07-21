@@ -1,0 +1,89 @@
+ows.homepage:
+  path: '/home'
+  defaults:
+    _controller: 'Drupal\ows\Controller\OWSController::homepage'
+    _title: ''
+  requirements:
+    _permission: 'access content'
+
+ows.ajax_content:
+  path: '/ajax-content'
+  defaults:
+    _controller: 'Drupal\ows\Controller\OWSController::ajaxContent'
+    _title: ''
+  requirements:
+    _permission: 'access content'
+
+ows.contestant_info:
+  path: '/contestant/{uid}'
+  defaults:
+    _controller: 'Drupal\ows\Controller\OWSController::contestantInfo'
+    _title: ''
+  requirements:
+    _permission: 'access content'
+
+ows.content:
+  path: '/content'
+  defaults:
+    _controller: 'Drupal\ows\Controller\OWSController::content'
+    _title: ''
+  requirements:
+    _permission: 'access content'
+
+ows.homepage_settings:
+  path: /admin/config/ows/homepage
+  defaults:
+    _form: 'Drupal\ows\HomepageSettingsForm'
+    _title: OWS homepage settings
+  requirements:
+    _permission: 'access administration pages'
+
+ows.join_contest_form:
+  path: /join-contest
+  defaults:
+      _form: 'Drupal\ows\Form\JoinContestForm'
+      _title: 'Join Contest'
+  requirements:
+      _permission: 'access content'
+
+ows.add_me_form:
+  path: /add-me
+  defaults:
+    _form: 'Drupal\ows\Form\AddMeForm'
+  requirements:
+      _access: 'TRUE'
+
+ows.enter_contest:
+  path: '/enter-contest'
+  defaults:
+    _form: 'Drupal\ows\Form\EnterContestForm'
+  requirements:
+      _access: 'TRUE'
+
+ows.enter_vote:
+  path: '/enter-vote'
+  defaults:
+    _form: 'Drupal\ows\Form\EnterVoteForm'
+  requirements:
+      _access: 'TRUE'
+
+ows.invite_friend:
+  path: '/invite-friend'
+  defaults:
+    _controller: 'Drupal\ows\Controller\OWSController::inviteFriend'
+  requirements:
+      _access: 'TRUE'
+
+ows.video_play:
+  path: '/video/{id}'
+  defaults:
+    _controller: 'Drupal\ows\Controller\OWSController::playVideo'
+  requirements:
+      _access: 'TRUE'
+
+ows.video_thumbnail:
+  path: '/video/thumbnail/{id}'
+  defaults:
+    _controller: 'Drupal\ows\Controller\OWSController::playThumbnail'
+  requirements:
+      _access: 'TRUE'
