@@ -716,6 +716,7 @@ function voting(klass, contestant) {
 			}
 		});
 	});
+	
 }
 
 /*function voting_contestant() {
