@@ -19,5 +19,12 @@ class DbStorage {
 	    return $select->execute()->fetchAll();
 	}
 
+	/* Vote list of an user */
+	public static function contestantVoteList($contestant) {
+	    $select = db_select('vote', 'v');
+	    $select->condition('v.contestant', '=', $contestant);
+	    $select->fields('v');
+	    return $select->execute()->fetchAll();
+	}
 }
 

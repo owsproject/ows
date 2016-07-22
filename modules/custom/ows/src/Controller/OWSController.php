@@ -405,8 +405,52 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 
 		    // Don't cache this page.
 		    $content['#cache']['max-age'] = 0;
-
 		    return $content;
+
+		} else if ($type == "my-vote") {
+
+			// ========================
+			// My votes
+			$votes = array();
+			$content = array();
+
+		    $content['message'] = array(
+		      '#markup' => $this->t('My vote.'),
+		    );
+
+		    $headers = array(
+		    	'#',
+		    	t('Voter'),
+		    	t('Score'),
+		    	t('Last vote date')
+		    );
+
+		    $rows = array();
+		    $data = array();
+		    $index = 1;
+		    foreach ($entries = \Drupal\ows\DbStorage::contestantVoteList() as $entry) {
+		    	$contestant = user_load($value['uid']);
+
+				$voter = user_load($value['uid']);
+		    	if (is_object($voter)) $voter_name .= $voter->get('field_first_name')->value.' ';
+		    	if (is_object($voter)) $voter_name .= $voter->get('field_last_name')->value;
+
+		    	$rows[] = array($index, $voter_name, $value['score'], $voter_name, date('d-m-Y', $value['created']));
+		    	$index++;
+		    }
+
+		    $content['table'] = array(
+		    	'#type' => 'table',
+		    	'#header' => $headers,
+		    	'#rows' => $rows,
+		    	'#attributes' => array('id' => 'contestant-vote-list'),
+		    	'#empty' => t('No vote record.'),
+		    );
+
+		    // Don't cache this page.
+		    $content['#cache']['max-age'] = 0;
+		    return $content;
+		    
 		} else {
 			return array('#type' => 'markup', '#markup' => 'Page not found!');
 		}
