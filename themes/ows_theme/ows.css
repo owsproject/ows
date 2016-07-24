@@ -639,6 +639,14 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
     background: url(images/ows-events.png) no-repeat scroll center center / 100% auto;
 }
 
+#block-mainmenu .social a {
+    background: url(images/ows-events.png) no-repeat scroll center center / 100% auto;
+}
+
+#block-mainmenu .current-voting a {
+    background: url(images/ows-events.png) no-repeat scroll center center / 100% auto;
+}
+
 .user-logged-in #block-mainmenu .login {
     display: none !important;
 }
@@ -856,6 +864,75 @@ nav.pager {
 }
 #nav-toggle.active span:after {
   transform: rotate(-45deg);
+}
+
+
+#user-menu { 
+    bottom: 14px;
+    position: fixed;
+    right: 90px;
+    background: rgba(230, 0, 0, 0.9) url(images/user.png) no-repeat scroll center center;
+    border-radius: 50%;
+    -webkit-box-shadow: 0px 10px 33px -9px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 10px 33px -9px rgba(0,0,0,0.75);
+    box-shadow: 0px 10px 33px -9px rgba(0,0,0,0.75);
+    z-index: 9999;
+    padding: 14px !important;
+    width: 50px;
+    height: 45px;
+    cursor: pointer;
+}
+
+#user-menu.dropdown {
+    color:#FFF;
+    box-shadow: 0px 8px 17px 0px rgba(0, 0, 0, 0.2), 0px 6px 20px 0px rgba(0, 0, 0, 0.19);
+}
+#user-menu.dropdown > input{
+    display:none;
+    position:fixed;
+    z-index:-2;
+}
+#user-menu.dropdown > label {
+    display: inline-block;
+    max-width: 100%;
+    margin-bottom: 5px;
+    font-weight: 700;
+}
+#user-menu .drop-ttl {
+    font-weight:400;
+    padding:5px 20px;
+}
+#user-menu.dropdown ul {
+    width:130px;
+    font-weight:400;
+    margin:0;
+    padding:0;
+    position:absolute;
+    top: -78px;
+    left: 0px;
+    text-align:left;
+    list-style-type:none;
+    background: rgba(7, 16, 20, 0.8) none repeat scroll 0 0;
+    color:#de0748;
+    box-shadow: 0px 8px 17px 0px rgba(0, 0, 0, 0.2), 0px 6px 20px 0px rgba(0, 0, 0, 0.19);
+    border: 1px solid #252525 !important;
+    display: none;
+    border-radius: 5px;
+}
+#user-menu.dropdown ul >li {
+    padding:5px 20px;
+}
+#user-menu.dropdown ul > li > a {
+    color:inherit;
+    outline:0;
+    text-decoration:none;
+    cursor:pointer;
+}
+#user-menu.dropdown ul > li:hover {
+    background:#DEDEDE;
+}
+#user-menu input[type="checkbox"]:checked ~ label > ul {
+    display:none;
 }
 
 .nav-tabs {

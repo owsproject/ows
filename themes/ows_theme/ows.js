@@ -158,7 +158,29 @@ jQuery(document).ready(function() {
 	});
 
 	try {
+		jQuery('.user-logged-in #block-mainmenu').parent().append('<div id="user-menu" class="user-menu dropdown"><div class="drop-ttl">&nbsp;</div><ul><li class="my-vote">My Vote</li><li class="my-account">My Account</li></ul></label></div></div>');
 		jQuery('#block-mainmenu').parent().append('<a id="nav-toggle" href="#"><span></span></a>');
+
+		// user menu click
+		jQuery('#user-menu').click(function(e) {
+			jQuery('#user-menu.dropdown ul').toggle();
+		});
+
+		// my vote click 
+		jQuery('.my-vote').click(function(e) {
+			jQuery.ajax({
+				url: "/ajax-content",
+				type: "POST",
+				data: {type: "my-vote", r: Math.random()},
+				async: false, 
+				success: function(data) {
+					loader(0);
+					callback = "scrollbar('.ui-dialog .page-my-voting', false); jQuery.ui.dialogr.maxZ += 2; jQuery('.current-voting').css('z-index', jQuery.ui.dialogr.maxZ);";
+					openDialog('.page-my-voting', 'My Vote', data, 600, 500, false, callback);
+				}
+			});
+		});
+		
 		document.querySelector("#nav-toggle")
 	  		.addEventListener( "click", function() {
 	    	this.classList.toggle( "active" );
@@ -168,11 +190,37 @@ jQuery(document).ready(function() {
 
 	// menu click
 	jQuery('#block-mainmenu li a').click(function(e) {
+		staticPage = true;
+		if (jQuery(this).parent().attr('class') == "current-voting") {
+			e.preventDefault();
+
+			staticPage = false;
+			jQuery.ajax({
+				url: "/ajax-content",
+				type: "POST",
+				data: {type: "vote-list", r: Math.random()},
+				async: false, 
+				success: function(data) {
+					loader(0);
+					callback = "scrollbar('.ui-dialog .page-current-voting', false); jQuery.ui.dialogr.maxZ += 2; jQuery('.current-voting').css('z-index', jQuery.ui.dialogr.maxZ);";
+					openDialog('.page-current-voting', 'Current Voting', data, 600, 500, false, callback);
+				}
+			});
+		}
+
+		if (jQuery(this).parent().attr('class') == "social") {
+			e.preventDefault();
+			staticPage = false;
+
+
+		}
+
 		// skip logout
-		if (jQuery(this).attr('href') != "/user/logout") {
+		if (jQuery(this).attr('href') != "/user/logout" && staticPage) {
 			e.preventDefault();
 			openStaticPage(jQuery(this));
 		}
+
 	});		
 });
 
@@ -704,7 +752,7 @@ function voting(klass, contestant) {
 		});
 	});
 
-	jQuery('.vote-result').click(function(event) {
+	/*jQuery('.vote-result').click(function(event) {
 		jQuery.ajax({
 			url: "/ajax-content",
 			data: {type: "vote-list", r: Math.random()},
@@ -715,8 +763,8 @@ function voting(klass, contestant) {
 				openDialog('.dialog-vote-list', 'Vote Result', data, 600, 500, false, false);
 			}
 		});
-	});
-	
+	});*/
+
 }
 
 /*function voting_contestant() {
@@ -844,7 +892,7 @@ function openDialog(element, title, data, width = 500, height = 500, is_new = fa
 			scrollbar(element + ' .ui-dialog-content');
 
 			// execute callback
-			console.log("Dialogr" + callback);
+			console.log("Dialogr: " + callback);
 			if (callback) eval(callback);
 			dialogs++;
 		},
