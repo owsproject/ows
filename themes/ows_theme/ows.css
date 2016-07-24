@@ -878,7 +878,7 @@ nav.pager {
     box-shadow: 0px 10px 33px -9px rgba(0,0,0,0.75);
     z-index: 9999;
     padding: 14px !important;
-    width: 50px;
+    width: 48px;
     height: 45px;
     cursor: pointer;
 }
@@ -1223,4 +1223,48 @@ body > #drupal-modal {
 
 .vote-result {
     color: #de0748;
+}
+
+#block-ows-theme-content table { 
+  color: #333;
+  font-family: Helvetica, Arial, sans-serif;
+  width: 640px;
+  /* Table reset stuff */
+  border-collapse: collapse; border-spacing: 0; 
+}
+        
+#block-ows-theme-content td, #block-ows-theme-content th {  border: 0 none; height: 30px; }
+            
+#block-ows-theme-content th {
+  /* Gradient Background */
+    background: linear-gradient(#de0748 0%,#df0748 100%);
+    color: #FFF; font-weight: bold;
+    height: 40px;
+}
+        
+#block-ows-theme-content td { background: #FAFAFA; text-align: center; }
+
+/* Zebra Stripe Rows */
+        
+#block-ows-theme-content tr:nth-child(even) td { background: rgba(51, 51, 51, 0.42); } 
+#block-ows-theme-content tr:nth-child(odd) td { background: rgba(102, 102, 102, 0.42); }
+
+/* First-child blank cells! */
+/*#block-ows-theme-content tr td:first-child, #block-ows-theme-content tr th:first-child { 
+    background: none; 
+    font-style: italic;
+    font-weight: bold;
+    font-size: 14px;
+    text-align: right;
+    padding-right: 10px;
+    width: 20px; 
+}*/
+
+/* Add border-radius to specific cells! */
+#block-ows-theme-content tr:first-child th:nth-child(2) { 
+  /*border-radius: 5px 0 0 0; */
+} 
+
+#block-ows-theme-content tr:first-child th:last-child { 
+  border-radius: 0 5px 0 0; 
 }
