@@ -316,11 +316,16 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 			$result = $this->votingContestant($contestant, $score);			
 
 			return new JsonResponse($result);
+
 		} elseif ($type == "voting-update") {
+
+			// ========================
+			// Voter update
 			$score = $_POST['score'];
 			$contestant = $_POST['contestant'];
 			$result = $this->votingContestantUpdate($contestant, $score);
 			return new JsonResponse($result);
+
 		} else if ($type == "vote-list") {
 			
 			// ========================
@@ -394,7 +399,6 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 		    	//'<a data-dialog-type="modal" data-accepts="application/vnd.drupal-modal" id="contestant-'.$value['contestant'].'" class="browse-contestant" href="#contestant/'.$value['contestant'].'">'
 		    }
 
-
 		    $content['table'] = array(
 		    	'#type' => 'table',
 		    	'#header' => $headers,
@@ -414,9 +418,9 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 			$votes = array();
 			$content = array();
 
-		    $content['message'] = array(
+		    /*$content['message'] = array(
 		      '#markup' => $this->t('My vote.'),
-		    );
+		    );*/
 
 		    $headers = array(
 		    	'#',
@@ -428,16 +432,18 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 		    $rows = array();
 		    $data = array();
 		    $index = 1;
-		    foreach ($entries = \Drupal\ows\DbStorage::contestantVoteList() as $entry) {
-		    	$contestant = user_load($value['uid']);
 
-				$voter = user_load($value['uid']);
-		    	if (is_object($voter)) $voter_name .= $voter->get('field_first_name')->value.' ';
-		    	if (is_object($voter)) $voter_name .= $voter->get('field_last_name')->value;
+		    $account = \Drupal::currentUser();
+		    if (is_object($account)) {
+			    foreach ($entries = \Drupal\ows\DbStorage::contestantVoteList(14/*$account->id()*/) as $entry) {
+			    	$voter = user_load($entry->uid);
+			    	if (is_object($voter)) $voter_name .= $voter->get('field_first_name')->value.' ';
+			    	if (is_object($voter)) $voter_name .= $voter->get('field_last_name')->value;
 
-		    	$rows[] = array($index, $voter_name, $value['score'], $voter_name, date('d-m-Y', $value['created']));
-		    	$index++;
-		    }
+			    	$rows[] = array($index, $voter_name, $value['score'], date('d-m-Y', $entry->created));
+			    	$index++;
+			    }
+			}
 
 		    $content['table'] = array(
 		    	'#type' => 'table',
@@ -455,7 +461,8 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 			return array('#type' => 'markup', '#markup' => 'Page not found!');
 		}
     }
-
+ 	
+ 	// sort array
 	public function sort_array_of_array(&$array, $subfield) {
 	    $sortarray = array();
 	    foreach ($array as $key => $row) {

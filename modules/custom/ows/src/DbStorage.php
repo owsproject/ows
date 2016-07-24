@@ -20,9 +20,9 @@ class DbStorage {
 	}
 
 	/* Vote list of an user */
-	public static function contestantVoteList($contestant) {
+	public static function contestantVoteList($uid) {
 	    $select = db_select('vote', 'v');
-	    $select->condition('v.contestant', '=', $contestant);
+	    $select->condition('v.contestant', $uid, '=');
 	    $select->fields('v');
 	    return $select->execute()->fetchAll();
 	}
