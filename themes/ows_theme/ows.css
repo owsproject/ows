@@ -344,6 +344,12 @@ Dialog styles
 
 .mCSB_scrollTools .mCSB_draggerRail {
     width: 1px !important;
+    position: relative;
+    right: 1px;
+}
+
+.mCSB_draggerContainer {
+    height: 98% !important;
 }
 
 .mCS-rounded-dark.mCSB_scrollTools .mCSB_draggerRail {
@@ -1271,4 +1277,8 @@ body > #drupal-modal {
 
 .vegas-slide-inner {
     background-size: auto !important;
+}
+
+.vegas-timer-progress {
+    background: #de0748 !important;
 }

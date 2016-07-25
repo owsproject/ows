@@ -20,7 +20,7 @@ jQuery(document).ready(function() {
 		overlay: drupalSettings.path.baseUrl+"themes/ows_theme/css/overlays/01.png",
 		transitionDuration: 3000,
 		preload: true,
-		delay: 5000,
+		delay: 7000,
 	    slides: [
 	        { src: drupalSettings.path.baseUrl+"themes/ows_theme/css/sliders/background.jpg" },
 	        { src: drupalSettings.path.baseUrl+"themes/ows_theme/css/sliders/background2.jpg" },
