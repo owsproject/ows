@@ -25,8 +25,8 @@ class OWSController extends ControllerBase
 		// -------------------
 		// close site, only show message and a form for user to enter email, name
 		// remember to add block Main menu to header on live
-		$site_close = 0;
-		if ($site_close) {
+		$close_domains = array('ows.dd', 'officialworldssexiest.com');
+		if (in_array($_SERVER['SERVER_NAME'], $close_domains)) {
 			// -------------------
 			// dialog property
 			$dialog_add_me = json_encode(array(
@@ -47,7 +47,7 @@ class OWSController extends ControllerBase
 			$intro_text = $intro->get('body')->value;
 			// sweet alert box
 			$html .= '
-			<div id="welcome-box" class="swal-add-me" class="hidden" title="Welcome to The Official World’s Sexiest Contest">
+			<div id="welcome-box" class="swal-add-me" class="hidden" title="The Official World’s Sexiest Contest">
 				<div class="welcome-wrapper">
 	  				<div class="welcome-text add-me-text">
 						'.$intro_text.'
@@ -70,9 +70,7 @@ class OWSController extends ControllerBase
 		$html = ''; //<div class="load-container"><div class="load-wrapper"><div class="loader">Loading...</div></div></div>
 
 		// user not logged
-		if (!empty($account->id())) {
-
-		}
+		// if (!empty($account->id())) {}
 
 		// -------------------
 		// dialog property
@@ -116,15 +114,12 @@ class OWSController extends ControllerBase
 		</div>";
 
 		// sweet alert box
+		$intro = node_load(7);
+		$intro_text = $intro->get('body')->value;
 		$html .= '
-		<div id="welcome-box" class="hidden" title="Welcome to OWS" class="ows-welcome">
+		<div id="welcome-box" class="hidden" title="The Official World\'s Sexiest Contest" class="ows-welcome">
 			<div class="welcome-wrapper">
-  				<div class="welcome-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
+  				<div class="welcome-text">'.$intro_text.'</div>';
 
 		$html .= "
   				<div class='buttons'>

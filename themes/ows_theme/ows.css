@@ -4,7 +4,7 @@
 }
 
 body {
-    background: #000 url("images/background1.png") no-repeat scroll center center;
+    background: #000 url("images/background.jpg") no-repeat scroll center center;
     font-family: 'Lato', sans-serif !important;
     /*min-height: 700px;*/
 }
@@ -1267,4 +1267,8 @@ body > #drupal-modal {
 
 #block-ows-theme-content tr:first-child th:last-child { 
   border-radius: 0 5px 0 0; 
+}
+
+.vegas-slide-inner {
+    background-size: auto !important;
 }

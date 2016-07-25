@@ -16,21 +16,21 @@ jQuery(document).ready(function() {
 	// set height 100%;
 	jQuery('body').css('height', jQuery(window).height());
 
-	/*
 	jQuery("body").delay(5000).vegas({
 		overlay: drupalSettings.path.baseUrl+"themes/ows_theme/css/overlays/01.png",
 		transitionDuration: 3000,
 		preload: true,
 		delay: 5000,
 	    slides: [
-	        { src: drupalSettings.path.baseUrl+"themes/ows_theme/css/sliders/slider1.jpg" },
-	        { src: drupalSettings.path.baseUrl+"themes/ows_theme/css/sliders/slider2.jpg" },
+	        { src: drupalSettings.path.baseUrl+"themes/ows_theme/css/sliders/background.jpg" },
+	        { src: drupalSettings.path.baseUrl+"themes/ows_theme/css/sliders/background2.jpg" },
+	        { src: drupalSettings.path.baseUrl+"themes/ows_theme/css/sliders/background.jpg" }
+	        /*{ src: drupalSettings.path.baseUrl+"themes/ows_theme/css/sliders/slider2.jpg" },
 	        { src: drupalSettings.path.baseUrl+"themes/ows_theme/css/sliders/slider3.jpg" },
 	        { src: drupalSettings.path.baseUrl+"themes/ows_theme/css/sliders/slider4.jpg" },
-	        { src: drupalSettings.path.baseUrl+"themes/ows_theme/css/sliders/slider5.jpg" }
+	        { src: drupalSettings.path.baseUrl+"themes/ows_theme/css/sliders/slider5.jpg" }*/
 	    ]
 	});
-	*/
 
 	// Prevent event on Home menu
 	jQuery('li.home a').click(function(e) {
@@ -285,10 +285,9 @@ function displayWelcome(box = false) {
 		}
 
 		if (sweetalert_content) {
-			if (sweetalert_class != "swal-add-me") {
-				sweetalert_title + ' <span class="swal-close"></span>';
-			}
-
+			//if (sweetalert_class != "swal-add-me")
+				sweetalert_title += ' <span class="swal-close"></span>';
+			
 			swal({
 				title: sweetalert_title,
 				text: sweetalert_content.html(),
