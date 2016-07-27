@@ -356,7 +356,7 @@ function displayWelcome(box = false) {
 			});
 
 			jQuery('.sweet-alert').center();
-			jQuery('.sweet-alert').draggable({ containment: "parent" });
+			jQuery('.sweet-alert').draggable({ containment: "html" });
 
 			// ------------------------------
 		    // Browse
@@ -366,6 +366,7 @@ function displayWelcome(box = false) {
 		  		jQuery('.dialog-buttons-wrapper #btn-men').trigger('click');
 		  	});
 
+		    // Browse women
 		  	jQuery('.sweet-alert #swal-btn-women').on('click', function() {
 		    	swal.close();
 		    	loader();

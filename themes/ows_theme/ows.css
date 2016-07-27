@@ -364,7 +364,7 @@ Dialog styles
     background: #de0748;
 }
 
-.welcome-text.add-me-text .mCS-rounded-dark.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar {
+.welcome-text .mCS-rounded-dark.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar {
     background: #de0748;
 }
 
@@ -1171,7 +1171,7 @@ body > #drupal-modal {
     width: 200px;
 }
 
-.welcome-text.add-me-text {
+.welcome-text {
     height: 230px;
     overflow: hidden;
     text-align: left !important;
