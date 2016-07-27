@@ -36,9 +36,17 @@ function ows_mail($key, &$message, $params) {
 	}
 
 	switch ($key) {
+		// send email to owner when someone submit Add Me form
 		case 'add_me':
 			$message['from'] = \Drupal::config('system.site')->get('mail');
-			$message['subject'] = t('OWS - @title', array('@title' => $params['title']), $options);
+			$message['subject'] = t('@title', array('@title' => $params['title']), $options);
+			$message['body'][] = $params['message'];
+		break;
+
+		// send thanks email to sender
+		case 'add_me_sender':
+			$message['from'] = \Drupal::config('system.site')->get('mail');
+			$message['subject'] = t('@title', array('@title' => $params['title']), $options);
 			$message['body'][] = $params['message'];
 		break;
 	}

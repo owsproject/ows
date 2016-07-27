@@ -25,7 +25,7 @@ class OWSController extends ControllerBase
 		// -------------------
 		// close site, only show message and a form for user to enter email, name
 		// remember to add block Main menu to header on live
-		$close_domains = array('ows.dd', 'officialworldssexiest.com');
+		$close_domains = array('owds.dd', 'officialworldssexiest.com');
 		if (in_array($_SERVER['SERVER_NAME'], $close_domains)) {
 			// -------------------
 			// dialog property
@@ -648,7 +648,7 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 						<div class="photo">
 							<img class="country-flag flag-'.strtolower($country).'" src="themes/ows_theme/images/flags/'.$country.'.png" />
 							<img src="'.$image_url.'" />
-							<div class="vote-score">Voting Score: <span>'.$voting_score.'<span> - <a href="#vote-result" class="vote-result">Vote result</a></div>
+							<div class="vote-score">Voting Score: <span>'.$voting_score.'<span></div>
 						</div>
 						<div class="detail">
 							<div class="item">

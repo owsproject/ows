@@ -176,9 +176,23 @@ class AddMeForm extends FormBase {
         $send = true;
         $result = $mailManager->mail($module, $key, $to, $langcode, $params, NULL, $send);
 
-        if ($result['result'] !== true) {
+        // ---------------------------
+        // mail to sender
+        $module = 'ows';
+        $key = 'add_me_sender';
+        $to = $form_state->getValue('mail');
+        $params['title'] = 'Thank you for your submission';
+        $params['message'] = 'Thank you for your submission to the Official World\'s Sexiest VIP List. We added your name to our VIP list. We will keep you updated about the progress of the contest and all the latest news. If you have any friends then please tell them about our great contest that will launch beginning of next year. If you consider yourself sexy, then you need to definitely enter the contest. After all, who will not want to be voted the sexiest in the world?
 
-        }
+            Regards
+            The Official World\'s Sexiest Team';
+                
+        $mailManager = \Drupal::service('plugin.manager.mail');
+        $langcode = \Drupal::currentUser()->getPreferredLangcode();
+        $send = true;
+        $result = $mailManager->mail($module, $key, $to, $langcode, $params, NULL, $send);
+
+        if ($result['result'] !== true) {}
 
         // $message .= '<script>owsDialogCallback(1);</script>';
         $response->addCommand(new OpenModalDialogCommand('Thank you', $message), ['width' => '700']);
