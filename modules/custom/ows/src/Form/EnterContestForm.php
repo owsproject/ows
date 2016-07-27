@@ -104,6 +104,17 @@ class EnterContestForm extends FormBase {
             )
         );
 
+        $user_entity = entity_load('user', 0);
+        $countries = $user_entity->get('field_country')->getItemDefinition()->getFieldDefinition()->getSettings()['allowed_values'];
+        $form['country'] = array(
+            '#type' => 'select',
+            '#title' => t('Country'),
+            '#options' => $countries,
+            '#attributes' => array(
+                'class' => array('form-control')
+            )
+        );
+
         if ($type == "contestant") {
             $form['photo'] = array(
                 '#type' => 'file',
@@ -322,6 +333,7 @@ class EnterContestForm extends FormBase {
         $user->set("field_birthday", $birthday);
         $user->set("field_first_name", $form_state->get('first_name'));
         $user->set("field_last_name", $form_state->get('last_name'));
+        $user->set("field_country", $form_state->get('country'));
 
         // these fields are for contestant only
         if ($type != "voter") {

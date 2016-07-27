@@ -107,6 +107,14 @@ class EnterVoteForm extends FormBase {
             )
         );
 
+        $user_entity = entity_load('user', 0);
+        $countries = $a->get('field_country')->getItemDefinition()->getFieldDefinition()->getSettings()['allowed_values'];
+        $form['country'] = array(
+            '#type' => 'select',
+            '#title' => t('Country'),
+            '#options' => $countries
+        );
+
         $form['gender'] = array(
             '#type' => 'radios',
             '#title' => $this->t('Gender'),
