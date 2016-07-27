@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css?family=Aref+Ruqaa");
 @import url("https://fonts.googleapis.com/css?family=Lato:400,700");
 *, a, div, html {
     outline: none !important;
@@ -158,6 +159,7 @@ Dialog styles
     font-size: 18px;
     cursor: move;
     height: 54px;  
+    font-family: "Aref Ruqaa";
 }
 
 .sweet-alert a:visited {
@@ -254,8 +256,9 @@ Dialog styles
 }
 
 .ui-dialog .ui-dialog-titlebar span {
-    color: #fff !important;
-    font-size: 18px;
+    color: #de0748 !important;
+    font-size: 20px;
+    font-family: "Aref Ruqaa"
 }
 
 .ui-dialog-titlebar > a,
@@ -364,7 +367,7 @@ Dialog styles
     background: #de0748;
 }
 
-.welcome-text .mCS-rounded-dark.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar {
+.mCS-rounded-dark.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar {
     background: #de0748;
 }
 
@@ -522,19 +525,27 @@ Dialog styles
     width: 120px;
 }
 
-.enter-contest-form input {
+.enter-contest-form input,
+.enter-contest-form select {
     float: left;
     width: 200px;
+    background: rgba(0, 0, 0, 0) none repeat scroll 0 0 !important;
+    border: 1px solid #444;
 }
 
 .enter-contest-form .form-item-gender input {
     width: 20px;
     margin-left: 114px;
+    background: rgba(0, 0, 0, 0) none repeat scroll 0 0 !important;
 }
 
 .enter-contest-form .fieldgroup legend {
     color: #fff;
     float: left;
+    font-weight: bold;
+    font-size: 16px;
+    border-bottom: 1px solid #666 !important;
+    padding-bottom: 10px;
 }
 
 .enter-contest-form .fieldgroup .fieldset-wrapper {
@@ -732,6 +743,7 @@ nav.pager {
 .views-browse .views-field.views-field-user-picture {
     float: left;
     width: 100px;
+    margin-right: 10px;
 }
 
 .contestant-info {
@@ -1093,8 +1105,8 @@ body > #drupal-modal {
 
 .browse-contestant .views-field-field-country {
     position: absolute;
-    right: -9px;
-    top: -1px;
+    right: 8px;
+    top: 13px;
     width: 32px;
     height: 22px;
 }
@@ -1281,4 +1293,20 @@ body > #drupal-modal {
 
 .vegas-timer-progress {
     background: #de0748 !important;
+}
+
+.dialog-browse .browse-contestant {
+    position: relative;
+}
+
+.dialog-browse .browse-contestant .views-field-field-last-name {
+    display: none;
+}
+
+.dialog-browse .browse-contestant .views-field {
+    
+}
+
+.ui-dialog label {
+    color: #999;
 }
