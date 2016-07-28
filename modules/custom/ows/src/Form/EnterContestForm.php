@@ -334,6 +334,7 @@ class EnterContestForm extends FormBase {
         $user->set("field_first_name", $form_state->get('first_name'));
         $user->set("field_last_name", $form_state->get('last_name'));
         $user->set("field_country", $form_state->get('country'));
+        $user->set("field_age", date('Y', time()) - date('Y', strtotime($birthday)));
 
         // these fields are for contestant only
         if ($type != "voter") {
