@@ -25,14 +25,14 @@ class OWSController extends ControllerBase
 		// -------------------
 		// close site, only show message and a form for user to enter email, name
 		// remember to add block Main menu to header on live
-		$close_domains = array('owds.dd', 'officialworldssexiest.com');
+		$close_domains = array('ows1.dd', 'officialworldssexiest.com');
 		if (in_array($_SERVER['SERVER_NAME'], $close_domains)) {
 			// -------------------
 			// dialog property
 			$dialog_add_me = json_encode(array(
 				'title' => 'Add my name',
 				'width' => '360',
-				'height' => '240',
+				'height' => '270',
 				'dialogClass' => 'dialog-add-me dialog-default',
 				'defaultDialog' => true
 			));
