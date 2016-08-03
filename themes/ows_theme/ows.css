@@ -667,6 +667,14 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
     background: url(images/ows-events.png) no-repeat scroll center center / 100% auto;
 }
 
+#block-mainmenu .buy-ticket a {
+    background: url(images/ows-ticket.png) no-repeat scroll center center / 100% auto;
+}
+
+#block-mainmenu .donate a {
+    background: url(images/ows-donate.png) no-repeat scroll center center / 100% auto;
+}
+
 .user-logged-in #block-mainmenu .login {
     display: none !important;
 }
@@ -1350,5 +1358,5 @@ a.f-activated span {
 }
 
 #user-menu, #nav-toggle {
-    display: none;
+    /*display: none;*/
 }

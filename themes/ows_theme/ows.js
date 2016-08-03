@@ -225,6 +225,7 @@ jQuery(document).ready(function() {
 	  	});
 	} catch(e) {}
 
+	// -------------
 	// menu click
 	jQuery('#block-mainmenu li a').click(function(e) {
 		staticPage = true;
@@ -248,8 +249,14 @@ jQuery(document).ready(function() {
 		if (jQuery(this).parent().attr('class') == "social") {
 			e.preventDefault();
 			staticPage = false;
+		}
 
-
+		if (jQuery(this).parent().attr('class') == "buy-ticket") {
+			e.preventDefault();
+			staticPage = false;
+			swal.close();
+		    loader();
+		  	jQuery('.dialog-buttons-wrapper #btn-buy-ticket').trigger('click');
 		}
 
 		// skip logout
@@ -257,7 +264,6 @@ jQuery(document).ready(function() {
 			e.preventDefault();
 			openStaticPage(jQuery(this));
 		}
-
 	});		
 });
 
