@@ -87,3 +87,17 @@ ows.video_thumbnail:
     _controller: 'Drupal\ows\Controller\OWSController::playThumbnail'
   requirements:
       _access: 'TRUE'
+
+ows.buy_ticket:
+  path: '/buy-ticket'
+  defaults:
+    _form: 'Drupal\ows\Form\BuyTicketForm'
+  requirements:
+      _access: 'TRUE'
+
+ows.donate:
+  path: '/donate'
+  defaults:
+    _form: 'Drupal\ows\Form\DonateForm'
+  requirements:
+      _access: 'TRUE'

@@ -102,7 +102,24 @@ class OWSController extends ControllerBase
 			'dialogClass' => 'dialog-invite',
 			'defaultDialog' => true
 		));
-		
+
+		// buy ticket
+		$dialog_buy_ticket = json_encode(array(
+			'title' => 'Buy Ticket',
+			'width' => '680',
+			'dialogClass' => 'dialog-buy-ticket dialog-default',
+			'defaultDialog' => true
+		));
+
+		// donate
+		$dialog_donate = json_encode(array(
+			'title' => 'Donate',
+			'width' => '680',
+			'dialogClass' => 'dialog-donate dialog-default',
+			'defaultDialog' => true
+		));
+
+		// --------------------
 		// buttons open dialog
 		$html .= "<div class='dialog-buttons-wrapper hidden'>
 			<a href='/enter-contest' id='btn-enter-contest' class='button button-red use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_enter_contest."'>Enter the Contest</a>
@@ -112,6 +129,10 @@ class OWSController extends ControllerBase
 			<a href='/browse' id='btn-browse' class='button button-red use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_browse."'>Browse the Website</a>
 
 			<a href='/invite-friend' id='btn-invite-friend' class='button button-red use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_invite."'>Invite Friend</a>
+
+			<a href='/buy-ticket' id='btn-buy-ticket' class='button button-red use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_buy_ticket."'>Buy Ticket</a>
+
+			<a href='/buy-ticket' id='btn-donate' class='button button-red use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_donate."'>Donate</a>
 		</div>";
 
 		// sweet alert box
