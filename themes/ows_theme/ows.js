@@ -146,7 +146,7 @@ jQuery(document).ready(function() {
 		dialog_class = jQuery(event.target).parent().attr('class').match(/dialog-[\w-]*\b/);
 
 		try {
-			jQuery('.'+dialog_class.toString() + ' .ui-dialog').draggable();
+			jQuery('.'+dialog_class.toString() + ' .ui-dialog').draggable({ containment: "html" });
 			openOWSDialog(dialog_class.toString());
 		} catch (e) {}
 

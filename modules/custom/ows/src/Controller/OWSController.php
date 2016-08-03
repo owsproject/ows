@@ -32,7 +32,7 @@ class OWSController extends ControllerBase
 			$dialog_add_me = json_encode(array(
 				'title' => 'Add my name',
 				'width' => '360',
-				'height' => '270',
+				'height' => '320',
 				'dialogClass' => 'dialog-add-me dialog-default',
 				'defaultDialog' => true
 			));

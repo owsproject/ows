@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css?family=Aref+Ruqaa");
+@import url("https://fonts.googleapis.com/css?family=Montserrat:400,700");
 @import url("https://fonts.googleapis.com/css?family=Lato:400,700");
 *, a, div, html {
     outline: none !important;
@@ -105,7 +105,7 @@ box-shadow: 0px 0px 23px -2px rgba(0,0,0,0.75);
 /* --- */
 
 .welcome-wrapper .buttons a {
-    margin-top: 10px;
+    margin-top: 20px;
 }
 
 .welcome-wrapper .buttons a:hover {
@@ -159,7 +159,7 @@ Dialog styles
     font-size: 18px;
     cursor: move;
     height: 54px;  
-    font-family: "Aref Ruqaa";
+    font-family: "Montserrat";
 }
 
 .sweet-alert a:visited {
@@ -258,7 +258,7 @@ Dialog styles
 .ui-dialog .ui-dialog-titlebar span {
     color: #de0748 !important;
     font-size: 20px;
-    font-family: "Aref Ruqaa"
+    font-family: "Montserrat"
 }
 
 .ui-dialog-titlebar > a,
@@ -1347,4 +1347,8 @@ a.fullscreen span {
 
 a.f-activated span {
     background: url(images/gtk-leave-fullscreen.png) no-repeat;
+}
+
+#user-menu, #nav-toggle {
+    display: none;
 }
