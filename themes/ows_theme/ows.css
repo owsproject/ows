@@ -526,7 +526,10 @@ Dialog styles
 }
 
 .enter-contest-form input,
-.enter-contest-form select {
+.enter-contest-form select,
+.ui-dialog input.form-text,
+.ui-dialog input.form-email,
+.ui-dialog input.form-pass {
     float: left;
     width: 200px;
     background: rgba(0, 0, 0, 0) none repeat scroll 0 0 !important;
@@ -1063,8 +1066,15 @@ body > #drupal-modal {
     /*margin: 10px 0;*/
     padding: 0 6px;
     text-align: center;
-    width: 30%;
+    width: 33%;
     float: left;
+    margin-bottom: 10px;
+}
+
+.ui-dialog .views-exposed-form .form-item-field-height-value,
+.ui-dialog .views-exposed-form .form-item-field-weight-value,
+.ui-dialog .views-exposed-form .form-item-field-age-value {
+    margin-bottom: 0px;
 }
 
 .ui-dialog .views-exposed-form .form-item label {
@@ -1199,8 +1209,12 @@ body > #drupal-modal {
     text-align: left !important;
 }
 
-.dialog-add-me .ui-dialog-titlebar-close, .dialog-add-me #dialog-maximize, .dialog-add-me #dialog-minimize {
+.dialog-add-me #dialog-maximize, .dialog-add-me #dialog-minimize {
     display: none !important;
+}
+
+.dialog-add-me .ui-dialog-titlebar-close {
+
 }
 
 .validate.error {
@@ -1309,4 +1323,28 @@ body > #drupal-modal {
 
 .ui-dialog label {
     color: #999;
+}
+
+a.fullscreen {
+    /*background: url(images/button-red.png) no-repeat;*/
+    border-radius: 50%;
+    display: block;
+    height: 38px;
+    padding-left: 3px;
+    padding-top: 3px;
+    position: absolute;
+    right: 10px;
+    text-align: center;
+    width: 38px;
+}
+
+a.fullscreen span {
+    background: url(images/gtk-fullscreen.png) no-repeat;
+    display: block;
+    width: 32px;
+    height: 32px;
+}
+
+a.f-activated span {
+    background: url(images/gtk-leave-fullscreen.png) no-repeat;
 }

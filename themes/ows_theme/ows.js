@@ -3,6 +3,7 @@ var dialog_class = '';
 var sweetalert_title = false;
 var sweetalert_content = false;
 var sweetalert_class = false;
+var fullscreen_interval = false;
 
 jQuery(document).ready(function() {
 	if (location.href.indexOf('/user/login') > -1) {
@@ -88,7 +89,43 @@ jQuery(document).ready(function() {
 			}
 		});
 	});
+
+	// Fullscreen button
+	jQuery("body").prepend('<a href="#fullscreen" class="fullscreen"><span></span></a>');
+	jQuery('.fullscreen').click(function() {
+		if (!jQuery(this).hasClass('f-activated')) {
+			jQuery(this).addClass('f-activated');
+		} else {
+			jQuery(this).removeClass('f-activated');
+		}
+
+		toggleFullScreen(document.body);
+		fullscreen_interval = setInterval(function() {checkFullScreen();}, 1000);
+	});
 });
+
+function checkFullScreen() {
+	if ((!document.mozFullScreen && !document.webkitIsFullScreen)) {
+		jQuery('.fullscreen').removeClass('f-activated');
+		clearInterval(fullscreen_interval);
+	} else {
+		jQuery('.fullscreen').addClass('f-activated');
+	}
+}
+
+document.onkeydown = function(evt) {
+    evt = evt || window.event;
+    var isEscape = false;
+    if ("key" in evt) {
+        isEscape = evt.key == "Escape";
+    } else {
+        isEscape = evt.keyCode == 27;
+    }
+
+    if (isEscape) {
+    	jQuery('.fullscreen').removeClass('f-activated');
+    }
+};
 
 jQuery(document).ready(function() {
 	user_option = jQuery.cookie('user.option');
@@ -825,6 +862,9 @@ function closeOWSDialog(dialog_class) {
 	if (dialogs > 0) dialogs--;
 	else dialogs = 0;
 	//if (dialogs == 0) displayWelcome();
+
+	// show welcome message if user close Add Me form
+	if (dialog_class = "dialog-add-me") displayWelcome();
 }
 
 function anyDialogActive() {
@@ -940,6 +980,31 @@ jQuery(document).ajaxComplete(function(event, xhr, settings) {
 	} catch (e) {}
 });
 
+function toggleFullScreen(elem) {
+    // ## The below if statement seems to work better ## if ((document.fullScreenElement && document.fullScreenElement !== null) || (document.msfullscreenElement && document.msfullscreenElement !== null) || (!document.mozFullScreen && !document.webkitIsFullScreen)) {
+    if ((document.fullScreenElement !== undefined && document.fullScreenElement === null) || (document.msFullscreenElement !== undefined && document.msFullscreenElement === null) || (document.mozFullScreen !== undefined && !document.mozFullScreen) || (document.webkitIsFullScreen !== undefined && !document.webkitIsFullScreen)) {
+        if (elem.requestFullScreen) {
+            elem.requestFullScreen();
+        } else if (elem.mozRequestFullScreen) {
+            elem.mozRequestFullScreen();
+        } else if (elem.webkitRequestFullScreen) {
+            elem.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+        } else if (elem.msRequestFullscreen) {
+            elem.msRequestFullscreen();
+        }
+    } else {
+        if (document.cancelFullScreen) {
+            document.cancelFullScreen();
+        } else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+        } else if (document.webkitCancelFullScreen) {
+            document.webkitCancelFullScreen();
+        } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+        }
+    }
+}
+
 /* jQuery lib */
 jQuery.fn.isBound = function(type, fn) {
     var data = this.data('events')[type];
@@ -971,3 +1036,4 @@ jQuery.urlParam = function(name) {
        return results[1] || 0;
     }
 }
+
