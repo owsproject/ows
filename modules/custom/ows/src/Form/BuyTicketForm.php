@@ -196,6 +196,14 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
         require_once($path.'/scr/payflow_curl.php');
         $response = new AjaxResponse();
 
+        $payflow = new payflow($_POST['VENDOR'], $_POST['USER'], $_POST['PARTNER'], $_POST['PWD']);
+        $result = $payflow->credit_transaction($_POST['ORIGID']);
+        if (!$payflow->get_errors()) {
+            var_dump($result); // save in local app
+        } else {  
+            echo $payflow->get_errors();
+        }
+
         $validate = false;
         $debug = false;
         $message = array();
