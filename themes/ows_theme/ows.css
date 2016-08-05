@@ -514,19 +514,19 @@ Dialog styles
 
 /* Enter contest form */
 
-.enter-contest-form .form-item {
+.ui-dialog .form-item {
     float: left;
     width: 100%;
     margin: 4px 0;
 }
 
-.enter-contest-form label {
+.ui-dialog label {
     float: left;
     width: 120px;
 }
 
-.enter-contest-form input,
-.enter-contest-form select,
+.ui-dialog input,
+.ui-dialog select,
 .ui-dialog input.form-text,
 .ui-dialog input.form-email,
 .ui-dialog input.form-pass {
@@ -536,13 +536,13 @@ Dialog styles
     border: 1px solid #444;
 }
 
-.enter-contest-form .form-item-gender input {
+.ui-dialog .form-item-gender input {
     width: 20px;
     margin-left: 114px;
     background: rgba(0, 0, 0, 0) none repeat scroll 0 0 !important;
 }
 
-.enter-contest-form .fieldgroup legend {
+.ui-dialog .fieldgroup legend {
     color: #fff;
     float: left;
     font-weight: bold;
@@ -551,19 +551,19 @@ Dialog styles
     padding-bottom: 10px;
 }
 
-.enter-contest-form .fieldgroup .fieldset-wrapper {
+.ui-dialog .fieldgroup .fieldset-wrapper {
     float: left;
 }
 
-.enter-contest-form .form-number {
+.ui-dialog .form-number {
     width: 108px !important;
 }
 
-.enter-contest-form .form-select {
+.ui-dialog .form-select {
     width: 108px !important;
 }
 
-.enter-contest-form .description {
+.ui-dialog .description {
     color: #fff !important;
     display: block;
     float: left;
@@ -571,7 +571,7 @@ Dialog styles
     margin-top: 4px;
 }
 
-.enter-contest-form .description > div {
+.ui-dialog .description > div {
     color: #ff0000;
 }
 
