@@ -30,7 +30,7 @@ class OWSController extends ControllerBase
 			// -------------------
 			// dialog property
 			$dialog_add_me = json_encode(array(
-				'title' => 'Add my name',
+				'title' => 'Get on the list',
 				'width' => '360',
 				'height' => '320',
 				'dialogClass' => 'dialog-add-me dialog-default',
@@ -39,7 +39,7 @@ class OWSController extends ControllerBase
 			
 			// buttons open dialog
 			$html .= "<div class='dialog-buttons-wrapper hidden'>
-				<a href='/add-me' id='btn-add-me' class='button button-red use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_add_me."'>Add my name</a>
+				<a href='/add-me' id='btn-add-me' class='button button-red use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_add_me."'>Get on the list</a>
 
 			</div>";
 
@@ -55,7 +55,7 @@ class OWSController extends ControllerBase
 
 			$html .= "
 	  				<div class='buttons'>
-	  					<a href='#add-me' id='swal-btn-add-me' class='button button-red'>Add my name</a>
+	  					<a href='#add-me' id='swal-btn-add-me' class='button button-red'>Get on the list</a>
 	  				</div>
 	  			</div>
 			</div>";
