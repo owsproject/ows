@@ -172,7 +172,26 @@ tempor incididunt ut labore et dolore magna aliqua.</div>
 
     // validate form
     public function validateForm(array &$form, FormStateInterface $form_state) {
-     
+        $path = drupal_get_path('module', 'ows');
+        require_once($path.'/src/common.inc');
+
+        $response = new AjaxResponse();
+
+        // Check credit card number
+        $card_number = $form_state->getValue('card_number');
+        $exp_month = $form_state->getValue('exp_month');
+        $exp_year = $form_state->getValue('exp_year');
+        $ccv = $form_state->getValue('card_ccv');
+
+        if (!$card_number || !ValidCreditcard($card_number)) {
+            $response->addCommand(new HtmlCommand('.validate', 'Invalid credit card number.'));
+        }
+
+        if(strtotime(substr(date('Y'), 0, 2)."{$exp_year}-{$exp_month}" ) < strtotime( date("Y-m"))) {
+            $response->addCommand(new HtmlCommand('.validate', 'Your card is expired.'));
+        }
+
+        return $response;
     }
 
     /*
@@ -184,10 +203,11 @@ tempor incididunt ut labore et dolore magna aliqua.</div>
 
     // Change method name to avoid duplicate callback
     public function submitFormAjax(array &$form, FormStateInterface $form_state) {
-        $response = new AjaxResponse();
-        // -------------------------
         $path = drupal_get_path('module', 'ows');
         require_once($path.'/src/PayPal/autoload.php');
+
+        // -------------------------
+        $response = new AjaxResponse();
 
         /* Payal credit card payment */
         $apiContext = new \PayPal\Rest\ApiContext(
