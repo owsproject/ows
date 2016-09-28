@@ -102,6 +102,9 @@ jQuery(document).ready(function() {
 		toggleFullScreen(document.body);
 		fullscreen_interval = setInterval(function() {checkFullScreen();}, 1000);
 	});
+
+	// enable tooltip
+	jQuery('[data-toggle="tooltip"]').tooltip(); 
 });
 
 function checkFullScreen() {

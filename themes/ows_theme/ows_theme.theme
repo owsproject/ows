@@ -6,8 +6,7 @@
  */
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
-function ows_theme_preprocess_page(&$variables)
-{
+function ows_theme_preprocess_page(&$variables) {
     //$user = \Drupal::currentUser();
     // if ($user->id()) {}
 
@@ -21,15 +20,13 @@ function ows_theme_preprocess_page(&$variables)
 
 // function ows_theme_css_alter(&$css, \Drupal\Core\Asset\AttachedAssetsInterface $assets) {}
 
-function ows_theme_theme_suggestions_alter(array &$suggestions, array $variables, $hook)
-{
+function ows_theme_theme_suggestions_alter(array &$suggestions, array $variables, $hook) {
     // $path_args = \Drupal::routeMatch()->getRouteName();
     // if ($path_args == "ows.ajax_content") {}
     // $suggestions[] = $hook . '__' . 'logged_in';
 }
 
-function ows_theme_page_attachments_alter(array &$attachments)
-{
+function ows_theme_page_attachments_alter(array &$attachments) {
     $user = \Drupal::currentUser();
 
     // attach uid to javascript
@@ -38,8 +35,7 @@ function ows_theme_page_attachments_alter(array &$attachments)
     }
 }
 
-function ows_theme_theme_suggestions_page_alter(&$suggestions, &$vars)
-{
+function ows_theme_theme_suggestions_page_alter(&$suggestions, &$vars) {
 
     //$request = \Drupal::routeMatch()->getRouteObject()->getDefault('view_id');
 }
@@ -55,6 +51,9 @@ function ows_theme_preprocess_menu(&$variables, $hook) {
         foreach ($items as $key => $item) {
             $klass = strtolower(str_replace(' ', '-', $item['title']));
             $variables['items'][$key]['attributes']->addClass($klass);
+            
+            $variables['items'][$key]['attributes']->setAttribute('data-toggle', 'tooltip');
+            $variables['items'][$key]['attributes']->setAttribute('title', $item['title']);
 
             // Set active to dom element if path of menu item matches current path
             if ($item['in_active_trail']) {        
