@@ -206,6 +206,10 @@ class EnterContestForm extends FormBase {
 
         // $form['type'] = array('#type' => 'hidden', '#value' => $type);
 
+        $form['recaptcha'] = array(
+            '#markup' => '<div id="g-recaptcha" class="g-recaptcha" data-sitekey="6LeJJCUTAAAAAFMG5QlQHzoguSOI1kmMAjIsMiAL"></div>'
+        );
+         
         $form['actions']['#type'] = 'actions';
             $form['actions']['submit'] = array(
             '#type' => 'submit',
@@ -235,6 +239,9 @@ class EnterContestForm extends FormBase {
     * validate email field
     */
     public function validateMailCallback(array &$form, FormStateInterface $form_state) {
+        $path = drupal_get_path('module', 'ows');
+        require_once($path.'/src/recaptchalib.php');
+
         // Instantiate an AjaxResponse Object to return.
         $response = new AjaxResponse();
         
@@ -250,7 +257,21 @@ class EnterContestForm extends FormBase {
             }
         }
 
-        $response->addCommand(new CloseDialogCommand('.dialog-enter-contest'));
+        // validate captcha
+        $resp = recaptcha_check_answer (GOOGLE_RECAPTCHA_SECRET_KEY,
+            $_SERVER["REMOTE_ADDR"],
+            $_POST["recaptcha_challenge_field"],
+            $_POST["g-recaptcha-response"]);
+
+        if (!$resp->is_valid) {
+            $response->addCommand(new HtmlCommand('.form-item-mail .description', '"The reCAPTCHA wasn\'t entered correctly. Go back and try it again. ('.$resp->error.')'));
+            // What happens when the CAPTCHA was entered incorrectly
+            // http://www.kaplankomputing.com/blog/tutorials/php/setting-recaptcha-2-0-ajax-demotutorial/
+        } else {
+            $response->addCommand(new HtmlCommand('.form-item-mail .description', ''));
+        }
+
+        // $response->addCommand(new CloseDialogCommand('.dialog-enter-contest'));
         return $response;
     }
 
