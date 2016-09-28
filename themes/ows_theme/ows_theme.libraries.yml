@@ -36,6 +36,10 @@ global-styling:
     js/jquery-eu-cookie-law-popup.js: {}
     js/jquery.range-min.js: {}
     ows.js: {}
+  recaptcha:
+    js:
+      base:
+        'https://www.google.com/recaptcha/api.js': { external: true }
   dependencies:
     - core/jquery
     - core/drupal.ajax

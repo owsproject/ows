@@ -1367,3 +1367,13 @@ a.f-activated span {
     padding: 10px;
     border-radius: 10px 10px 0 0;
 }
+
+#g-recaptcha {
+    
+}
+
+.enter-contest-form #g-recaptcha {
+    padding-left: 120px;
+    float: left;
+    margin-top: 10px;
+}
