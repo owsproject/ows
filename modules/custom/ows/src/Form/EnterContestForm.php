@@ -239,9 +239,6 @@ class EnterContestForm extends FormBase {
     * validate email field
     */
     public function validateMailCallback(array &$form, FormStateInterface $form_state) {
-        $path = drupal_get_path('module', 'ows');
-        require_once($path.'/src/recaptchalib.php');
-
         // Instantiate an AjaxResponse Object to return.
         $response = new AjaxResponse();
         
@@ -255,20 +252,6 @@ class EnterContestForm extends FormBase {
             } else {
                 $response->addCommand(new HtmlCommand('.form-item-mail .description', ''));
             }
-        }
-
-        // validate captcha
-        $resp = recaptcha_check_answer (GOOGLE_RECAPTCHA_SECRET_KEY,
-            $_SERVER["REMOTE_ADDR"],
-            $_POST["recaptcha_challenge_field"],
-            $_POST["g-recaptcha-response"]);
-
-        if (!$resp->is_valid) {
-            $response->addCommand(new HtmlCommand('.form-item-mail .description', '"The reCAPTCHA wasn\'t entered correctly. Go back and try it again. ('.$resp->error.')'));
-            // What happens when the CAPTCHA was entered incorrectly
-            // http://www.kaplankomputing.com/blog/tutorials/php/setting-recaptcha-2-0-ajax-demotutorial/
-        } else {
-            $response->addCommand(new HtmlCommand('.form-item-mail .description', ''));
         }
 
         // $response->addCommand(new CloseDialogCommand('.dialog-enter-contest'));
@@ -289,6 +272,16 @@ class EnterContestForm extends FormBase {
 
     // Change method name to avoid duplicate callback
     public function submitFormAjax(array &$form, FormStateInterface $form_state) {
+        $path = drupal_get_path('module', 'ows');
+        require_once($path.'/src/recaptchalib.php');
+
+        // validate captcha
+        $url = 'https://www.google.com/recaptcha/api/siteverify';
+        $captcha_response = $_POST['g-recaptcha-response'];
+        $params = array('secret'=> $secret, 'response'=> $captcha_response);
+        $json = json_decode(file_get_contents($url.'?secret='.GOOGLE_RECAPTCHA_SECRET_KEY.'&response='.$captcha_response));       
+
+        // --------------------------
         $response = new AjaxResponse();
 
         $validate = false;
@@ -327,6 +320,11 @@ class EnterContestForm extends FormBase {
         if (count($message)) {
             $message = implode('<br>', $message);
             $response->addCommand(new HtmlCommand('.validate', $message));
+            return $response;
+        }
+
+        if (!$json->success) {
+            $response->addCommand(new HtmlCommand('.validate', "Please verify you're human by click on \"I'm not a robot\""));
             return $response;
         }
 
