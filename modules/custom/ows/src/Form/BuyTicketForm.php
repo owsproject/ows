@@ -16,7 +16,6 @@ use Drupal\Core\Ajax\CloseDialogCommand;
 use Drupal\Core\Ajax\CssCommand;
 use Drupal\Core\Ajax\HtmlCommand;
 
-
 use Symfony\Component\HttpFoundation\JsonResponse;
 /**
  * Class BuyTicketForm.
@@ -97,9 +96,17 @@ tempor incididunt ut labore et dolore magna aliqua.</div>
         );
 
         // credit card form
-        $form['card_name'] = array(
+        $form['card_first_name'] = array(
             '#type' => 'textfield',
-            '#title' => $this->t('Name (as it appears on your card'),
+            '#title' => $this->t('Card first name (as it appears on your card'),
+            '#attributes' => array(
+                'class' => array('form-control')
+            )
+        );
+
+        $form['card_last_name'] = array(
+            '#type' => 'textfield',
+            '#title' => $this->t('Card last name (as it appears on your card'),
             '#attributes' => array(
                 'class' => array('form-control')
             )
@@ -209,25 +216,49 @@ tempor incididunt ut labore et dolore magna aliqua.</div>
         // -------------------------
         $response = new AjaxResponse();
 
+        $clientId = 'AbPf_36pBxcfrUKS_4k_aSGToBIC8B0iLV7CLKOvh2iVrUugMX90Mryz2dSZQwVjlud2SkIYB-CJMx6J';
+        $clientSecret = 'EFGrn_1lFJdQNHApln8vnmo4M5ZIBQgbnVb8wUX2V2Smq1wPOKzzow5gbsIQBCAtXGUC5HnIZ0uRst-g';
+
         /* Payal credit card payment */
         $apiContext = new \PayPal\Rest\ApiContext(
             new \PayPal\Auth\OAuthTokenCredential(
-                'AbPf_36pBxcfrUKS_4k_aSGToBIC8B0iLV7CLKOvh2iVrUugMX90Mryz2dSZQwVjlud2SkIYB-CJMx6J',     // ClientID
-                'EFGrn_1lFJdQNHApln8vnmo4M5ZIBQgbnVb8wUX2V2Smq1wPOKzzow5gbsIQBCAtXGUC5HnIZ0uRst-g'      // ClientSecret
+                $clientId,
+                $clientSecret
+            )
+        );
+
+        $apiContext->setConfig(
+            array(
+                'mode' => 'sandbox',
+                'log.LogEnabled' => true,
+                'log.FileName' => '../PayPal.log',
+                'log.LogLevel' => 'DEBUG', // PLEASE USE `INFO` LEVEL FOR LOGGING IN LIVE ENVIRONMENTS
+                'cache.enabled' => true,
+                // 'http.CURLOPT_CONNECTTIMEOUT' => 30
+                // 'http.headers.PayPal-Partner-Attribution-Id' => '123123123'
+                //'log.AdapterFactory' => '\PayPal\Log\DefaultLogFactory' // Factory class implementing \PayPal\Log\PayPalLogFactory
             )
         );
 
         // ### CreditCard
         // A resource representing a credit card that can be
         // used to fund a payment.
+        $card_number = $form_state->getValue('card_number');
+        $exp_month = $form_state->getValue('exp_month');
+        $exp_year = $form_state->getValue('exp_year');
+        $ccv = $form_state->getValue('card_ccv');
+
+        $card_first_name = $form_state->getValue('card_first_name');
+        $card_last_name = $form_state->getValue('card_last_name');
+
         $card = new \PayPal\Api\CreditCard();
         $card->setType("visa")
-            ->setNumber("4669424246660779")
-            ->setExpireMonth("11")
-            ->setExpireYear("2019")
-            ->setCvv2("012")
-            ->setFirstName("Joe")
-            ->setLastName("Shopper");
+            ->setNumber($card_number)
+            ->setExpireMonth($exp_month)
+            ->setExpireYear($exp_year)
+            ->setCvv2($ccv)
+            ->setFirstName($card_first_name)
+            ->setLastName($card_last_name);
         // ### FundingInstrument
         // A resource representing a Payer's funding instrument.
         // For direct credit card payments, set the CreditCard
@@ -244,31 +275,36 @@ tempor incididunt ut labore et dolore magna aliqua.</div>
         // ### Itemized information
         // (Optional) Lets you specify item wise
         // information
-        $item1 = new \PayPal\Api\Item();
-        $item1->setName('Ground Coffee 40 oz')
+        $item_price = 10; // $10
+        $quantity = $form_state->getValue('quantity');
+        $total = $item_price * $quantity;
+
+        $item = new \PayPal\Api\Item();
+        $item->setName('Ground Coffee 40 oz')
             ->setDescription('Ground Coffee 40 oz')
             ->setCurrency('USD')
-            ->setQuantity(1)
-            ->setTax(0.3)
-            ->setPrice(7.50);
+            ->setQuantity($quantity)
+            ->setTax(0)
+            ->setPrice($item_price);
         $itemList = new \PayPal\Api\ItemList();
-        $itemList->setItems(array($item1));
-        // ### Additional payment details
+        $itemList->setItems(array($item));
+        
+        /*// ### Additional payment details
         // Use this optional field to set additional
         // payment information such as tax, shipping
         // charges etc.
         $details = new \PayPal\Api\Details();
         $details->setShipping(1.2)
             ->setTax(1.3)
-            ->setSubtotal(17.5);
+            ->setSubtotal(17.5);*/
+
         // ### Amount
         // Lets you specify a payment amount.
         // You can also specify additional details
         // such as shipping, tax.
         $amount = new \PayPal\Api\Amount();
-        $amount->setCurrency("USD")
-            ->setTotal(20)
-            ->setDetails($details);
+        $amount->setCurrency("USD")->setTotal($total);
+            // ->setDetails($details);
         // ### Transaction
         // A transaction defines the contract of a
         // payment - what is the payment for and who
@@ -278,6 +314,7 @@ tempor incididunt ut labore et dolore magna aliqua.</div>
             ->setItemList($itemList)
             ->setDescription("Payment description")
             ->setInvoiceNumber(uniqid());
+
         // ### Payment
         // A Payment Resource; create one using
         // the above types and intent set to sale 'sale'
@@ -293,17 +330,21 @@ tempor incididunt ut labore et dolore magna aliqua.</div>
         // The return object contains the state.
         try {
             $payment->create($apiContext);
-        } catch (Exception $ex) {
-            // NOTE: PLEASE DO NOT USE RESULTPRINTER CLASS IN YOUR ORIGINAL CODE. FOR SAMPLE ONLY
-            \PayPal\Api\ResultPrinter::printError('Create Payment Using Credit Card. If 500 Exception, try creating a new Credit Card using <a href="https://ppmts.custhelp.com/app/answers/detail/a_id/750">Step 4, on this link</a>, and using it.', 'Payment', null, $request, $ex);
-            exit(1);
+            if (isset($payment->getId())) {
+                // payment ID exist, execute
+                $execution = new PaymentExecution();
+                $execution->setPayerId($payment->getId());
+                result = $payment->execute($execution, $apiContext);
+            }   
+        } catch (Exception $e) {
+            print_r($e);
+            // exit(1);
         }
+
         // NOTE: PLEASE DO NOT USE RESULTPRINTER CLASS IN YOUR ORIGINAL CODE. FOR SAMPLE ONLY
         print_r($payment->getId());
         print_r($request);
         print_r($payment);
-
-       
 
         /*$validate = false;
         $debug = false;
