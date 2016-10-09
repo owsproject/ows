@@ -17,7 +17,8 @@ jQuery(document).ready(function() {
 	// set height 100%;
 	jQuery('body').css('height', jQuery(window).height());
 
-	jQuery("body").delay(5000).vegas({
+	// front page slideshow
+	jQuery("body.front").delay(5000).vegas({
 		overlay: drupalSettings.path.baseUrl+"themes/ows_theme/css/overlays/01.png",
 		transitionDuration: 3000,
 		preload: true,
@@ -30,6 +31,16 @@ jQuery(document).ready(function() {
 	        { src: drupalSettings.path.baseUrl+"themes/ows_theme/css/sliders/slider3.jpg" },
 	        { src: drupalSettings.path.baseUrl+"themes/ows_theme/css/sliders/slider4.jpg" },
 	        { src: drupalSettings.path.baseUrl+"themes/ows_theme/css/sliders/slider5.jpg" }*/
+	    ]
+	});
+
+	jQuery("body.not-front").delay(5000).vegas({
+		overlay: drupalSettings.path.baseUrl+"themes/ows_theme/css/overlays/01.png",
+		transitionDuration: 3000,
+		preload: true,
+		delay: 7000,
+	    slides: [
+	        { src: drupalSettings.path.baseUrl+"themes/ows_theme/css/sliders/background.jpg" }
 	    ]
 	});
 
