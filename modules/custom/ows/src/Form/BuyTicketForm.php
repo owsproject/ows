@@ -44,6 +44,16 @@ tempor incididunt ut labore et dolore magna aliqua.</div>
             <div class="validate error"></div>'
         );
 
+        $form['gender'] = array(
+            '#type' => 'select',
+            '#title' => $this->t('Gender'),
+            '#options' => array('Male' => t('Male'), 'Female' => t('Female')),
+            '#required' => true,
+            '#attributes' => array(
+                //'class' => array('form-control')
+            )
+        );
+
         $form['mail'] = array(
             '#type' => 'email',
             '#title' => $this->t('Email'),
@@ -120,19 +130,31 @@ tempor incididunt ut labore et dolore magna aliqua.</div>
             )
         );
 
+        $months = range(1, 12);
+        $month_options = array();
+        foreach ($months as $y) {
+            $month_options[$y] = $y;
+        }
+
         $form['exp_month'] = array(
             '#type' => 'select',
             '#title' => $this->t('Expiration'),
-            '#options' => range(1, 12),
+            '#options' => $month_options,
             '#attributes' => array(
                 'class' => array('form-control')
             )
         );
 
+        $years = range (date("Y"), date("Y") + 5);
+        $year_options = array();
+        foreach ($years as $y) {
+            $year_options[$y] = $y;
+        }
+
         $form['exp_year'] = array(
             '#type' => 'select',
             '#title' => $this->t(''),
-            '#options' => range(2016, 2030),
+            '#options' => $year_options,
             '#attributes' => array(
                 'class' => array('form-control')
             )
@@ -251,6 +273,11 @@ tempor incididunt ut labore et dolore magna aliqua.</div>
         $card_first_name = $form_state->getValue('card_first_name');
         $card_last_name = $form_state->getValue('card_last_name');
 
+        $total_amount = $form_state->getValue('quantity') * 5;
+
+        // ### CreditCard
+        // A resource representing a credit card that can be
+        // used to fund a payment.
         $card = new \PayPal\Api\CreditCard();
         $card->setType("visa")
             ->setNumber($card_number)
@@ -275,36 +302,31 @@ tempor incididunt ut labore et dolore magna aliqua.</div>
         // ### Itemized information
         // (Optional) Lets you specify item wise
         // information
-        $item_price = 10; // $10
-        $quantity = $form_state->getValue('quantity');
-        $total = $item_price * $quantity;
-
-        $item = new \PayPal\Api\Item();
-        $item->setName('Ground Coffee 40 oz')
-            ->setDescription('Ground Coffee 40 oz')
+        $item1 = new \PayPal\Api\Item();
+        $item1->setName('Official Sexiest Contest ticket x'.$quantity)
+            ->setDescription('Official Sexiest Contest ticket x'.$quantity)
             ->setCurrency('USD')
-            ->setQuantity($quantity)
+            ->setQuantity(1)
             ->setTax(0)
-            ->setPrice($item_price);
+            ->setPrice($total_amount);
         $itemList = new \PayPal\Api\ItemList();
-        $itemList->setItems(array($item));
-        
-        /*// ### Additional payment details
+        $itemList->setItems(array($item1));
+        // ### Additional payment details
         // Use this optional field to set additional
         // payment information such as tax, shipping
         // charges etc.
         $details = new \PayPal\Api\Details();
-        $details->setShipping(1.2)
-            ->setTax(1.3)
-            ->setSubtotal(17.5);*/
-
+        $details->setShipping(0)
+            ->setTax(0)
+            ->setSubtotal(0);
         // ### Amount
         // Lets you specify a payment amount.
         // You can also specify additional details
         // such as shipping, tax.
         $amount = new \PayPal\Api\Amount();
-        $amount->setCurrency("USD")->setTotal($total);
-            // ->setDetails($details);
+        $amount->setCurrency("USD")
+            ->setTotal($total_amount);
+            //->setDetails($details);
         // ### Transaction
         // A transaction defines the contract of a
         // payment - what is the payment for and who
@@ -315,6 +337,7 @@ tempor incididunt ut labore et dolore magna aliqua.</div>
             ->setDescription("Payment description")
             ->setInvoiceNumber(uniqid());
 
+
         // ### Payment
         // A Payment Resource; create one using
         // the above types and intent set to sale 'sale'
@@ -322,29 +345,40 @@ tempor incididunt ut labore et dolore magna aliqua.</div>
         $payment->setIntent("sale")
             ->setPayer($payer)
             ->setTransactions(array($transaction));
-        // For Sample Purposes Only.
-        $request = clone $payment;
-        // ### Create Payment
-        // Create a payment by calling the payment->create() method
-        // with a valid ApiContext (See bootstrap.php for more on `ApiContext`)
-        // The return object contains the state.
+
         try {
+            // ### Create Payment
+            // Create a payment by calling the payment->create() method
+            // with a valid ApiContext (See bootstrap.php for more on `ApiContext`)
+            // The return object contains the state.
             $payment->create($apiContext);
-            if (isset($payment->getId())) {
-                // payment ID exist, execute
-                $execution = new PaymentExecution();
-                $execution->setPayerId($payment->getId());
-                result = $payment->execute($execution, $apiContext);
-            }   
+            if ($payment->getId() && $payment->state) {
+                $user = \Drupal::currentUser();
+                $fields = array(
+                    'mail' => $form_state->getValue('mail'), 
+                    'uid' => $user->id(), 
+                    'gender' => $form_state->getValue('gender'), 
+                    'quantity' => $form_state->getValue('quantity'), 
+                    'amount' => $total_amount, 
+                    'created' => time()
+                );
+
+                db_insert('win_a_date')->fields($fields)->execute();
+
+                // payment created.
+                $response->addCommand(new CloseDialogCommand('.dialog-buy-ticket'));
+                // open message dialog
+                $message = 'Thank you, your payment has been made.';
+                $message .= '<script>owsDialogCallback(1);</script>';
+                print 1;
+                $response->addCommand(new OpenModalDialogCommand('Thank you', $message), ['width' => '700']);
+            } else {
+                $response->addCommand(new OpenModalDialogCommand('Error!', "Payment failed, please try again."), ['width' => '700']);
+            }
         } catch (Exception $e) {
             print_r($e);
             // exit(1);
-        }
-
-        // NOTE: PLEASE DO NOT USE RESULTPRINTER CLASS IN YOUR ORIGINAL CODE. FOR SAMPLE ONLY
-        print_r($payment->getId());
-        print_r($request);
-        print_r($payment);
+        }     
 
         /*$validate = false;
         $debug = false;
