@@ -1386,3 +1386,7 @@ a.f-activated span {
     float: left;
     margin-top: 10px;
 }
+
+:not(body.path-frontpage) {
+    
+}

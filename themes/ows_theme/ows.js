@@ -116,6 +116,31 @@ jQuery(document).ready(function() {
 
 	// enable tooltip
 	jQuery('[data-toggle="tooltip"]').tooltip(); 
+
+	// --------------------
+	// dialog for not-front
+	if (!jQuery("body").hasClass('path-frontpage')) {
+		if (jQuery(".layout-container #block-ows-theme-page-title h1").html() == "Page not found") {
+			jQuery("#block-ows-theme-page-title, #block-ows-theme-content").hide();
+			swal({
+				title: jQuery(".layout-container #block-ows-theme-page-title h1").html(),
+				text: jQuery("#block-ows-theme-content").html(),
+				html: true,
+				customClass: 'twitter',
+				showConfirmButton: false,
+				allowEscapeKey: true, // turn on for debug only
+				allowOutsideClick: false
+				//allowEscapeKey: false
+			});
+
+			jQuery('.sweet-alert').draggable({ containment: "html" });
+			jQuery('.sweet-alert').center();
+		} else {
+			jQuery("#block-ows-theme-page-title, #block-ows-theme-content").hide();
+			callback = "scrollbar('.ui-dialog .dialog-content', false); jQuery.ui.dialogr.maxZ += 2;";
+			openDialog('.dialog-content', jQuery(".layout-container #block-ows-theme-page-title h1").html(), jQuery("#block-ows-theme-content").html(), 650, 500, 	false, callback);
+		}
+	}
 });
 
 function checkFullScreen() {
