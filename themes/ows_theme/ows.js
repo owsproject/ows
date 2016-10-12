@@ -534,6 +534,9 @@ function openOWSDialog(dialog_class) {
 // -------------------
 // Dialog custom events
 function dialog_restore(dialog_class) {
+	jQuery(dialog_class).draggable("enable");
+	jQuery(dialog_class + " .ui-dialog-titlebar").css("cursor", "move");
+
 	window.maximized = false; /* reset both states (restored) */
 	window.minimized = false;
 	$this = jQuery(dialog_class);
@@ -597,6 +600,10 @@ function dialog_restore(dialog_class) {
 	  
 	  /* Minimize to a custom position */
 function dialog_minimize(dialog_class) {
+	console.log("Minimize");
+	jQuery(dialog_class).draggable('disable');
+	jQuery(dialog_class + " .ui-dialog-titlebar").css("cursor", "default");
+
 	window.minimized = true; /* save the current state: minimized */
 	window.maximized = false;
 	$this = jQuery(dialog_class);
@@ -643,6 +650,9 @@ function dialog_minimize(dialog_class) {
 }
 
 function dialog_maximize(dialog_class) {
+	jQuery(dialog_class).draggable('disable');
+	jQuery(dialog_class + " .ui-dialog-titlebar").css("cursor", "default");
+
 	window.maximized = true; /* save the current state: maximized */
 	window.minimized = false;
 	$this = jQuery(dialog_class);
