@@ -88,7 +88,8 @@ tempor incididunt ut labore et dolore magna aliqua.</div>
             '#type' => 'textfield',
             '#title' => $this->t('How many do you want to donate?'),
             '#required' => true,
-            '#default_value' => 1,
+            '#default_value' => 10,
+            '#prefix' => '$'
             '#attributes' => array(
                 //'class' => array('form-control')
             )
