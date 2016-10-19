@@ -132,7 +132,7 @@ class OWSController extends ControllerBase
 
 			<a href='/buy-ticket' id='btn-buy-ticket' class='button button-red use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_buy_ticket."'>Buy Ticket</a>
 
-			<a href='/buy-ticket' id='btn-donate' class='button button-red use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_donate."'>Donate</a>
+			<a href='/donate' id='btn-donate' class='button button-red use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_donate."'>Donate</a>
 		</div>";
 
 		// sweet alert box
