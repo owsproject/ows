@@ -298,6 +298,14 @@ jQuery(document).ready(function() {
 		  	jQuery('.dialog-buttons-wrapper #btn-buy-ticket').trigger('click');
 		}
 
+		if (jQuery(this).parent().attr('class') == "donate") {
+			e.preventDefault();
+			staticPage = false;
+			swal.close();
+		    loader();
+		  	jQuery('.dialog-buttons-wrapper #btn-donate').trigger('click');
+		}
+
 		// skip logout
 		if (jQuery(this).attr('href') != "/user/logout" && staticPage) {
 			e.preventDefault();
