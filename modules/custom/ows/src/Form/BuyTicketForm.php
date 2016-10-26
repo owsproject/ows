@@ -108,18 +108,20 @@ tempor incididunt ut labore et dolore magna aliqua.</div>
         // credit card form
         $form['card_first_name'] = array(
             '#type' => 'textfield',
-            '#title' => $this->t('Card first name (as it appears on your card'),
+            '#title' => $this->t('Card first name'),
             '#attributes' => array(
                 'class' => array('form-control')
-            )
+            ),
+            '#description' => '(as it appears on your card)'
         );
 
         $form['card_last_name'] = array(
             '#type' => 'textfield',
-            '#title' => $this->t('Card last name (as it appears on your card'),
+            '#title' => $this->t('Card last name'),
             '#attributes' => array(
                 'class' => array('form-control')
-            )
+            ),
+            '#description' => '(as it appears on your card)'
         );
 
         $form['card_number'] = array(
@@ -279,7 +281,7 @@ tempor incididunt ut labore et dolore magna aliqua.</div>
         // A resource representing a credit card that can be
         // used to fund a payment.
         $card = new \PayPal\Api\CreditCard();
-        $card->setType("visa")
+        $card->setType(strtolower($this->cardType($card_number)))
             ->setNumber($card_number)
             ->setExpireMonth($exp_month)
             ->setExpireYear($exp_year)
@@ -309,6 +311,7 @@ tempor incididunt ut labore et dolore magna aliqua.</div>
             ->setQuantity(1)
             ->setTax(0)
             ->setPrice($total_amount);
+
         $itemList = new \PayPal\Api\ItemList();
         $itemList->setItems(array($item1));
         // ### Additional payment details
@@ -393,5 +396,37 @@ tempor incididunt ut labore et dolore magna aliqua.</div>
         $response->addCommand(new OpenModalDialogCommand('Thank you', $message), ['width' => '700']);
         */
         return $response;
+    }
+
+    public function cardType($number) {
+        $number=preg_replace('/[^\d]/','',$number);
+        if (preg_match('/^3[47][0-9]{13}$/',$number))
+        {
+            return 'American Express';
+        }
+        elseif (preg_match('/^3(?:0[0-5]|[68][0-9])[0-9]{11}$/',$number))
+        {
+            return 'Diners Club';
+        }
+        elseif (preg_match('/^6(?:011|5[0-9][0-9])[0-9]{12}$/',$number))
+        {
+            return 'Discover';
+        }
+        elseif (preg_match('/^(?:2131|1800|35\d{3})\d{11}$/',$number))
+        {
+            return 'JCB';
+        }
+        elseif (preg_match('/^5[1-5][0-9]{14}$/',$number))
+        {
+            return 'MasterCard';
+        }
+        elseif (preg_match('/^4[0-9]{12}(?:[0-9]{3})?$/',$number))
+        {
+            return 'Visa';
+        }
+        else
+        {
+            return 'Unknown';
+        }
     }
 }

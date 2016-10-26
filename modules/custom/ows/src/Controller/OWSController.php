@@ -643,7 +643,7 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 		    	}
 		    }
 
-		    $voting_score = $voting_score / $total_vote;
+		    if ($voting_score) $voting_score = $voting_score / $total_vote;
 
 			// user not logged
 			if (!empty($account->id())) {
@@ -671,6 +671,7 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 							<img class="country-flag flag-'.strtolower($country).'" src="themes/ows_theme/images/flags/'.$country.'.png" />
 							<img src="'.$image_url.'" />
 							<div class="vote-score">Voting Score: <span>'.$voting_score.'<span></div>
+							<div class="add-to-favourist"></div>
 						</div>
 						<div class="detail">
 							<div class="item">

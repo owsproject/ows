@@ -822,6 +822,12 @@ function voting(klass, contestant) {
 	jQuery('.voting-slider').jRange('setValue', jQuery(".voting-container").attr("score"));
 	
 	jQuery(klass + ' .voting-contestant .voting-container').append('<button type="button" value="Vote" id="vote-button" class="button">Vote</button>');
+	jQuery(klass + ' .personal-information .add-to-favourist').append('<button type="button" value="Vote" id="favourist-button" class="button">+ Favourist</button>');
+
+	jQuery("#favourist-button").click(function(event) {
+		console.log(contestant);
+	});
+	
 	jQuery('#vote-button').click(function() {
 		jQuery.ajax({
 			url: "/ajax-content",

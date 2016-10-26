@@ -1390,3 +1390,7 @@ a.f-activated span {
 :not(body.path-frontpage) {
     
 }
+
+.add-to-favourist {
+    margin-top: 10px;
+}
