@@ -152,6 +152,17 @@ class OWSController extends ControllerBase
   			</div>
 		</div>";
 
+		// price pool
+		$price_pool = \Drupal\ows\DbStorage::pricePool();
+		$price_pool_total = 0;
+		foreach ($price_pool as $entry) {
+			$price_pool_total += $entry->donate;
+		}
+
+		$html .= '<div class="price-pool">
+			<span class="text">Price Pool: <strong>'.$price_pool_total.'</strong></span>
+		</div>';
+
 		// -----------------
 		$role = '';
 		$roles = $account->getRoles();
@@ -474,6 +485,14 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 		    $content['#cache']['max-age'] = 0;
 		    return $content;
 		    
+		} elseif ($type == "favourite") {
+
+			// ========================
+			// Add to favourite
+			$contestant = $_POST['contestant'];
+			$result = $this->addToFavourite($contestant);
+			return new JsonResponse($result);
+
 		} else {
 			return array('#type' => 'markup', '#markup' => 'Page not found!');
 		}
@@ -654,7 +673,12 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 						<div class="voting-container" score="'.$voted_score.'"></div>
 					</div>';
 				}
-			}			
+			}
+
+			$favourite_container = '<div class="add-to-favourite"></div>';
+			if ($this->checkFavourite($uid)) {
+				$favourite_container = '<div class="my-favourite"></div>';
+			}
 
 	    	$html = '<div class="contestant-info" id="contestant-'.$uid.'">
 	    		<ul class="nav nav-tabs">
@@ -671,7 +695,7 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 							<img class="country-flag flag-'.strtolower($country).'" src="themes/ows_theme/images/flags/'.$country.'.png" />
 							<img src="'.$image_url.'" />
 							<div class="vote-score">Voting Score: <span>'.$voting_score.'<span></div>
-							<div class="add-to-favourist"></div>
+							'.$favourite_container.'
 						</div>
 						<div class="detail">
 							<div class="item">
@@ -833,6 +857,20 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 	     	db_insert('vote')->fields($fields)->execute();
 
 	    return array('code' => 1, 'message' => 'Vote score has been updated.');
+    }
+
+    public function addToFavourite($contestant) {
+    	$voter = \Drupal::currentUser();
+
+	    // insert new record
+		$fields = array('uid' => $voter->id(), 'contestant' => $contestant->id(), 'created' => time());
+	     	db_insert('favourite')->fields($fields)->execute();
+
+	    return array('code' => 1, 'message' => 'Contestant has been added to favourite.');
+    }
+
+    public function checkFavourite($contestant) {
+    	return true;
     }
 
     public function playVideo($id) {

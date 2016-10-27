@@ -1391,6 +1391,23 @@ a.f-activated span {
     
 }
 
-.add-to-favourist {
+.add-to-favourite {
     margin-top: 10px;
+}
+
+.price-pool {
+    font-weight:400;
+    margin:0;
+    padding:0;
+    position:absolute;
+    top: 20%;
+    right: 10px;
+    text-align:left;
+    list-style-type:none;
+    background: rgba(7, 16, 20, 0.8) none repeat scroll 0 0;
+    color:#de0748;
+    box-shadow: 0px 8px 17px 0px rgba(0, 0, 0, 0.2), 0px 6px 20px 0px rgba(0, 0, 0, 0.19);
+    border: 1px solid #252525 !important;
+    border-radius: 5px;
+    padding: 10px;
 }

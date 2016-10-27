@@ -26,5 +26,11 @@ class DbStorage {
 	    $select->fields('v');
 	    return $select->execute()->fetchAll();
 	}
+
+	public static function pricePool() {
+		$select = db_select('donate', 'd');
+	    $select->fields('d');
+	    return $select->execute()->fetchAll();	
+	}
 }
 

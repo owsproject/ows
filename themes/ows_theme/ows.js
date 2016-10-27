@@ -46,6 +46,7 @@ jQuery(document).ready(function() {
 
 	// Prevent event on Home menu
 	jQuery('li.home a').click(function(e) {
+		// console.log(e);
 		e.preventDefault();
 		displayWelcome();
 	});
@@ -307,9 +308,10 @@ jQuery(document).ready(function() {
 		}
 
 		// skip logout
-		if (jQuery(this).attr('href') != "/user/logout" && staticPage) {
-			e.preventDefault();
+		if (jQuery(this).attr('href') != "/" && jQuery(this).attr('href') != "/user/logout" && staticPage) {
 			openStaticPage(jQuery(this));
+			e.preventDefault();
+			console.log("Open statis page");
 		}
 	});		
 });
@@ -822,10 +824,11 @@ function voting(klass, contestant) {
 	jQuery('.voting-slider').jRange('setValue', jQuery(".voting-container").attr("score"));
 	
 	jQuery(klass + ' .voting-contestant .voting-container').append('<button type="button" value="Vote" id="vote-button" class="button">Vote</button>');
-	jQuery(klass + ' .personal-information .add-to-favourist').append('<button type="button" value="Vote" id="favourist-button" class="button">+ Favourist</button>');
-
-	jQuery("#favourist-button").click(function(event) {
-		console.log(contestant);
+	jQuery(klass + ' .personal-information .add-to-favourite').append('<button type="button" value="Add to Favourite" id="favourite-button" class="button">+ Favourite</button>');
+	jQuery(klass + ' .personal-information .my-favourite').append('<button type="button" value="My Favourite" id="my-favourite" class="button">My Favourite</button>');
+	
+	jQuery("#favourite-button").click(function(event) {
+		addToFavourite(contestant, klass);
 	});
 	
 	jQuery('#vote-button').click(function() {
@@ -871,6 +874,22 @@ function voting(klass, contestant) {
 		});
 	});*/
 
+}
+
+function addToFavourite(contestant, klass) {
+	jQuery.ajax({
+		url: "/ajax-content",
+		data: {type: "favourite", contestant: contestant, r: Math.random()},
+		type: "POST",
+		dataType: "json",
+		async: false, 
+		success: function(data) {
+			loader(0);
+			if (data.code == 1) {
+				jQuery(klass + ' .personal-information .add-to-favourite').append('<a href="#favourite" id="my-favourite">Favourite</a>');
+			}
+		}
+	});
 }
 
 /*function voting_contestant() {
