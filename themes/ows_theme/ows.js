@@ -824,11 +824,15 @@ function voting(klass, contestant) {
 	jQuery('.voting-slider').jRange('setValue', jQuery(".voting-container").attr("score"));
 	
 	jQuery(klass + ' .voting-contestant .voting-container').append('<button type="button" value="Vote" id="vote-button" class="button">Vote</button>');
-	jQuery(klass + ' .personal-information .add-to-favourite').append('<button type="button" value="Add to Favourite" id="favourite-button" class="button">+ Favourite</button>');
-	jQuery(klass + ' .personal-information .my-favourite').append('<button type="button" value="My Favourite" id="my-favourite" class="button">My Favourite</button>');
+	jQuery(klass + ' .personal-information .add-to-favorite').append('<button type="button" value="Add to favorite" id="favorite-button" class="button">+ favorite</button>');
+	jQuery(klass + ' .personal-information .my-favorite').append('<button type="button" value="My favorite" class="btn-my-favorite button">My favorite</button>');
 	
-	jQuery("#favourite-button").click(function(event) {
-		addToFavourite(contestant, klass);
+	jQuery("#favorite-button").click(function(event) {
+		addToFavorite(contestant, klass);
+	});
+
+	jQuery(".btn-my-favorite").click(function(event) {
+		myFavorite();
 	});
 	
 	jQuery('#vote-button').click(function() {
@@ -876,18 +880,32 @@ function voting(klass, contestant) {
 
 }
 
-function addToFavourite(contestant, klass) {
+function addToFavorite(contestant, klass) {
 	jQuery.ajax({
 		url: "/ajax-content",
-		data: {type: "favourite", contestant: contestant, r: Math.random()},
+		data: {type: "favorite", contestant: contestant, r: Math.random()},
 		type: "POST",
 		dataType: "json",
 		async: false, 
 		success: function(data) {
 			loader(0);
 			if (data.code == 1) {
-				jQuery(klass + ' .personal-information .add-to-favourite').append('<a href="#favourite" id="my-favourite">Favourite</a>');
+				jQuery(".add-to-favorite").remove();
 			}
+		}
+	});
+}
+
+function myFavorite() {
+	jQuery.ajax({
+		url: "/ajax-content",
+		type: "POST",
+		data: {type: "my-favorite", r: Math.random()},
+		async: false, 
+		success: function(data) {
+			loader(0);
+			callback = "scrollbar('.ui-dialog .page-current-voting', false); jQuery.ui.dialogr.maxZ += 2; jQuery('.current-voting').css('z-index', jQuery.ui.dialogr.maxZ);";
+			openDialog('.page-my-favorite', 'My favorite', data, 600, 500, false, callback);
 		}
 	});
 }
@@ -895,7 +913,6 @@ function addToFavourite(contestant, klass) {
 /*function voting_contestant() {
 	vote-button
 }*/
-
 
 // Invite friend
 function inviteFriendForm(klass) {

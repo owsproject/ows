@@ -32,5 +32,11 @@ class DbStorage {
 	    $select->fields('d');
 	    return $select->execute()->fetchAll();	
 	}
+
+	public static function myFavorite() {
+		$select = db_select('favourite', 'f');
+	    $select->fields('f');
+	    return $select->execute()->fetchAll();	
+	}
 }
 

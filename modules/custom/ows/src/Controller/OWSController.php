@@ -485,15 +485,58 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 		    $content['#cache']['max-age'] = 0;
 		    return $content;
 		    
-		} elseif ($type == "favourite") {
+		} elseif ($type == "favorite") {
 
 			// ========================
 			// Add to favourite
 			$contestant = $_POST['contestant'];
-			$result = $this->addToFavourite($contestant);
+			$result = $this->addToFavorite($contestant);
 			return new JsonResponse($result);
 
-		} else {
+		} else if ($type == "my-favorite") {
+			
+			// ========================
+			// My Favourite
+			$content = array();
+		    $headers = array(
+		    	'#',
+		    	t('Contestant'),
+		    	t('Gender'),
+		    	// t('Added'),
+		    );
+
+		    $rows = array();
+		    $data = array();
+		    $row_data = array();
+			$index = 1;
+
+		    foreach ($result = \Drupal\ows\DbStorage::myFavorite() as $entry) {
+		    	$contestant = user_load($entry->contestant);
+
+		    	$full_name = '';
+		    	if (is_object($contestant)) $full_name .= $contestant->get('field_first_name')->value.' ';
+		    	if (is_object($contestant)) $full_name .= $contestant->get('field_last_name')->value;
+
+		    	$rows[] = array(
+		    			$index, $full_name, $contestant->get('field_gender')->value, //date('m/d/Y', $entry->created)
+		    		);
+		    	$index++;
+		    	//'<a data-dialog-type="modal" data-accepts="application/vnd.drupal-modal" id="contestant-'.$value['contestant'].'" class="browse-contestant" href="#contestant/'.$value['contestant'].'">'
+		    }
+
+		    $content['table'] = array(
+		    	'#type' => 'table',
+		    	'#header' => $headers,
+		    	'#rows' => $rows,
+		    	'#attributes' => array('id' => 'dbtng-example-advanced-list'),
+		    	'#empty' => t('No entries available.'),
+		    );
+
+		    // Don't cache this page.
+		    $content['#cache']['max-age'] = 0;
+		    return $content;
+
+		}else {
 			return array('#type' => 'markup', '#markup' => 'Page not found!');
 		}
     }
@@ -662,7 +705,7 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 		    	}
 		    }
 
-		    if ($voting_score) $voting_score = $voting_score / $total_vote;
+		    if ($voting_score) $voting_score = round($voting_score / $total_vote);
 
 			// user not logged
 			if (!empty($account->id())) {
@@ -675,10 +718,10 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 				}
 			}
 
-			$favourite_container = '<div class="add-to-favourite"></div>';
-			if ($this->checkFavourite($uid)) {
-				$favourite_container = '<div class="my-favourite"></div>';
-			}
+			$favorite_container = '<div class="my-favorite"></div>';
+			//if (!$this->checkFavourite($uid)) {
+				$favorite_container .= '<div class="add-to-favorite"></div>';	
+			//}
 
 	    	$html = '<div class="contestant-info" id="contestant-'.$uid.'">
 	    		<ul class="nav nav-tabs">
@@ -695,7 +738,7 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 							<img class="country-flag flag-'.strtolower($country).'" src="themes/ows_theme/images/flags/'.$country.'.png" />
 							<img src="'.$image_url.'" />
 							<div class="vote-score">Voting Score: <span>'.$voting_score.'<span></div>
-							'.$favourite_container.'
+							'.$favorite_container.'
 						</div>
 						<div class="detail">
 							<div class="item">
@@ -859,18 +902,28 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 	    return array('code' => 1, 'message' => 'Vote score has been updated.');
     }
 
-    public function addToFavourite($contestant) {
-    	$voter = \Drupal::currentUser();
+    public function addToFavorite($contestant) {
+    	$user = \Drupal::currentUser();
 
 	    // insert new record
-		$fields = array('uid' => $voter->id(), 'contestant' => $contestant->id(), 'created' => time());
+		$fields = array('uid' => $user->id(), 'contestant' => $contestant, 'created' => time());
 	     	db_insert('favourite')->fields($fields)->execute();
 
 	    return array('code' => 1, 'message' => 'Contestant has been added to favourite.');
     }
 
-    public function checkFavourite($contestant) {
-    	return true;
+    public function checkFavorite($contestant) {
+    	$user = \Drupal::currentUser();
+    	$query = db_select('favourite', 'f');
+		$query->fields('f');
+		$query->condition('f.uid', $user->id());
+		$query->condition('f.contestant', $contestant);
+	    $result = $query->execute();
+	    foreach($result as $r) {
+	    	return true;
+	    }
+
+    	return;
     }
 
     public function playVideo($id) {
