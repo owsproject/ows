@@ -1399,19 +1399,22 @@ a.f-activated span {
     margin-top: 10px;
 }
 
+.price-pool-holder {
+    display: none;
+}
+
 .price-pool {
-    font-weight:400;
+    font-weight:bold;
     margin:0;
     padding:0;
     position:absolute;
-    top: 20%;
-    right: 10px;
+    left: 10px;
     text-align:left;
     list-style-type:none;
-    background: rgba(7, 16, 20, 0.8) none repeat scroll 0 0;
-    color:#de0748;
+    background: rgba(230, 0, 0, 0.9);
+    color:#fff;
     box-shadow: 0px 8px 17px 0px rgba(0, 0, 0, 0.2), 0px 6px 20px 0px rgba(0, 0, 0, 0.19);
     border: 1px solid #252525 !important;
     border-radius: 5px;
-    padding: 10px;
+    padding: 7px;
 }

@@ -25,7 +25,7 @@ class OWSController extends ControllerBase
 		// -------------------
 		// close site, only show message and a form for user to enter email, name
 		// remember to add block Main menu to header on live
-		$close_domains = array('ows1.dd', 'officialworldssexiest.com');
+		$close_domains = array('ows1.dd', 'officialworldssexiest.com1');
 		if (in_array($_SERVER['SERVER_NAME'], $close_domains)) {
 			// -------------------
 			// dialog property
@@ -159,9 +159,10 @@ class OWSController extends ControllerBase
 			$price_pool_total += $entry->donate;
 		}
 
-		$html .= '<div class="price-pool">
-			<span class="text">Price Pool: <strong>'.$price_pool_total.'</strong></span>
+		$html .= '<div class="price-pool-holder">'.$price_pool_total.'</span>
 		</div>';
+
+		// <span class="text">Prize Pool: <strong>'.$price_pool_total.'</strong></span>
 
 		// -----------------
 		$role = '';
@@ -248,7 +249,7 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 		$params['title'] = "Dear $friend_name check out this hot contestant. Come join and vote like me!";
 		$langcode = \Drupal::currentUser()->getPreferredLangcode();
 		$send = true;
-		$result = $mailManager->mail($module, $key, $to, $langcode, $params, NULL, $send);
+		// $result = $mailManager->mail($module, $key, $to, $langcode, $params, NULL, $send);
 
 		if ($result['result'] !== true) {
 			$result = 0;

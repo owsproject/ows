@@ -144,6 +144,16 @@ class EnterContestForm extends FormBase {
         );
 
         if ($type == "contestant") {
+            $form['measurement'] = array(
+                '#type' => 'select',
+                '#title' => $this->t('Measurement'),
+                '#options' => array('US Standard', 'Metric'), // Metric: cm, kg. US: Pound, inch
+                '#required' => true,
+                '#attributes' => array(
+                    'class' => array('form-control')
+                )
+            );
+
             $form['eyes_color'] = array(
                 '#type' => 'select',
                 '#title' => $this->t('Eye Color'),
@@ -168,7 +178,8 @@ class EnterContestForm extends FormBase {
                 '#title' => $this->t('Height'),
                 '#attributes' => array(
                     'class' => array('form-control')
-                )
+                ),
+                '#suffix' => '<div class="measurement-suffix"></div>'
             );
 
             $form['weight'] = array(
@@ -176,7 +187,8 @@ class EnterContestForm extends FormBase {
                 '#title' => $this->t('Weight'),
                 '#attributes' => array(
                     'class' => array('form-control')
-                )
+                ),
+                '#suffix' => '<div class="measurement-suffix"></div>'
             );
 
             $form['bust'] = array(
@@ -184,7 +196,8 @@ class EnterContestForm extends FormBase {
                 '#title' => $this->t('Bust'),
                 '#attributes' => array(
                     'class' => array('form-control')
-                )
+                ),
+                '#suffix' => '<div class="measurement-suffix"></div>'
             );
 
             $form['waist'] = array(
@@ -192,7 +205,8 @@ class EnterContestForm extends FormBase {
                 '#title' => $this->t('Waist'),
                 '#attributes' => array(
                     'class' => array('form-control')
-                )
+                ),
+                '#suffix' => '<div class="measurement-suffix"></div>'
             );
 
             $form['hips'] = array(
@@ -200,7 +214,8 @@ class EnterContestForm extends FormBase {
                 '#title' => $this->t('Hips'),
                 '#attributes' => array(
                     'class' => array('form-control')
-                )
+                ),
+                '#suffix' => '<div class="measurement-suffix">1</div>'
             );
         }
 

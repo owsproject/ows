@@ -142,6 +142,9 @@ jQuery(document).ready(function() {
 			openDialog('.dialog-content', jQuery(".layout-container #block-ows-theme-page-title h1").html(), jQuery("#block-ows-theme-content").html(), 650, 500, 	false, callback);
 		}
 	}
+
+	// price pool
+	jQuery("body").prepend('<div class="price-pool"><span class="text">Prize Pool: <strong>'+jQuery(".price-pool-holder").html()+'</strong></span></div>');
 });
 
 function checkFullScreen() {
@@ -262,6 +265,9 @@ jQuery(document).ready(function() {
 	  		.addEventListener( "click", function() {
 	    	this.classList.toggle( "active" );
 	    	jQuery('#block-mainmenu').slideToggle();
+
+	    	// hide white windows
+	    	swal.close();
 	  	});
 	} catch(e) {}
 
