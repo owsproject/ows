@@ -570,6 +570,43 @@ function openOWSDialog(dialog_class) {
 	if (dialog_class == ".dialog-add-me") {
 
 	}
+
+	if (dialog_class == ".dialog-enter-contest") {
+		jQuery(".form-item-measurement select").change(function() {
+			if (jQuery(this).val() == "US Standard") {
+				jQuery(".form-item-height .measurement-suffix").html("inch");
+				jQuery(".form-item-weight .measurement-suffix").html("pound");
+				jQuery(".form-item-bust .measurement-suffix").html("inch");
+				jQuery(".form-item-waist .measurement-suffix").html("inch");
+				jQuery(".form-item-hips .measurement-suffix").html("inch");
+			} else if (jQuery(this).val() == "Metric") {
+				jQuery(".form-item-height .measurement-suffix").html("kg");
+				jQuery(".form-item-weight .measurement-suffix").html("cm");
+				jQuery(".form-item-bust .measurement-suffix").html("cm");
+				jQuery(".form-item-waist .measurement-suffix").html("cm");
+				jQuery(".form-item-hips .measurement-suffix").html("cm");
+			} else {
+				jQuery(".form-item-height .measurement-suffix").html("");
+				jQuery(".form-item-weight .measurement-suffix").html("");
+				jQuery(".form-item-bust .measurement-suffix").html("");
+				jQuery(".form-item-waist .measurement-suffix").html("");
+				jQuery(".form-item-hips .measurement-suffix").html("");
+			}
+		});
+
+		// gender change
+		jQuery(".form-item-gender .form-radio").change(function() {
+			jQuery(".form-item-gender .form-radio").each(function(index, el) {
+				if (jQuery(this).is(":checked")) {
+					if(jQuery(this).val() == "Male") {
+						jQuery(".form-item-bust label").html("Chest");
+					} else {
+						jQuery(".form-item-bust label").html("Bust");
+					}
+				}
+			});
+		});
+	}
 }
 
 // -------------------
