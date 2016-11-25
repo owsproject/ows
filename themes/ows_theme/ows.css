@@ -14,6 +14,24 @@ body {
     /*min-height: 700px;*/
 }
 
+:-webkit-full-screen body {background-image:url(images/background.jpg);}
+:-moz-full-screen body {background-image:url(images/background.jpg);}
+:full-screen body {background-image:url(images/background.jpg);}
+
+:-webkit-full-screen {
+    body {background-image:url(images/background.jpg);}
+}
+
+:-moz-full-screen {
+}
+
+:-ms-fullscreen {
+}
+
+:fullscreen {
+}
+
+
 #ascrail2000 {
     border: 1px solid #444;
 }
@@ -530,7 +548,9 @@ Dialog styles
 
 .ui-dialog label {
     float: left;
-    width: 120px;
+    font-size: 12px;
+    font-weight: normal;
+    width: 160px;
 }
 
 .ui-dialog input,
@@ -544,9 +564,15 @@ Dialog styles
     border: 1px solid #444;
 }
 
+.form-managed-file .form-submit {
+    margin: 0 0.5em;
+    padding: 4px 10px;
+    background: rgba(0, 0, 0, 0) url("images/button-red.png") repeat scroll 0 0 !important;
+}
+
 .ui-dialog .form-item-gender input {
     width: 20px;
-    margin-left: 114px;
+    margin-left: 160px;
     background: rgba(0, 0, 0, 0) none repeat scroll 0 0 !important;
 }
 
@@ -557,6 +583,7 @@ Dialog styles
     font-size: 16px;
     border-bottom: 1px solid #666 !important;
     padding-bottom: 10px;
+    margin-bottom: 10px;
 }
 
 .ui-dialog .fieldgroup .fieldset-wrapper {
@@ -568,15 +595,16 @@ Dialog styles
 }
 
 .ui-dialog .form-select {
-    width: 108px !important;
+    /*width: 108px !important;*/
 }
 
 .ui-dialog .description {
-    color: #fff !important;
+    color: #999 !important;
     display: block;
     float: left;
     padding-left: 10px;
     margin-top: 4px;
+    font-size: 12px;
 }
 
 .ui-dialog .description > div {
@@ -1074,9 +1102,10 @@ body > #drupal-modal {
 
 /* Browse filter */
 .ui-dialog .views-exposed-form {
-    border-bottom: 1px solid #444;
-    margin-bottom: 20px;
+    /*border-bottom: 1px solid #444;
+    margin-bottom: 20px;*/
     padding-bottom: 10px;
+    display: none;
 }
 
 .ui-dialog .views-exposed-form .form-item {
@@ -1438,4 +1467,37 @@ a.f-activated span {
 
 .views-browse .views-exposed-form-browse-page-browse {
     display: none;
+}
+
+body.page-not-found h1.js-quickedit-page-title, body.page-not-found #block-ows-theme-content {
+    display: none;
+}
+
+/* */
+.dialog-edit-my-account .password-strength {
+    display: none;
+}
+
+.dialog-edit-my-account .field--name-field-about-me .form-textarea-wrapper {
+    clear: left;
+}
+
+.dialog-edit-my-account .field--name-field-about-me .filter-wrapper.form-wrapper {
+    display: none;
+}
+
+.dialog-edit-my-account .field--name-field-about-me .form-textarea {
+    background: transparent none repeat scroll 0 0;
+    border: 1px solid #333;
+    width: 100%;
+}
+
+textarea.about-me {
+    background: transparent;
+    border: 1px solid #333;
+}
+
+.my-account-edit {
+    display: block;
+    cursor: pointer;
 }

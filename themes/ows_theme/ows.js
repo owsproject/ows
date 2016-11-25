@@ -46,9 +46,12 @@ jQuery(document).ready(function() {
 
 	// Prevent event on Home menu
 	jQuery('li.home a').click(function(e) {
-		// console.log(e);
-		e.preventDefault();
-		displayWelcome();
+	    var title = jQuery(document).attr('title');
+		if (title.indexOf("Page not found") == -1) {
+			// console.log(e);
+			e.preventDefault();
+			displayWelcome();
+		}
 	});
 
 	// -------------
@@ -144,7 +147,9 @@ jQuery(document).ready(function() {
 	}
 
 	// price pool
-	jQuery("body").prepend('<div class="price-pool"><span class="text">Prize Pool: <strong>'+jQuery(".price-pool-holder").html()+'</strong></span></div>');
+	if (jQuery(".price-pool-holder").html() != null) {
+		jQuery("body").prepend('<div class="price-pool"><span class="text">Prize Pool: <strong>'+jQuery(".price-pool-holder").html()+'</strong></span></div>');
+	}
 });
 
 function checkFullScreen() {
@@ -248,6 +253,7 @@ jQuery(document).ready(function() {
 
 		// my vote click 
 		jQuery('.my-vote').click(function(e) {
+			swal.close();
 			jQuery.ajax({
 				url: "/ajax-content",
 				type: "POST",
@@ -255,8 +261,25 @@ jQuery(document).ready(function() {
 				async: false, 
 				success: function(data) {
 					loader(0);
-					callback = "scrollbar('.ui-dialog .page-my-voting', false); jQuery.ui.dialogr.maxZ += 2; jQuery('.current-voting').css('z-index', jQuery.ui.dialogr.maxZ);";
+					callback = "scrollbar('.ui-dialog .page-my-voting', false); jQuery.ui.dialogr.maxZ += 1; jQuery('.current-voting').css('z-index', jQuery.ui.dialogr.maxZ);";
 					openDialog('.page-my-voting', 'My Vote', data, 600, 500, false, callback);
+				}
+			});
+		});
+
+		// my account click 
+
+		jQuery('.my-account').click(function(e) {
+			swal.close();
+			jQuery.ajax({
+				url: "/ajax-content",
+				type: "POST",
+				data: {type: "my-account", r: Math.random()},
+				async: false, 
+				success: function(data) {
+					loader(0);
+					callback = "scrollbar('.ui-dialog .dialog-my-account', false); jQuery('.colorbox').colorbox({rel: 'gallery-item'}); jQuery.ui.dialogr.maxZ += 1; jQuery('.dialog-my-account').css('z-index', jQuery.ui.dialogr.maxZ); contestant_video(); edit_account();";
+					openDialog('.dialog-my-account', 'My Account', data, 600, 500, false, callback);
 				}
 			});
 		});
@@ -303,6 +326,9 @@ jQuery(document).ready(function() {
 			swal.close();
 		    loader();
 		  	jQuery('.dialog-buttons-wrapper #btn-buy-ticket').trigger('click');
+		  	setTimeout(function() {
+		  		loader(0);
+		  	}, 2000);
 		}
 
 		if (jQuery(this).parent().attr('class') == "donate") {
@@ -311,6 +337,9 @@ jQuery(document).ready(function() {
 			swal.close();
 		    loader();
 		  	jQuery('.dialog-buttons-wrapper #btn-donate').trigger('click');
+		  	setTimeout(function() {
+		  		loader(0);
+		  	}, 2000);
 		}
 
 		// skip logout
@@ -352,6 +381,12 @@ function contestant_video() {
             videojs('contestant_video_player').dispose();
         }
 	});*/
+}
+
+function edit_account() {
+	jQuery(".my-account-edit").click(function() {
+		jQuery("#btn-edit-account").trigger('click');
+	});
 }
 
 // Welcome sweetalert box
@@ -534,10 +569,14 @@ function openOWSDialog(dialog_class) {
 			}
 		});
 
-		// Add ghost text for filters
-		jQuery('.dialog-browse .form-item-field-country-value option:first-child').text("- Country -");
-		jQuery('.dialog-browse .form-item-field-eyes-color-value option:first-child').text("- Eyes Color -");
-		jQuery('.dialog-browse .form-item-field-hair-color-value option:first-child').text("- Hair Color -");
+		browser_fields_ghost_text();
+		setTimeout(function() {
+			jQuery(".dialog-browse .ui-dialog-buttonpane .form-actions").prepend('<button type="button" class="button filter-button">Filter</button>');
+			jQuery(".dialog-browse .filter-button").click(function(event) {
+				jQuery("#views-exposed-form-browse-page-browse").toggle();
+			});
+		}, 2000);
+		console.log("prepended");
 	} 
 	
 	// --------------
@@ -567,10 +606,12 @@ function openOWSDialog(dialog_class) {
 		});
 	}
 
+	// --------------------
 	if (dialog_class == ".dialog-add-me") {
 
 	}
 
+	// --------------------
 	if (dialog_class == ".dialog-enter-contest") {
 		jQuery(".form-item-measurement select").change(function() {
 			if (jQuery(this).val() == "US Standard") {
@@ -606,6 +647,10 @@ function openOWSDialog(dialog_class) {
 				}
 			});
 		});
+	}
+
+	if (dialog_class == ".dialog-my-account") {
+		alert(1);
 	}
 }
 
@@ -1012,13 +1057,13 @@ function closeOWSDialog(dialog_class) {
 	//if (dialogs == 0) displayWelcome();
 
 	// show welcome message if user close Add Me form
-	if (dialog_class = "dialog-add-me") displayWelcome();
+	if (dialog_class == "dialog-add-me") displayWelcome();
 }
 
 function anyDialogActive() {
 	// no more dialog, display welcome mesasge
 	if(dialogs == 0) {
-		displayWelcome();
+		// displayWelcome();
 	}
 }
 
@@ -1127,6 +1172,41 @@ jQuery(document).ajaxComplete(function(event, xhr, settings) {
 		}
 	} catch (e) {}
 });
+
+function browser_fields_ghost_text() {
+	// Add ghost text for filters
+	jQuery('.dialog-browse .form-item-field-country-value option:first-child').text("- Country -");
+	jQuery('.dialog-browse .form-item-field-eyes-color-value option:first-child').text("- Eyes Color -");
+	jQuery('.dialog-browse .form-item-field-hair-color-value option:first-child').text("- Hair Color -");
+
+	// Height
+	jQuery(".dialog-browse .form-item-field-height-value input").val("Height").focus(function() {
+		if (jQuery(this).val() == "Height") jQuery(this).val("");
+	}).focusout(function() {
+		if (jQuery(this).val() == "") jQuery(this).val("Height");
+	});
+
+	// Weight
+	jQuery(".dialog-browse .form-item-field-weight-value input").val("Weight").focus(function() {
+		if (jQuery(this).val() == "Weight") jQuery(this).val("");
+	}).focusout(function() {
+		if (jQuery(this).val() == "") jQuery(this).val("Weight");
+	});
+
+	// Age
+	jQuery(".dialog-browse .form-item-age input").val("Age").focus(function() {
+		if (jQuery(this).val() == "Age") jQuery(this).val("");
+	}).focusout(function() {
+		if (jQuery(this).val() == "") jQuery(this).val("Age");
+	});
+
+	// Bust
+	jQuery(".dialog-browse .form-item-bust input").val("Bust/Chest").focus(function() {
+		if (jQuery(this).val() == "Bust/Chest") jQuery(this).val("");
+	}).focusout(function() {
+		if (jQuery(this).val() == "") jQuery(this).val("Bust/Chest");
+	});
+}
 
 function toggleFullScreen(elem) {
     // ## The below if statement seems to work better ## if ((document.fullScreenElement && document.fullScreenElement !== null) || (document.msfullscreenElement && document.msfullscreenElement !== null) || (!document.mozFullScreen && !document.webkitIsFullScreen)) {
