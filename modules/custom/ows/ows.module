@@ -24,6 +24,26 @@ function ows_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state
 	if ($form_id == "views_exposed_form" && $form['#id'] == "views-exposed-form-browse-page-browse") {
 		// kint($form);
 	}
+
+	if ($form_id == "user_form") {
+		// dpm($form);
+		// disable fields
+		$form['account']['mail']['#disabled'] = TRUE;
+		unset($form['account']['mail']['#description']);
+
+		$form['account']['name']['#disabled'] = TRUE;
+		unset($form['account']['name']['#description']);
+
+		$form['account']['status']['#disabled'] = TRUE;
+		$form['account']['roles']['#disabled'] = TRUE;
+		$form['account']['notify']['#disabled'] = TRUE;
+		$form['contact']['#disabled'] = TRUE;
+
+		unset($form['account']['status']);
+		unset($form['account']['roles']);
+		unset($form['account']['notify']);
+		unset($form['contact']);
+	}
 }
 
 function ows_views_query_alter(Drupal\views\ViewExecutable $view, Drupal\views\Plugin\views\query\Sql $query) {
@@ -31,7 +51,7 @@ function ows_views_query_alter(Drupal\views\ViewExecutable $view, Drupal\views\P
 	// unset default where condition of birthday
 	unset($query->where[1]['conditions'][1]);
 	
-	if (isset($_POST['age'])) {
+	if (isset($_POST['age']) && $_POST['age'] > 0) {
 		$configuration = [
 			'table' => 'user__field_birthday',
 			'field' => 'entity_id',

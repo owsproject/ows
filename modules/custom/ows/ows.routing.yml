@@ -60,6 +60,13 @@ ows.enter_contest:
   requirements:
       _access: 'TRUE'
 
+ows.profile:
+  path: '/profile'
+  defaults:
+    _form: 'Drupal\ows\Form\ProfileForm'
+  requirements:
+      _access: 'TRUE'    
+
 ows.enter_vote:
   path: '/enter-vote'
   defaults:
