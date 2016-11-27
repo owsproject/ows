@@ -746,6 +746,9 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 				$favorite_container .= '<div class="add-to-favorite"></div>';	
 			//}
 
+			$country = strtolower(str_replace(' ', '-', $country));
+			$country = strtolower(str_replace('%20', '-', $country));
+
 	    	$html = '<div class="contestant-info" id="contestant-'.$uid.'">
 	    		<ul class="nav nav-tabs">
 					<li class="active"><a data-toggle="tab" href="#personal-information-'.$uid.'">Personal Information</a></li>
@@ -758,7 +761,7 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 				<div class="tab-content">
 					<div id="personal-information-'.$uid.'" class="info personal-information tab-pane fade in active">
 						<div class="photo">
-							<img class="country-flag flag-'.strtolower($country).'" src="themes/ows_theme/images/flags/'.$country.'.png" />
+							<img class="country-flag flag-'.$country.'" src="themes/ows_theme/images/flags/'.$country.'.png" />
 							<img src="'.$image_url.'" />
 							<div class="vote-score">Voting Score: <span>'.$voting_score.'<span></div>
 							'.$favorite_container.'
@@ -997,6 +1000,9 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 				// }
 			}
 
+			$country = strtolower(str_replace(' ', '-', $country));
+			$country = strtolower(str_replace('%20', '-', $country));
+			
 	    	$html = '<div class="contestant-info" id="contestant-'.$uid.'">
 	    		<ul class="nav nav-tabs">
 					<li class="active"><a data-toggle="tab" href="#personal-information-'.$uid.'">Personal Information</a></li>
@@ -1008,7 +1014,7 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 				<div class="tab-content">
 					<div id="personal-information-'.$uid.'" class="info personal-information tab-pane fade in active">
 						<div class="photo">
-							<img class="country-flag flag-'.strtolower($country).'" src="themes/ows_theme/images/flags/'.$country.'.png" />
+							<img class="country-flag flag-'.$country.'" src="themes/ows_theme/images/flags/'.$country.'.png" />
 							<img src="'.$image_url.'" />
 							'.$favorite_container.'
 						</div>

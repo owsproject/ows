@@ -127,10 +127,11 @@ class ProfileForm extends FormBase {
             $photo_uploaded = '';
             if (!empty($user->user_picture->target_id)) {
                 $file = File::load($user->user_picture->target_id);
+                $file_url = file_create_url(file_url_transform_relative($file->getfileUri()));
                 $image_style_id = 'thumbnail';
                 $style = ImageStyle::load($image_style_id);
                 $image_url = file_url_transform_relative($style->buildUrl($file->getfileUri()));
-                $photo_uploaded .= '<div class="photo-image"><img src="'.$image_url.'" /></div>';
+                $photo_uploaded .= '<div class="photo-image"><a href="'.$file_url.'" target="_blank"><img src="'.$image_url.'" /></a></div>';
             }
 
             $form['photo'] = array(
@@ -139,19 +140,19 @@ class ProfileForm extends FormBase {
                 '#attributes' => array(
                     //'class' => array('form-control')
                 ),
-                '#prefix' => '<div class="form-item-files-photo">',
+                '#prefix' => '<div class="form-item-photo">',
                 '#suffix' => $photo_uploaded . '</div>'
             );
 
             $photo_id_uploaded = '';
-            
             if (!empty($user->get('field_photo_id')->get(0))) {
                 $file_id = $user->get('field_photo_id')->get(0)->getValue()['target_id'];
                 $file = File::load($file_id);
+                $file_url = file_create_url(file_url_transform_relative($file->getfileUri()));
                 $image_style_id = 'thumbnail'; //$this->config('core.entity_view_display.user.user.compact')->get('content.user_picture.settings.image_style');
                 $style = ImageStyle::load($image_style_id);
                 $image_url = file_url_transform_relative($style->buildUrl($file->getfileUri()));
-                $photo_id_uploaded .= '<div class="photo-image"><img src="'.$image_url.'" /></div>';
+                $photo_id_uploaded .= '<div class="photo-image"><a href="'.$file_url.'" target="_blank"><img src="'.$image_url.'" /></a></div>';
             }
 
             $form['photo_id'] = array(
@@ -160,16 +161,26 @@ class ProfileForm extends FormBase {
                 '#attributes' => array(
                     //'class' => array('form-control')
                 ),
-                '#prefix' => '<div class="form-item-files-photo-id">',
+                '#prefix' => '<div class="form-item-photo-id">',
                 '#suffix' => $photo_id_uploaded . '</div>'
             );
+
+            $voice_uploaded = '';
+            if (!empty($user->get('field_voice')->get(0))) {
+                $file_id = $user->get('field_voice')->get(0)->getValue()['target_id'];
+                $file = File::load($file_id);
+                $file_url = file_create_url(file_url_transform_relative($file->getfileUri()));
+                $voice_uploaded .= '<div class="voice-file"><a href="'.$file_url.'" target="_blank">'.$file->getFilename().'</a></div>';
+            }
 
             $form['voice'] = array(
                 '#type' => 'file',
                 '#title' => $this->t('Voice'),
                 '#attributes' => array(
                     //'class' => array('form-control')
-                )
+                ),
+                '#prefix' => '<div class="form-item-voice">',
+                '#suffix' => $voice_uploaded . '</div>'
             );
         }
 
@@ -280,6 +291,55 @@ class ProfileForm extends FormBase {
                 ),
                 '#default_value' => $user->get('field_about_me')->value
             );
+
+            /*-------------------------
+            Gallery up to 10 files
+            */
+            $gallery_count = $user->get('field_gallery')->count();
+            $gallery_uploaded = array();
+            if ($gallery_count) {
+                for ($i = 0; $i < $gallery_count; $i++) {
+                    $file_id = $user->get('field_gallery')->get($i)->getValue()['target_id'];
+                    if (is_numeric($file_id) && $file_id) {
+                        $file = File::load($file_id);
+                        $file_url = file_create_url(file_url_transform_relative($file->getfileUri()));
+                        $image_style_id = 'thumbnail';
+                        $style = ImageStyle::load($image_style_id);
+                        $image_url = file_url_transform_relative($style->buildUrl($file->getfileUri()));
+                        $gallery_uploaded[$i] = '<div class="gallery-file gallery-'.$i.'"><a href="'.$file_url.'" target="_blank"><img src="'.$image_url.'" /></a></div>';
+                    }
+                }
+            }
+
+            $form['gallery_open'] = array(
+                '#markup' => '<div class="gallery form-item-gallery">'
+            );
+
+            for ($i = 0; $i < 10; $i++) {
+                $suffix = '';
+                if (isset($gallery_uploaded[$i])) {
+                    $suffix = $gallery_uploaded[$i];
+                }
+
+                $klass = 'gallery-file';
+                $label = '';
+
+                if ($i == 0) {
+                    $label = 'Gallery';
+                    $klass = 'gallery-file-first';
+                }
+
+                $form['gallery_'.$i] = array(
+                    '#type' => 'file',
+                    '#title' => $label,
+                    '#attributes' => array('class' => array($klass)),
+                    '#suffix' => $suffix
+                );
+            }
+
+            $form['gallery_close'] = array(
+                '#markup' => '</div>'
+            );
         }
 
         // $form['type'] = array('#type' => 'hidden', '#value' => $type);
@@ -291,13 +351,13 @@ class ProfileForm extends FormBase {
         $form['actions']['#type'] = 'actions';
             $form['actions']['submit'] = array(
             '#type' => 'submit',
-            '#value' => $this->t('Register'),
+            '#value' => $this->t('Update'),
             '#ajax' => array(
                 'callback' => '::submitFormAjax',
             ),
         );
 
-        $form['#title'] = 'Enter the Contest';
+        $form['#title'] = 'My Profile';
         return $form;
     }
 
@@ -323,12 +383,18 @@ class ProfileForm extends FormBase {
         if (!valid_email_address($form_state->getValue('mail'))) {
             $response->addCommand(new HtmlCommand('.form-item-mail .description', 'Invalid email adress!'));
         } else {
-            // validate email
-            if (user_load_by_mail($form_state->getValue('mail')) && $form_state->getValue('mail') != false) {
-                $response->addCommand(new HtmlCommand('.form-item-mail .description', 'Email already exist!'));
-                //$response->addCommand(new InvokeCommand('#edit-mail', 'css', array('color', '#ff0000')));
-            } else {
-                $response->addCommand(new HtmlCommand('.form-item-mail .description', ''));
+            $user = \Drupal::currentUser();
+            $user = user_load($user->id());
+
+            // Validate email if not same as current email
+            if ($user->get('mail')->value != $form_state->getValue('mail')) {
+                // validate email
+                if (user_load_by_mail($form_state->getValue('mail')) && $form_state->getValue('mail') != false) {
+                    $response->addCommand(new HtmlCommand('.form-item-mail .description', 'Email already exist!'));
+                    //$response->addCommand(new InvokeCommand('#edit-mail', 'css', array('color', '#ff0000')));
+                } else {
+                    $response->addCommand(new HtmlCommand('.form-item-mail .description', ''));
+                }
             }
         }
 
@@ -353,6 +419,9 @@ class ProfileForm extends FormBase {
         $path = drupal_get_path('module', 'ows');
         require_once($path.'/src/recaptchalib.php');
 
+        $user = \Drupal::currentUser();
+        $user = user_load($user->id());
+
         // validate captcha
         $url = 'https://www.google.com/recaptcha/api/siteverify';
         $captcha_response = $_POST['g-recaptcha-response'];
@@ -373,8 +442,10 @@ class ProfileForm extends FormBase {
         if (!valid_email_address($form_state->getValue('mail'))) {
             $message[] = 'Invalid email adress.';
         } else {
-            if (user_load_by_mail($form_state->getValue('mail')) && $form_state->getValue('mail') != false) {
-                $message[] = 'Email already exist.';
+            if ($user->get('mail')->value != $form_state->getValue('mail')) {
+                if (user_load_by_mail($form_state->getValue('mail')) && $form_state->getValue('mail') != false) {
+                    $message[] = 'Email already exist.';
+                }
             }
         }
 
@@ -383,7 +454,7 @@ class ProfileForm extends FormBase {
         $year = date('Y', strtotime($birthday));
         $current_year = date('Y', time());
         if (($current_year - $year) < 18) {
-            $message[] = 'You must be 18 to enter the contest.';    
+            $message[] = 'Your age must be greater than 18.';    
         }
 
         $birthday = $values['birthday'];
@@ -402,20 +473,17 @@ class ProfileForm extends FormBase {
         }
 
         if (!$json->success) {
-            $response->addCommand(new HtmlCommand('.validate', "Please verify you're human by click on \"I'm not a robot\""));
-            return $response;
+            //$response->addCommand(new HtmlCommand('.validate', "Please verify you're human by click on \"I'm not a robot\""));
+            //return $response;
         }
 
         // ----------------------------------
         // save user when all fields are fine
         $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
-        $user = \Drupal\user\Entity\User::create();
 
         // Mandatory settings
-        $user->setPassword('|contestant|');
-        $user->enforceIsNew();
-        $user->setEmail($form_state->getValue('mail'));
-        $user->setUsername($form_state->getValue('mail'));
+        //$user->setEmail($form_state->getValue('mail'));
+        //$user->setUsername($form_state->getValue('mail'));
 
         // Optional settings
         /*
@@ -424,24 +492,27 @@ class ProfileForm extends FormBase {
         $user->set("preferred_langcode", $language);
         $user->set("preferred_admin_langcode", $language);*/
 
-        $type = $_GET['type']; //$form_state->get('type');
+        $roles = $user->getRoles();
+        if (in_array('contestant', $roles)) {
+            $type = 'contestant';
+        }
+
         // custom fields
-        $user->set("field_gender", $form_state->get('gender'));
+        $user->set("field_gender", $form_state->getValue('gender'));
         $user->set("field_birthday", $birthday);
-        $user->set("field_first_name", $form_state->get('first_name'));
-        $user->set("field_last_name", $form_state->get('last_name'));
-        $user->set("field_country", $form_state->get('country'));
-        $user->set("field_age", date('Y', time()) - date('Y', strtotime($birthday)));
+        $user->set("field_first_name", $form_state->getValue('first_name'));
+        $user->set("field_last_name", $form_state->getValue('last_name'));
+        $user->set("field_country", $form_state->getValue('country'));
+        // $user->set("field_age", date('Y', time()) - date('Y', strtotime($birthday)));
+        $user->set("field_about_me", $form_state->getValue('about_me'));
 
         // these fields are for contestant only
         if ($type != "voter") {
-            $user->addRole('contestant');
-
-            $user->set("field_bust", $form_state->get('bust'));
-            $user->set("field_eyes_color", $form_state->get('eyes_color'));
-            $user->set("field_waist", $form_state->get('waist'));
-            $user->set("field_weight", $form_state->get('weight'));       
-        
+            $user->set("field_bust", $form_state->getValue('bust'));
+            $user->set("field_eyes_color", $form_state->getValue('eyes_color'));
+            $user->set("field_waist", $form_state->getValue('waist'));
+            $user->set("field_weight", $form_state->getValue('weight'));       
+            
             // save photo
             $file = file_save_upload('photo');
             if ($file) {
@@ -464,8 +535,31 @@ class ProfileForm extends FormBase {
                 // set photo to user
                 @$user->set('field_voice', array('target_id' => $file->id()));
             }
-        } else {
-            $user->addRole('voter');
+
+            $file = file_save_upload('photo_id');
+            if ($file) {
+                // set status permanent
+                $file[0]->setPermanent();
+                $file[0]->save();
+                // move file from temporary:// to public://
+                $file = file_move($file[0], 'public://'.$file[0]->getFilename());
+                // set photo to user
+                @$user->set('field_photo_id', array('target_id' => $file->id()));
+            }
+
+            // gallery
+            $gallery_target = array();
+            for ($i = 0; $i < 10; $i++) {
+                $file = file_save_upload('gallery_'.$i);
+                if ($file) {
+                    $file[0]->setPermanent();
+                    $file[0]->save();
+                    // move file from temporary:// to public://
+                    $file = file_move($file[0], 'public://'.$file[0]->getFilename());
+                    //$gallery_target[] = $file->id();
+                    $user->field_gallery[] = $file->id();
+                }
+            }
         }
 
         // $user->activate();
@@ -479,13 +573,11 @@ class ProfileForm extends FormBase {
         // drupal_set_message($this->t('Registration successful. You are now logged in.'));
         // $form_state->setRedirect('');
 
-        
-        
         // open message dialog
-        $message = 'Please check your email to complete the registration.';
+        $message = 'Profile update successully.';
         // Append script into callback message
         $script = '<script>
-            swal("Thank you", "We have sent you an email with activation link.", "success");
+            swal("Profile Updated", "Profile update successully.", "success");
             jQuery(".sweet-alert").center();
         </script>';
         // $response->addCommand(new OpenModalDialogCommand('Thank you', $message), ['width' => '700', 'clkass' => 'dialog-thanks']);

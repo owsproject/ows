@@ -363,21 +363,21 @@ class EnterContestForm extends FormBase {
 
         $type = $_GET['type']; //$form_state->get('type');
         // custom fields
-        $user->set("field_gender", $form_state->get('gender'));
+        $user->set("field_gender", $form_state->getValue('gender'));
         $user->set("field_birthday", $birthday);
-        $user->set("field_first_name", $form_state->get('first_name'));
-        $user->set("field_last_name", $form_state->get('last_name'));
-        $user->set("field_country", $form_state->get('country'));
-        $user->set("field_age", date('Y', time()) - date('Y', strtotime($birthday)));
+        $user->set("field_first_name", $form_state->getValue('first_name'));
+        $user->set("field_last_name", $form_state->getValue('last_name'));
+        $user->set("field_country", $form_state->getValue('country'));
+        //$user->set("field_age", date('Y', time()) - date('Y', strtotime($birthday)));
 
         // these fields are for contestant only
         if ($type != "voter") {
             $user->addRole('contestant');
 
-            $user->set("field_bust", $form_state->get('bust'));
-            $user->set("field_eyes_color", $form_state->get('eyes_color'));
-            $user->set("field_waist", $form_state->get('waist'));
-            $user->set("field_weight", $form_state->get('weight'));       
+            $user->set("field_bust", $form_state->getValue('bust'));
+            $user->set("field_eyes_color", $form_state->getValue('eyes_color'));
+            $user->set("field_waist", $form_state->getValue('waist'));
+            $user->set("field_weight", $form_state->getValue('weight'));       
         
             // save photo
             $file = file_save_upload('photo');

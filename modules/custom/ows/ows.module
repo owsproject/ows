@@ -26,23 +26,31 @@ function ows_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state
 	}
 
 	if ($form_id == "user_form") {
+		$roles = $user = \Drupal::currentUser()->getRoles();
+		$is_admin = false;
+        if (in_array('administrator', $roles)) {
+            $is_admin = true;
+        }
+
 		// dpm($form);
 		// disable fields
-		$form['account']['mail']['#disabled'] = TRUE;
-		unset($form['account']['mail']['#description']);
+		if (!$is_admin) {
+			$form['account']['mail']['#disabled'] = TRUE;
+			unset($form['account']['mail']['#description']);
 
-		$form['account']['name']['#disabled'] = TRUE;
-		unset($form['account']['name']['#description']);
+			$form['account']['name']['#disabled'] = TRUE;
+			unset($form['account']['name']['#description']);
 
-		$form['account']['status']['#disabled'] = TRUE;
-		$form['account']['roles']['#disabled'] = TRUE;
-		$form['account']['notify']['#disabled'] = TRUE;
-		$form['contact']['#disabled'] = TRUE;
+			$form['account']['status']['#disabled'] = TRUE;
+			$form['account']['roles']['#disabled'] = TRUE;
+			$form['account']['notify']['#disabled'] = TRUE;
+			$form['contact']['#disabled'] = TRUE;
 
-		unset($form['account']['status']);
-		unset($form['account']['roles']);
-		unset($form['account']['notify']);
-		unset($form['contact']);
+			unset($form['account']['status']);
+			unset($form['account']['roles']);
+			unset($form['account']['notify']);
+			unset($form['contact']);
+		}
 	}
 }
 
