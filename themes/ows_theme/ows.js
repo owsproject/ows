@@ -248,7 +248,7 @@ jQuery(document).ready(function() {
 
 		// user menu click
 		jQuery('#user-menu').click(function(e) {
-			jQuery('#user-menu.dropdown ul').toggle();
+			jQuery('#user-menu.dropdown ul').fadeToggle();
 		});
 
 		// my vote click 
@@ -268,8 +268,8 @@ jQuery(document).ready(function() {
 		});
 
 		// my account click 
-
 		jQuery('.my-account').click(function(e) {
+			loader();
 			swal.close();
 			jQuery.ajax({
 				url: "/ajax-content",
@@ -278,7 +278,7 @@ jQuery(document).ready(function() {
 				async: false, 
 				success: function(data) {
 					loader(0);
-					callback = "scrollbar('.ui-dialog .dialog-my-account', false); jQuery('.colorbox').colorbox({rel: 'gallery-item'}); jQuery.ui.dialogr.maxZ += 1; jQuery('.dialog-my-account').css('z-index', jQuery.ui.dialogr.maxZ); contestant_video(); edit_account();";
+					callback = "scrollbar('.ui-dialog .dialog-my-account', false); jQuery('.colorbox').colorbox({rel: 'gallery-item'}); jQuery.ui.dialogr.maxZ += 1; jQuery('.dialog-my-account').css('z-index', jQuery.ui.dialogr.maxZ); edit_account();";
 					openDialog('.dialog-my-account', 'My Account', data, 600, 500, false, callback);
 				}
 			});
@@ -386,6 +386,8 @@ function contestant_video() {
 function edit_account() {
 	jQuery(".my-account-edit").click(function() {
 		jQuery("#btn-edit-account").trigger('click');
+		loader();
+		jQuery('.dialog-my-account').remove();
 	});
 }
 
@@ -650,7 +652,7 @@ function openOWSDialog(dialog_class) {
 	}
 
 	if (dialog_class == ".dialog-my-account") {
-		alert(1);
+		
 	}
 }
 

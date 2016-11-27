@@ -564,6 +564,15 @@ Dialog styles
     border: 1px solid #444;
 }
 
+.ui-dialog input:hover,
+.ui-dialog select:hover,
+.ui-dialog input.form-text:hover,
+.ui-dialog input.form-email:hover,
+.ui-dialog input.form-pass:hover {
+    border: 1px solid #999;
+    color: #999;
+}
+
 .form-managed-file .form-submit {
     margin: 0 0.5em;
     padding: 4px 10px;
@@ -1500,4 +1509,48 @@ textarea.about-me {
 .my-account-edit {
     display: block;
     cursor: pointer;
+    height: auto;
+    width: 100px;
+    background: rgba(0, 0, 0, 0) url(images/button-red.png) repeat scroll 0 0;
+    text-shadow: none;
+    color: #fff;
+    border: none;
+    text-align: center;
+    border-radius: 4px;
+    padding: 4px 10px;
+}
+
+form.profile-form .form-item-photo,
+form.profile-form .form-item-photo-id {
+    float: left;
+    width: 100%;
+    border-bottom: 1px solid #333;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+}
+
+form.profile-form .photo-image, 
+form.profile-form .photo-id-image,
+form.profile-form .voice-file,
+form.profile-form .form-item-gallery .form-item {
+    padding-left: 160px;
+}
+
+form.profile-form .form-item-gallery .form-item-files-gallery-0 {
+    padding-left: 0 !important;
+}
+
+form.profile-form .voice-file a {
+    color: #999 !important;
+}
+
+form.profile-form .form-item-gallery {
+    margin-top: 10px;
+    float: left;
+    width: 100%;
+}
+
+form.profile-form .gallery-file img {
+    margin-bottom: 16px;
+    margin-left: 160px;
 }
