@@ -449,6 +449,15 @@ class ProfileForm extends FormBase {
             }
         }
 
+        // validate first and last name
+        if (!$values['first_name']) {
+            $message[] = 'First name is required.';
+        }
+
+        if (!$values['last_name']) {
+            $message[] = 'Last name is required.';
+        }
+
         // validate birthday
         $birthday = $values['birthday'];
         $year = date('Y', strtotime($birthday));
@@ -459,6 +468,10 @@ class ProfileForm extends FormBase {
 
         $birthday = $values['birthday'];
         $year = date('Y-m-d', strtotime($birthday));
+
+        if (!$values['country']) {
+            $message[] = 'Country is required.';
+        }
 
         // validate gender
         if (!$values['gender']) {
@@ -566,30 +579,20 @@ class ProfileForm extends FormBase {
         // save user
         $user->save();
         
-        // No email verification required; log in user immediately.
-        _user_mail_notify('register_no_approval_required', $user);
-        //user_login_finalize($user);
-
-        // drupal_set_message($this->t('Registration successful. You are now logged in.'));
-        // $form_state->setRedirect('');
-
         // open message dialog
         $message = 'Profile update successully.';
         // Append script into callback message
         $script = '<script>
             swal("Profile Updated", "Profile update successully.", "success");
             jQuery(".sweet-alert").center();
+            setTimeout(function() { jQuery(".my-account").trigger("click"); }, 3000);
         </script>';
         // $response->addCommand(new OpenModalDialogCommand('Thank you', $message), ['width' => '700', 'clkass' => 'dialog-thanks']);
         $response->addCommand(new HtmlCommand('.ui-dialog-title', $script));
 
         // -------------
         // close dialog
-        if ($type != "voter") {
-            $response->addCommand(new CloseDialogCommand('.dialog-enter-contest'));
-        } else {
-            $response->addCommand(new CloseDialogCommand('.dialog-vote'));
-        }
+        $response->addCommand(new CloseDialogCommand('.dialog-edit-my-account'));
 
         return $response;
     }
