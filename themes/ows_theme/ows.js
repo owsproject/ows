@@ -205,7 +205,7 @@ jQuery(document).ready(function() {
 					autoClose: true
 				});
 			}
-		} catch (e) {}
+		} catch (e) {console.log(e);}
 	};
 
 	drupalSettings.dialog.close = function(event) {
