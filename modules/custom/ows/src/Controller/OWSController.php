@@ -19,8 +19,9 @@ use Drupal\image\Entity\ImageStyle;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-class OWSController extends ControllerBase
-{
+class OWSController extends ControllerBase {
+	protected $search_key;
+
 	public function homepage() {
 		/*
 		// set dan as admin with pass 1
@@ -34,6 +35,7 @@ class OWSController extends ControllerBase
 		// remember to add block Main menu to header on live
 		$close_domains = array('ows1.dd', 'officialworldssexiest.com1');
 		if (in_array($_SERVER['SERVER_NAME'], $close_domains)) {
+
 			// -------------------
 			// dialog property
 			$dialog_add_me = json_encode(array(
@@ -51,6 +53,7 @@ class OWSController extends ControllerBase
 
 			$intro = node_load(7);
 			$intro_text = $intro->get('body')->value;
+
 			// sweet alert box
 			$html .= '
 			<div id="welcome-box" class="swal-add-me" class="hidden" title="The Official World’s Sexiest Contest">
@@ -74,9 +77,6 @@ class OWSController extends ControllerBase
 		$account = \Drupal::currentUser();
 
 		$html = ''; //<div class="load-container"><div class="load-wrapper"><div class="loader">Loading...</div></div></div>
-
-		// user not logged
-		// if (!empty($account->id())) {}
 
 		// -------------------
 		// dialog property
@@ -144,6 +144,14 @@ class OWSController extends ControllerBase
 		// sweet alert box
 		$intro = node_load(7);
 		$intro_text = $intro->get('body')->value;
+
+		$swal_buttons = '';
+		// user not logged
+		if (empty($account->id())) {
+			$swal_buttons = "<a href='#enter-contest' id='swal-btn-register' class='button button-red'>Enter the Contest</a>
+			<a href='#vote' id='swal-btn-vote' class='button button-red'>Vote in the Contest</a>";	
+		}
+
 		$html .= '
 		<div id="welcome-box" class="hidden" title="The Official World\'s Sexiest Contest" class="ows-welcome">
 			<div class="welcome-wrapper">
@@ -151,8 +159,7 @@ class OWSController extends ControllerBase
 
 		$html .= "
   				<div class='buttons'>
-  					<a href='#enter-contest' id='swal-btn-register' class='button button-red'>Enter the Contest</a>
-  					<a href='#vote' id='swal-btn-vote' class='button button-red'>Vote in the Contest</a>
+  					".$swal_buttons."
   					<a href='#browse' id='swal-btn-browse' class='button button-red browse-website'>Browse the Website</a>
   				</div>
   			</div>
@@ -185,19 +192,20 @@ class OWSController extends ControllerBase
 			}
 		}
 
-		// dialog property
+		// Dialog property
+		// NOTICE: For default browse, only one dialog can be used at a time.
 		$dialog_men = json_encode(array(
 			'title' => 'Men',
 			'width' => '680',
 			'dialogClass' => 'dialog-browse dialog-men dialog-default',
-			'defaultDialog' => true
+			'defaultDialog' => true // in order to use views filter, this value must be set as TRUE
 		));
 
 		$dialog_women = json_encode(array(
 			'title' => 'Women',
 			'width' => '680',
 			'dialogClass' => 'dialog-browse dialog-women dialog-default',
-			'defaultDialog' => true
+			'defaultDialog' => true // in order to use views filter, this value must be set as TRUE
 		));
 
 		$dialog_things = json_encode(array(
@@ -214,6 +222,15 @@ class OWSController extends ControllerBase
 			'dialogClass' => 'dialog-edit-my-account dialog-default',
 			'defaultDialog' => true
 		));
+
+		// serach
+		$dialog_search = json_encode(array(
+			'title' => 'Search',
+			'key' => '[key]',
+			'width' => '680',
+			'dialogClass' => 'dialog-browse dialog-search dialog-default',
+			'defaultDialog' => true
+		));
 		
 		// buttons open dialog
 		$html .= "<div class='dialog-buttons-wrapper hidden'>
@@ -224,6 +241,8 @@ class OWSController extends ControllerBase
 			<a href='/browse/things' id='btn-things' class='button button-red use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_things."'>Things</a>
 
 			<a href='/profile' id='btn-edit-account' class='button button-red use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='modal' data-dialog-options='".$dialog_edit_account."'>Edit</a>
+
+			<a href='/search-user' id='btn-search-user' class='button button-red use-ajax' data-accepts='application/vnd.drupal-modal' data-dialog-type='dialog' data-dialog-options='".$dialog_search."'></a>
 		</div>"; // /user/".$account->id()."/edit
 
 		// sweet alert box
@@ -241,10 +260,17 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
   				<div class='buttons'>
   					<a href='#men' id='swal-btn-men' class='button button-red'>Men</a>
   					<a href='#women' id='swal-btn-women' class='button button-red'>Women</a>
-  					<a href='#things' id='swal-btn-things' class='button button-red browse-website'>Things</a>
   				</div>
   			</div>
 		</div>";
+		// <a href='#things' id='swal-btn-things' class='button button-red browse-website'>Things</a>
+
+		// export flag to open login windows when user fails to login
+		if (isset($_POST['form_id']) && $_POST['form_id'] == "user_login_form") {
+			if (empty($account->id())) {
+				$html .= '<span id="login_message"></span>';
+			}
+		}
 
 		return array('#type' => 'markup', '#markup' => $html);
 	}
@@ -252,16 +278,28 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 	public function inviteFriend() {
 		$result = 0;
 
-		$friend_name = $_POST['name'];
-		$to = $_POST['email'];
-		$friend_content = $_POST['content'];
+		$friend_name = $_REQUEST['name'];
+		$to = $_REQUEST['email'];
+		$content = $_REQUEST['content'];
 
+        if (!valid_email_address($to)) {
+            $result = 'Invalid email address!';
+            return new JsonResponse($result);
+        }
+
+        if (!$content) {
+            $result = 'Please enter message.';
+            return new JsonResponse($result);
+        }
+
+        // send invite email
 		$mailManager = \Drupal::service('plugin.manager.mail');
 		$module = 'ows';
 		$key = 'invite_friend';
 		
-		$params['message'] = 'Dear '.$friend_name.'<br>
-		Join and vote for me at OWS.';
+		$params['message'] = '<p>Dear '.$friend_name.'</p>
+		</p>Join and vote for me at OWS.</p>
+		</p>'.$content.'</p>';
 
 		$params['title'] = "Dear $friend_name check out this hot contestant. Come join and vote like me!";
 		$langcode = \Drupal::currentUser()->getPreferredLangcode();
@@ -274,14 +312,13 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 			$result = 1;
 		}
 
-		return array('#type' => 'markup', '#markup' => $result);
+		return new JsonResponse($result);
 	}
 
     public function ajaxContent() {
     	$type = $_REQUEST['type'];
     	
 		if ($type == "register") {
-
 			// ========================
 	    	// get user register form
 	    	$entity = \Drupal::entityManager()->getStorage('user')->create(array());
@@ -481,7 +518,7 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 
 		    $account = \Drupal::currentUser();
 		    if (is_object($account)) {
-			    foreach ($entries = \Drupal\ows\DbStorage::contestantVoteList(14/*$account->id()*/) as $entry) {
+			    foreach ($entries = \Drupal\ows\DbStorage::contestantVoteList($account->id()) as $entry) {
 			    	$voter = user_load($entry->uid);
 			    	if (is_object($voter)) $voter_name .= $voter->get('field_first_name')->value.' ';
 			    	if (is_object($voter)) $voter_name .= $voter->get('field_last_name')->value;
@@ -529,16 +566,19 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 			$index = 1;
 
 		    foreach ($result = \Drupal\ows\DbStorage::myFavorite() as $entry) {
-		    	$contestant = user_load($entry->contestant);
+		    	if (isset($entry->contestant)) {
+			    	$contestant = user_load($entry->contestant);
 
-		    	$full_name = '';
-		    	if (is_object($contestant)) $full_name .= $contestant->get('field_first_name')->value.' ';
-		    	if (is_object($contestant)) $full_name .= $contestant->get('field_last_name')->value;
+			    	$full_name = '';
+			    	if (is_object($contestant)) $full_name .= $contestant->get('field_first_name')->value.' ';
+			    	if (is_object($contestant)) $full_name .= $contestant->get('field_last_name')->value;
 
-		    	$rows[] = array(
-		    			$index, $full_name, $contestant->get('field_gender')->value, //date('m/d/Y', $entry->created)
-		    		);
-		    	$index++;
+			    	$rows[] = array(
+			    		$index, $full_name, $contestant->get('field_gender')->value, //date('m/d/Y', $entry->created)
+			    	);
+
+			    	$index++;
+		    	}
 		    	//'<a data-dialog-type="modal" data-accepts="application/vnd.drupal-modal" id="contestant-'.$value['contestant'].'" class="browse-contestant" href="#contestant/'.$value['contestant'].'">'
 		    }
 
@@ -546,7 +586,7 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 		    	'#type' => 'table',
 		    	'#header' => $headers,
 		    	'#rows' => $rows,
-		    	'#attributes' => array('id' => 'dbtng-example-advanced-list'),
+		    	'#attributes' => array('id' => 'table-my-favorite'),
 		    	'#empty' => t('No entries available.'),
 		    );
 
@@ -555,10 +595,17 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>';
 		    return $content;
 
 	    } else if ($type == "my-account") {
-
 			// ========================
 			// My Account
 			return $this->myAccount();
+
+		} else if ($type == "search-key") {
+			$_SESSION['search-key'] = $_REQUEST['key'];
+
+			$tempstore = \Drupal::service('user.private_tempstore')->get('ows');
+			$tempstore->set('search-key', $_REQUEST['key']);
+
+			return new JsonResponse(array(1));
 		} else {
 			return array('#type' => 'markup', '#markup' => 'Page not found!');
 		}

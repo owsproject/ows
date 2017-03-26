@@ -79,6 +79,22 @@ class EnterContestForm extends FormBase {
             )
         );
 
+        $form['pass'] = array(
+            '#type' => 'password',
+            '#title' => $this->t('Password'),
+            '#attributes' => array(
+                'class' => array('form-control')
+            )
+        );
+
+        $form['pass_confirm'] = array(
+            '#type' => 'password',
+            '#title' => $this->t('Confirm Password'),
+            '#attributes' => array(
+                'class' => array('form-control')
+            )
+        );
+
         $form['first_name'] = array(
             '#type' => 'textfield',
             '#title' => $this->t('First Name'),
@@ -116,6 +132,14 @@ class EnterContestForm extends FormBase {
         );
 
         if ($type == "contestant") {
+            $form['photo_id'] = array(
+                '#type' => 'file',
+                '#title' => $this->t('Photo ID'),
+                '#attributes' => array(
+                    //'class' => array('form-control')
+                )
+            );
+
             $form['photo'] = array(
                 '#type' => 'file',
                 '#title' => $this->t('Photo'),
@@ -144,16 +168,6 @@ class EnterContestForm extends FormBase {
         );
 
         if ($type == "contestant") {
-            $form['measurement'] = array(
-                '#type' => 'select',
-                '#title' => $this->t('Measurement'),
-                '#options' => array('US Standard' => 'US Standard', 'Metric' => 'Metric'), // Metric: cm, kg. US: Pound, inch
-                '#required' => true,
-                '#attributes' => array(
-                    'class' => array('form-control')
-                )
-            );
-
             $form['eyes_color'] = array(
                 '#type' => 'select',
                 '#title' => $this->t('Eye Color'),
@@ -173,6 +187,17 @@ class EnterContestForm extends FormBase {
                 )
             );
 
+            $form['measurements'] = array(
+                '#type' => 'select',
+                '#title' => $this->t('Measurement'),
+                '#options' => $this->getUserFieldValues('field_measurements'),
+                // array('US Standard' => 'US Standard', 'Metric' => 'Metric'), // Metric: cm, kg. US: Pound, inch
+                '#required' => true,
+                '#attributes' => array(
+                    'class' => array('form-control')
+                )
+            );
+            
             $form['height'] = array(
                 '#type' => 'number',
                 '#title' => $this->t('Height'),
@@ -258,7 +283,7 @@ class EnterContestForm extends FormBase {
         $response = new AjaxResponse();
         
         if (!valid_email_address($form_state->getValue('mail'))) {
-            $response->addCommand(new HtmlCommand('.form-item-mail .description', 'Invalid email adress!'));
+            $response->addCommand(new HtmlCommand('.form-item-mail .description', 'Invalid email address!'));
         } else {
             // validate email
             if (user_load_by_mail($form_state->getValue('mail')) && $form_state->getValue('mail') != false) {
@@ -267,6 +292,13 @@ class EnterContestForm extends FormBase {
             } else {
                 $response->addCommand(new HtmlCommand('.form-item-mail .description', ''));
             }
+        }
+
+        // validate password
+        $pass = $form_state->getValue('pass');
+        $pass_confirm = $form_state->getValue('pass_confirm');
+        if ($pass != $pass_confirm) {
+            $message[] = 'Password must matched!';
         }
 
         // $response->addCommand(new CloseDialogCommand('.dialog-enter-contest'));
@@ -308,39 +340,117 @@ class EnterContestForm extends FormBase {
 
         // validate email
         if (!valid_email_address($form_state->getValue('mail'))) {
-            $message[] = 'Invalid email adress.';
+            $message[] = 'Invalid email address.';
         } else {
             if (user_load_by_mail($form_state->getValue('mail')) && $form_state->getValue('mail') != false) {
                 $message[] = 'Email already exist.';
             }
         }
 
-        // validate birthday
-        $birthday = $values['birthday'];
-        $year = date('Y', strtotime($birthday));
-        $current_year = date('Y', time());
-        if (($current_year - $year) < 18) {
-            $message[] = 'You must be 18 to enter the contest.';    
+        // validate password
+        $pass = $form_state->getValue('pass');
+        $pass_confirm = $form_state->getValue('pass_confirm');
+        if ($pass != $pass_confirm) {
+            $message[] = 'Password must matched.';
         }
 
-        $birthday = $values['birthday'];
-        $year = date('Y-m-d', strtotime($birthday));
+        // for dev
+        if ($validate) {
+            // validate first and last name
+            $first_name = $form_state->getValue('first_name');
+            $last_name = $form_state->getValue('last_name');
+            if (!$first_name) {
+                $message[] = 'First name is required.';
+            }
 
-        // validate gender
-        if (!$values['gender']) {
-            $message[] = 'Gender is required.';
+            if (!$last_name) {
+                $message[] = 'Last name is required.';
+            }
+
+            // validate birthday
+            $birthday = $values['birthday'];
+            $year = date('Y', strtotime($birthday));
+            $current_year = date('Y', time());
+            if (($current_year - $year) < 18) {
+                $message[] = 'You must be 18 to enter the contest.';    
+            }
+
+            $birthday = $values['birthday'];
+            $year = date('Y-m-d', strtotime($birthday));
+
+            // validate files
+            $photo_id = file_save_upload('photo_id');
+            if (!$photo_id) {
+                $message[] = 'Photo ID is required.';
+            }
+
+            $photo = file_save_upload('photo');
+            if (!$photo_id) {
+                $message[] = 'Photo is required.';
+            }
+
+            $voice = file_save_upload('voice');
+            if (!$voice) {
+                $message[] = 'Voice file is required.';
+            }
+
+            // validate gender
+            if (!$values['gender']) {
+                $message[] = 'Gender is required.';
+            }
+
+            // eye color
+            if (!$values['eyes_color']) {
+                $message[] = 'Eye color is required.';
+            }
+
+            // hair color
+            if (!$values['hair_color']) {
+                $message[] = 'Hair color is required.';
+            }
+
+            // height
+            if (!$values['weight']) {
+                $message[] = 'Weight is required.';
+            }
+
+            // bust
+            if (!$values['bust']) {
+                if ($values['gender'] == "Male") {
+                    $message[] = 'Chest is required.';
+                } else {
+                    $message[] = 'Bust is required.';
+                }
+            }
+
+            // waist
+            if (!$values['waist']) {
+                $message[] = 'Waist is required.';
+            }
+
+            // hips
+            if (!$values['hips']) {
+                $message[] = 'Hips is required.';
+            }
         }
 
         // validate flag
         if (count($message)) {
             $message = implode('<br>', $message);
+
+            // scrollto error message
+            $message .= '<script>
+                jQuery(".dialog-edit-my-account .ui-dialog-content").mCustomScrollbar("scrollTo", jQuery(".validate.error"));
+            </script>';
+            $response->addCommand(new HtmlCommand('.validate', $message));
+
             $response->addCommand(new HtmlCommand('.validate', $message));
             return $response;
         }
 
         if (!$json->success) {
-            $response->addCommand(new HtmlCommand('.validate', "Please verify you're human by click on \"I'm not a robot\""));
-            return $response;
+            /*$response->addCommand(new HtmlCommand('.validate', "Please verify you're human by click on \"I'm not a robot\""));
+            return $response;*/
         }
 
         // ----------------------------------
@@ -349,7 +459,7 @@ class EnterContestForm extends FormBase {
         $user = \Drupal\user\Entity\User::create();
 
         // Mandatory settings
-        $user->setPassword('|contestant|');
+        $user->setPassword($form_state->getValue('pass'));
         $user->enforceIsNew();
         $user->setEmail($form_state->getValue('mail'));
         $user->setUsername($form_state->getValue('mail'));
@@ -376,30 +486,44 @@ class EnterContestForm extends FormBase {
 
             $user->set("field_bust", $form_state->getValue('bust'));
             $user->set("field_eyes_color", $form_state->getValue('eyes_color'));
+            $user->set("field_hair_color", $form_state->getValue('hair_color'));
             $user->set("field_waist", $form_state->getValue('waist'));
-            $user->set("field_weight", $form_state->getValue('weight'));       
+            $user->set("field_weight", $form_state->getValue('weight'));
+            $user->set("field_hip", $form_state->getValue('hips'));
         
-            // save photo
-            $file = file_save_upload('photo');
-            if ($file) {
+            // save photo id
+            $photo_id = file_save_upload('photo_id');
+            if ($photo_id) {
                 // set status permanent
-                $file[0]->setPermanent();
-                $file[0]->save();
+                $photo_id[0]->setPermanent();
+                $photo_id[0]->save();
                 // move file from temporary:// to public://
-                $file = file_move($file[0], 'public://'.$file[0]->getFilename());
+                $photo_id = file_move($photo_id[0], 'public://'.$photo_id[0]->getFilename());
                 // set photo to user
-                @$user->set('user_picture', array('target_id' => $file->id()));
+                @$user->set('field_photo_id', array('target_id' => $photo_id->id()));
             }
 
-            $file = file_save_upload('voice');
-            if ($file) {
+            // save photo
+            
+            if ($photo) {
                 // set status permanent
-                $file[0]->setPermanent();
-                $file[0]->save();
+                $photo[0]->setPermanent();
+                $photo[0]->save();
                 // move file from temporary:// to public://
-                $file = file_move($file[0], 'public://'.$file[0]->getFilename());
+                $photo = file_move($photo[0], 'public://'.$photo[0]->getFilename());
                 // set photo to user
-                @$user->set('field_voice', array('target_id' => $file->id()));
+                @$user->set('user_picture', array('target_id' => $photo->id()));
+            }
+
+            
+            if ($voice) {
+                // set status permanent
+                $voice[0]->setPermanent();
+                $voice[0]->save();
+                // move file from temporary:// to public://
+                $voice = file_move($voice[0], 'public://'.$voice[0]->getFilename());
+                // set photo to user
+                @$user->set('field_voice', array('target_id' => $voice->id()));
             }
         } else {
             $user->addRole('voter');
@@ -416,13 +540,23 @@ class EnterContestForm extends FormBase {
         // drupal_set_message($this->t('Registration successful. You are now logged in.'));
         // $form_state->setRedirect('');
 
-        
-        
         // open message dialog
         $message = 'Please check your email to complete the registration.';
         // Append script into callback message
         $script = '<script>
-            swal("Thank you", "We have sent you an email with activation link.", "success");
+            swal({
+                title: "Thank you",
+                text: "We have sent you an email with activation link.",
+                type: "success",
+                customClass: "registration-completed"
+            });
+
+            // bind click event to the button OK
+            jQuery(".registration-completed").click(function() {
+                // show login
+                jQuery("#block-mainmenu .login a").trigger("click");
+            });
+
             jQuery(".sweet-alert").center();
         </script>';
         // $response->addCommand(new OpenModalDialogCommand('Thank you', $message), ['width' => '700', 'clkass' => 'dialog-thanks']);

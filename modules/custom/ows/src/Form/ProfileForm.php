@@ -481,6 +481,11 @@ class ProfileForm extends FormBase {
         // validate flag
         if (count($message)) {
             $message = implode('<br>', $message);
+
+            // scrollto error message
+            $message .= '<script>
+                jQuery(".dialog-edit-my-account .ui-dialog-content").mCustomScrollbar("scrollTo", jQuery(".validate.error"));
+            </script>';
             $response->addCommand(new HtmlCommand('.validate', $message));
             return $response;
         }
@@ -585,7 +590,7 @@ class ProfileForm extends FormBase {
         $script = '<script>
             swal("Profile Updated", "Profile update successully.", "success");
             jQuery(".sweet-alert").center();
-            setTimeout(function() { jQuery(".my-account").trigger("click"); }, 3000);
+            // setTimeout(function() { jQuery(".my-account").trigger("click"); }, 3000);
         </script>';
         // $response->addCommand(new OpenModalDialogCommand('Thank you', $message), ['width' => '700', 'clkass' => 'dialog-thanks']);
         $response->addCommand(new HtmlCommand('.ui-dialog-title', $script));

@@ -17,6 +17,8 @@ use Drupal\Core\Ajax\CssCommand;
 use Drupal\Core\Ajax\HtmlCommand;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Inacho\CreditCard;
+
 /**
  * Class BuyTicketForm.
  *
@@ -73,7 +75,8 @@ tempor incididunt ut labore et dolore magna aliqua.</div>
             '#title' => $this->t('First Name'),
             '#attributes' => array(
                 'class' => array('form-control')
-            )
+            ),
+            '#required' => true,
         );
 
         $form['last_name'] = array(
@@ -81,7 +84,8 @@ tempor incididunt ut labore et dolore magna aliqua.</div>
             '#title' => $this->t('Last Name'),
             '#attributes' => array(
                 'class' => array('form-control')
-            )
+            ),
+            '#required' => true,
         );
 
         $form['amount'] = array(
@@ -90,9 +94,10 @@ tempor incididunt ut labore et dolore magna aliqua.</div>
             '#required' => true,
             '#default_value' => 10,
             '#attributes' => array(
-                //'class' => array('form-control')
+                'class' => array('form-control')
             ),
-            '#description' => 'How many do you want to donate?'
+            '#description' => 'How many do you want to donate?',
+            '#required' => true,
         );
 
         // credit card form
@@ -102,7 +107,8 @@ tempor incididunt ut labore et dolore magna aliqua.</div>
             '#attributes' => array(
                 'class' => array('form-control')
             ),
-            '#description' => '(as it appears on your card)'
+            '#description' => '(as it appears on your card)',
+            '#required' => true,
         );
 
         $form['card_last_name'] = array(
@@ -111,7 +117,8 @@ tempor incididunt ut labore et dolore magna aliqua.</div>
             '#attributes' => array(
                 'class' => array('form-control')
             ),
-            '#description' => '(as it appears on your card)'
+            '#description' => '(as it appears on your card)',
+            '#required' => true,
         );
 
         $form['card_number'] = array(
@@ -119,7 +126,8 @@ tempor incididunt ut labore et dolore magna aliqua.</div>
             '#title' => $this->t('Card number'),
             '#attributes' => array(
                 'class' => array('form-control')
-            )
+            ),
+            '#required' => true,
         );
 
         $months = range(1, 12);
@@ -134,7 +142,8 @@ tempor incididunt ut labore et dolore magna aliqua.</div>
             '#options' => $month_options,
             '#attributes' => array(
                 'class' => array('form-control')
-            )
+            ),
+            '#required' => true,
         );
 
         $years = range (date("Y"), date("Y") + 5);
@@ -149,15 +158,17 @@ tempor incididunt ut labore et dolore magna aliqua.</div>
             '#options' => $year_options,
             '#attributes' => array(
                 'class' => array('form-control')
-            )
+            ),
+            '#required' => true,
         );
 
-        $form['card_cvv'] = array(
+        $form['card_cvc'] = array(
             '#type' => 'textfield',
             '#title' => $this->t('Security code'),
             '#attributes' => array(
                 'class' => array('form-control')
-            )
+            ),
+            '#required' => true,
         );
 
         $form['actions']['#type'] = 'actions';
@@ -171,9 +182,6 @@ tempor incididunt ut labore et dolore magna aliqua.</div>
 
         $form['#title'] = 'Donate';
 
-        // test paypal
-        
-
         return $form;
     }
 
@@ -184,8 +192,12 @@ tempor incididunt ut labore et dolore magna aliqua.</div>
         // Instantiate an AjaxResponse Object to return.
         $response = new AjaxResponse();
 
-        if (!valid_email_address($form_state->getValue('mail'))) {
-            $response->addCommand(new HtmlCommand('.form-item-mail .description', 'Invalid email adress!'));
+        if (!$form_state->getValue('mail')) {
+            $response->addCommand(new HtmlCommand('.form-item-mail .description', 'Please enter your email address.'));
+        } else {
+            if (!valid_email_address($form_state->getValue('mail'))) {
+                $response->addCommand(new HtmlCommand('.form-item-mail .description', 'Invalid email address!'));
+            }
         }
 
         return $response;
@@ -202,7 +214,7 @@ tempor incididunt ut labore et dolore magna aliqua.</div>
         $card_number = $form_state->getValue('card_number');
         $exp_month = $form_state->getValue('exp_month');
         $exp_year = $form_state->getValue('exp_year');
-        $ccv = $form_state->getValue('card_ccv');
+        $cvc = $form_state->getValue('card_cvc');
 
         if (!$card_number || !ValidCreditcard($card_number)) {
             $response->addCommand(new HtmlCommand('.validate', 'Invalid credit card number.'));
@@ -226,10 +238,67 @@ tempor incididunt ut labore et dolore magna aliqua.</div>
     public function submitFormAjax(array &$form, FormStateInterface $form_state) {
         $path = drupal_get_path('module', 'ows');
         require_once($path.'/src/PayPal/autoload.php');
+        require_once($path.'/src/CreditCard.php');
 
         // -------------------------
         $response = new AjaxResponse();
 
+        $validate = false;
+        $debug = false;
+        $message = array();
+        $values = $form_state->getValues();
+
+        if ($debug) $message[] = print_r($form_state->getValues(), true);
+
+        // validate email
+        if (!$form_state->getValue('mail') || !valid_email_address($form_state->getValue('mail'))) {
+            $message[] = 'Invalid email address.';
+        }
+
+        $amount = $form_state->getValue('amount');
+        if (!$amount || !is_numeric($amount)) {
+            $message[] = 'Please enter amount.';
+        }
+
+        if (!$form_state->getValue('card_first_name')) {
+            $message[] = 'Please enter card first name.';
+        }
+
+        if (!$form_state->getValue('card_last_name')) {
+            $message[] = 'Please enter card last name.';
+        }
+
+        $card = CreditCard::validCreditCard($form_state->getValue('card_number'));
+        if (!$form_state->getValue('card_number') || !$card['valid']) {
+            $message[] = 'Please enter a valid credit card number.';
+        }
+
+        if (!$form_state->getValue('exp_month')) {
+            $message[] = 'Please select card expiration month.';
+        }
+
+        if (!$form_state->getValue('exp_year')) {
+            $message[] = 'Please select card expiration year.';
+        }
+
+        $validCvc = CreditCard::validCvc($form_state->getValue('card_cvc'), $card['type']);
+        if (!$form_state->getValue('card_cvc') || !$validCvc) {
+            $message[] = 'Please enter card security code.';
+        }
+
+        $validDate = CreditCard::validDate($form_state->getValue('exp_year'), $form_state->getValue('exp_month'));
+        if (!$validDate) {
+            $message[] = 'Please enter valid card expiration date.';
+        }
+
+        // validate flag
+        if (count($message)) {
+            $message = implode('<br>', $message);
+            $response->addCommand(new HtmlCommand('.validate', $message));
+            return $response;
+        }
+
+        // Paypal info
         $clientId = 'AbPf_36pBxcfrUKS_4k_aSGToBIC8B0iLV7CLKOvh2iVrUugMX90Mryz2dSZQwVjlud2SkIYB-CJMx6J';
         $clientSecret = 'EFGrn_1lFJdQNHApln8vnmo4M5ZIBQgbnVb8wUX2V2Smq1wPOKzzow5gbsIQBCAtXGUC5HnIZ0uRst-g';
 

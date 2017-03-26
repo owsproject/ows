@@ -55,26 +55,70 @@ function ows_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state
 }
 
 function ows_views_query_alter(Drupal\views\ViewExecutable $view, Drupal\views\Plugin\views\query\Sql $query) {
-	// filter by age
-	// unset default where condition of birthday
-	unset($query->where[1]['conditions'][1]);
-	
-	if (isset($_POST['age']) && $_POST['age'] > 0) {
-		$configuration = [
-			'table' => 'user__field_birthday',
-			'field' => 'entity_id',
-			'left_table' => 'users_field_data',
-			'left_field' => 'uid',
-			'operator' => '='
-	    ];
+	if ($view->current_display == "page_browse") {
+		// filter by age
+		// unset default where condition of birthday
+		unset($query->where[1]['conditions'][1]);
+		
+		if (isset($_POST['age']) && $_POST['age'] > 0) {
+			$configuration = [
+				'table' => 'user__field_birthday',
+				'field' => 'entity_id',
+				'left_table' => 'users_field_data',
+				'left_field' => 'uid',
+				'operator' => '='
+		    ];
 
-	    $year = date('Y') - $_POST['age'];
+		    $year = date('Y') - $_POST['age'];
 
-		$join = \Drupal\views\Views::pluginManager('join')->createInstance('standard', $configuration);
-		$query->addRelationship('user__field_birthday', $join, 'users_field_data');
-		$query->addWhere(count($query->where), 'user__field_birthday.field_birthday_value', array("$year-01-01", "$year-12-31"), "BETWEEN");
-		//$query->addWhere(count($query->where), 'user__field_birthday.field_birthday_value', "$year-01-01", ">=");
-		//dpm($query);
+			$join = \Drupal\views\Views::pluginManager('join')->createInstance('standard', $configuration);
+			$query->addRelationship('user__field_birthday', $join, 'users_field_data');
+			$query->addWhere(count($query->where), 'user__field_birthday.field_birthday_value', array("$year-01-01", "$year-12-31"), "BETWEEN");
+			//$query->addWhere(count($query->where), 'user__field_birthday.field_birthday_value', "$year-01-01", ">=");
+			//dpm($query);
+		}
+	}
+
+	// Use session to pass search key
+	if ($view->current_display == "page_search_user") {
+		$current_path = \Drupal::service('path.current')->getPath();
+		$path_args = explode('/', $current_path);
+
+		$key = @$_SESSION['search-key']; // works
+
+		$tempstore = \Drupal::service('user.private_tempstore')->get('ows');
+		$key = $tempstore->get('search-key');
+
+		if ($key) {
+			$configuration = [
+				'table' => 'user__field_first_name',
+				'field' => 'entity_id',
+				'left_table' => 'users_field_data',
+				'left_field' => 'uid',
+				'operator' => '='
+		    ];
+
+		    // new where group 
+		    $group = 'name';
+			$join = \Drupal\views\Views::pluginManager('join')->createInstance('standard', $configuration);
+			$query->addRelationship('user__field_first_name', $join, 'users_field_data');
+			$query->addWhere($group, 'user__field_first_name.field_first_name_value', $key.'%', "LIKE");
+
+			$configuration = [
+				'table' => 'user__field_last_name',
+				'field' => 'entity_id',
+				'left_table' => 'users_field_data',
+				'left_field' => 'uid',
+				'operator' => '='
+		    ];
+
+			$join = \Drupal\views\Views::pluginManager('join')->createInstance('standard', $configuration);
+			$query->addRelationship('user__field_last_name', $join, 'users_field_data');
+			$query->addWhere($group, 'user__field_last_name.field_last_name_value', $key.'%', "LIKE");
+
+			// change group type to OR
+			$view->query->where[$group]['type'] = 'OR';
+		}
 	}
 }
 
@@ -86,7 +130,7 @@ function ows_mail($key, &$message, $params) {
 	switch ($key) {
 		case 'invite_friend':
 			$message['from'] = \Drupal::config('system.site')->get('mail');
-			$message['subject'] = t('Article created: @title', array('@title' => $params['node_title']), $options);
+			$message['subject'] = t('@title', array('@title' => $params['title']), $options);
 			$message['body'][] = $params['message'];
 		break;
 	}

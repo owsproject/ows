@@ -540,6 +540,24 @@
 	  
 	  /* Allow restore the dialog */
 	  restore : function() {
+	  	// get saved state
+		var _w = _h = _t = _l = false;
+		if (this.uiDialog.attr('w') != undefined) {
+			_w = this.uiDialog.attr('w');
+		}
+
+		if (this.uiDialog.attr('h') != undefined) {
+			_h = this.uiDialog.attr('h');
+		}
+
+		if (this.uiDialog.attr('t') != undefined) {
+			_t = this.uiDialog.attr('t');
+		}
+
+		if (this.uiDialog.attr('l') != undefined) {
+			_l = this.uiDialog.attr('l');
+		}
+
 		  window.maximized = false; /* reset both states (restored) */
 		  window.minimized = false;
 		  this.uiDialog.find('.ui-dialog-content').show();
@@ -581,10 +599,19 @@
 			  left += w + 5;
 		  });
 		  /* end */
+
+		  if (_t) this.uiDialog.css('top', _t);
+		  if (_l) this.uiDialog.css('left', _l);
 	  },
 	  
 	  /* Minimize to a custom position */
 	  minimize : function() {
+	  	// save width, height and position
+		this.uiDialog.attr('w', this.uiDialog.width());
+		this.uiDialog.attr('h', this.uiDialog.height());
+		this.uiDialog.attr('t', this.uiDialog.css('top'));
+		this.uiDialog.attr('l', this.uiDialog.css('left'));
+
 		  window.minimized = true; /* save the current state: minimized */
 		  window.maximized = false;
 		  this.uiDialog.find('.ui-dialog-content').hide();
@@ -644,12 +671,16 @@
 			  marginHDialog = 25;
 			  marginWDialog = 52;
 		  }
+
+		  // reset to make it full 
+		  marginHDialog = marginWDialog = 0;
+
 		  marginHDialog = $(window).height() - marginHDialog;
 		  marginWDialog = $('body').width() - marginWDialog;
 		  //console.log('maximize to '+marginWDialog+", $('body').width() : "+$('body').width());
 		  this.uiDialog.css( {
-		    left : 10,
-		    top : $(document).scrollTop() + 5,
+		    left : 0, // 10
+		    top : $(document).scrollTop(), // + 5
 		    width : marginWDialog + "px",
 		    height : marginHDialog + "px"
 		  });
@@ -709,6 +740,9 @@
 			  marginH = 12;
 			  marginW = 16;
 		  }
+
+		  // make full width and height
+		  marginH = marginW = 0;
 		  
 		  $('#dialog').css('width', ($('#dialog').width() - 3) + "px");
 		  $('.ui-resizable-w').css('height', ($('.ui-dialog').height() - $('.ui-resizable-sw').height() - marginH) + "px");

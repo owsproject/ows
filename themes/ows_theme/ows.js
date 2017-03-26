@@ -6,6 +6,18 @@ var sweetalert_class = false;
 var fullscreen_interval = false;
 
 jQuery(document).ready(function() {
+
+});
+
+jQuery(document).ready(function() {
+	// hide error
+	jQuery(".layout-container header > div > div").each(function(index, el) {
+		if (jQuery(this).attr("aria-label") == "Error message") {
+			jQuery(this).hide();
+		}
+	});
+ 
+	// show login windows
 	if (location.href.indexOf('/user/login') > -1) {
 		location.href = "/home?login=window";
 	}
@@ -17,32 +29,38 @@ jQuery(document).ready(function() {
 	// set height 100%;
 	jQuery('body').css('height', jQuery(window).height());
 
+	// ---------------------
 	// front page slideshow
-	jQuery("body.front").delay(5000).vegas({
-		overlay: drupalSettings.path.baseUrl+"themes/ows_theme/css/overlays/01.png",
-		transitionDuration: 3000,
-		preload: true,
-		delay: 7000,
-	    slides: [
-	        { src: drupalSettings.path.baseUrl+"themes/ows_theme/css/sliders/background.jpg" },
-	        { src: drupalSettings.path.baseUrl+"themes/ows_theme/css/sliders/background2.jpg" },
-	        { src: drupalSettings.path.baseUrl+"themes/ows_theme/css/sliders/background.jpg" }
-	        /*{ src: drupalSettings.path.baseUrl+"themes/ows_theme/css/sliders/slider2.jpg" },
-	        { src: drupalSettings.path.baseUrl+"themes/ows_theme/css/sliders/slider3.jpg" },
-	        { src: drupalSettings.path.baseUrl+"themes/ows_theme/css/sliders/slider4.jpg" },
-	        { src: drupalSettings.path.baseUrl+"themes/ows_theme/css/sliders/slider5.jpg" }*/
-	    ]
-	});
-
-	jQuery("body.not-front").delay(5000).vegas({
-		overlay: drupalSettings.path.baseUrl+"themes/ows_theme/css/overlays/01.png",
-		transitionDuration: 3000,
-		preload: true,
-		delay: 7000,
-	    slides: [
-	        { src: drupalSettings.path.baseUrl+"themes/ows_theme/css/sliders/background.jpg" }
-	    ]
-	});
+	if (jQuery("body").hasClass('path-frontpage')) {
+		$body = jQuery("body");
+		$body.delay(5000).vegas({
+			overlay: drupalSettings.path.baseUrl+"themes/ows_theme/css/overlays/01.png",
+			transitionDuration: 3000,
+			preload: true,
+			delay: 7000,
+		    slides: [
+		        /*{ src: drupalSettings.path.baseUrl+"themes/ows_theme/css/sliders/background.jpg" },
+		        { src: drupalSettings.path.baseUrl+"themes/ows_theme/css/sliders/background2.jpg" },
+		        { src: drupalSettings.path.baseUrl+"themes/ows_theme/css/sliders/background.jpg" }*/
+		        { src: drupalSettings.path.baseUrl+"themes/ows_theme/css/sliders/slider1.jpg", cover: false },
+		        { src: drupalSettings.path.baseUrl+"themes/ows_theme/css/sliders/slider2.jpg", cover: false },
+		        { src: drupalSettings.path.baseUrl+"themes/ows_theme/css/sliders/slider3.jpg", cover: false },
+		        { src: drupalSettings.path.baseUrl+"themes/ows_theme/css/sliders/slider4.jpg", cover: false },
+		        { src: drupalSettings.path.baseUrl+"themes/ows_theme/css/sliders/slider5.jpg", cover: false }
+		    ]
+		});
+	} else {
+		jQuery("body").delay(5000).vegas({
+			overlay: drupalSettings.path.baseUrl+"themes/ows_theme/css/overlays/01.png",
+			transitionDuration: 3000,
+			preload: true,
+			delay: 7000,
+			cover: false,
+		    slides: [
+		        { src: drupalSettings.path.baseUrl+"themes/ows_theme/css/sliders/background.jpg" }
+		    ]
+		});
+	}
 
 	// Prevent event on Home menu
 	jQuery('li.home a').click(function(e) {
@@ -50,7 +68,7 @@ jQuery(document).ready(function() {
 		if (title.indexOf("Page not found") == -1) {
 			// console.log(e);
 			e.preventDefault();
-			displayWelcome();
+			displayWelcome(false);
 		}
 	});
 
@@ -61,7 +79,7 @@ jQuery(document).ready(function() {
 
 		jQuery(".ui-dialog").not(".dialogr-minimized").each(function() {
 			if (jQuery(this).width() < 980) {
-				jQuery(this).center();
+				//jQuery(this).center(); // enable this will cause the windows looks like it resize 4 edges
 			}
 		});
 	});
@@ -90,7 +108,7 @@ jQuery(document).ready(function() {
 		swal.close();
 		obj = jQuery(this);
 		e.preventDefault();
-		loader();
+		loader(true);
 		page = 6;
 		jQuery.ajax({
 			url: "/ajax-content",
@@ -118,12 +136,54 @@ jQuery(document).ready(function() {
 		fullscreen_interval = setInterval(function() {checkFullScreen();}, 1000);
 	});
 
+	// ----------------------
+	// Search
+	jQuery("body").prepend('<div class="search-box"><div class="search-key-wrapper"><input type="text" id="search-key" name="search-key" /></div><a href="#search" class="search-icon"><span></span></a></div>');
+	// search action
+	jQuery(".search-icon").click(function() {
+		if (jQuery('.search-box .search-key-wrapper').css('display') == "none") {
+			jQuery('.search-box .search-key-wrapper').toggle({ direction: "left" }, 200);
+		} else {
+			loader(1);
+			// close exist search dialog, if not use modal (see dialog type on controller file)
+			if (jQuery(".dialog-search").length) {
+				jQuery('.dialog-search .ui-dialog-titlebar-close').trigger('click');
+			}
+
+			dialog_options = jQuery("#btn-search-user").attr('data-dialog-options').replace('[key]', jQuery("#search-key").val());
+			jQuery("#btn-search-user").attr('data-dialog-options', dialog_options);
+
+			// send key before trigger dialog
+			jQuery.ajax({
+				url: "/ajax-content",
+				type: "POST",
+				data: {type: "search-key", key: jQuery("#search-key").val()},
+				async: false, 
+				success: function(data) {
+					loader(0);
+					jQuery("#btn-search-user").attr('href', '/search-user?_wrapper_format=' + jQuery("#search-key").val()).click();
+				}
+			});
+			
+		}
+	});
+
 	// enable tooltip
-	jQuery('[data-toggle="tooltip"]').tooltip(); 
+	tooltip_settings = { placement: "top" };
+	if (jQuery(window).width() <= 640) {
+		// jQuery('[data-toggle="tooltip"]').tooltip({
+			
+		// });
+	} else {
+		jQuery('[data-toggle="tooltip"]').tooltip({
+			placement: "top"
+		});
+	}
 
 	// --------------------
 	// dialog for not-front
 	if (!jQuery("body").hasClass('path-frontpage')) {
+		// Page not found
 		if (jQuery(".layout-container #block-ows-theme-page-title h1").html() == "Page not found") {
 			jQuery("#block-ows-theme-page-title, #block-ows-theme-content").hide();
 			swal({
@@ -144,11 +204,22 @@ jQuery(document).ready(function() {
 			callback = "scrollbar('.ui-dialog .dialog-content', false); jQuery.ui.dialogr.maxZ += 2;";
 			openDialog('.dialog-content', jQuery(".layout-container #block-ows-theme-page-title h1").html(), jQuery("#block-ows-theme-content").html(), 650, 500, 	false, callback);
 		}
+	} else {
+		// show login windows
+		if (jQuery("#login_message").length > 0) {
+			//  || jQuery(".layout-container header div").html().indexOf('Unrecognized username or password.') > -1
+			jQuery("#block-ows-theme-page-title, #block-ows-theme-content, .layout-container header").hide();
+			swal.close();
+			
+			jQuery.ui.dialogr.maxZ += 1;
+			jQuery('#block-userlogin').css('z-index', jQuery.ui.dialogr.maxZ).center().fadeIn();			
+			jQuery("#user-login-form #edit-actions").prepend('<div class="login-fail">Unrecognized username or password.</div>')
+		} 
 	}
 
 	// price pool
 	if (jQuery(".price-pool-holder").html() != null) {
-		jQuery("body").prepend('<div class="price-pool"><span class="text">Prize Pool: <strong>'+jQuery(".price-pool-holder").html()+'</strong></span></div>');
+		jQuery("body").prepend('<div class="price-pool"><span class="text">Prize Pool: <strong>$'+jQuery(".price-pool-holder").html()+'</strong></span></div>');
 	}
 });
 
@@ -179,10 +250,10 @@ jQuery(document).ready(function() {
 	user_option = jQuery.cookie('user.option');
 	if (user_option === undefined) {
 		if (jQuery('body').hasClass('path-frontpage')) {
-			displayWelcome();
+			displayWelcome(false);
 		}
 	} else {
-		displayWelcome();
+		displayWelcome(false);
 	}
 
 	// Check dialog active jQuery('.ui-dialog').length;
@@ -201,9 +272,15 @@ jQuery(document).ready(function() {
 		// date picker, make sure element exist
 		try {
 			if (jQuery("input.form-date").length) {
-				jQuery("input.form-date").attr('readonly', 'readonly').attr('data-language', 'en').datepicker({
-					autoClose: true
+
+				jQuery("input.form-date").val('1/1/1999').attr('readonly', 'readonly').attr('data-language', 'en').datepicker({
+					autoClose: true,
+					yearRange: "-180:+0",
+					changeMonth: true,
+            		changeYear: true
 				});
+
+				// $("input.form-date").datepicker("option", "defaultDate", '1/1/1999');
 			}
 		} catch (e) {console.log(e);}
 	};
@@ -243,6 +320,29 @@ jQuery(document).ready(function() {
 	});
 
 	try {
+		var slide_state = 'play';
+		// slide navigation
+		jQuery('#block-mainmenu').parent().append('<div class="slideshow-nav-buttons"><a href="#prev" class="prev"></a><a href="#play-pause" class="play-pause"></a><a href="#next" class="next"></a></div>');
+		jQuery(".slideshow-nav-buttons .prev").on('click', function () {
+    		$body.vegas('previous');
+		});
+
+		jQuery(".slideshow-nav-buttons .next").on('click', function () {
+    		$body.vegas('next');
+		});
+
+		jQuery(".slideshow-nav-buttons .play-pause").on('click', function () {
+			if (slide_state == "play") {
+    			$body.vegas('pause');
+    			jQuery(".slideshow-nav-buttons .play-pause").addClass('pause');
+    			slide_state = 'pause';
+    		} else {
+    			$body.vegas('play');
+    			jQuery(".slideshow-nav-buttons .play-pause").removeClass('pause');
+    			slide_state = 'play';
+    		}
+		});
+
 		jQuery('.user-logged-in #block-mainmenu').parent().append('<div id="user-menu" class="user-menu dropdown"><div class="drop-ttl">&nbsp;</div><ul><li class="my-vote">My Vote</li><li class="my-account">My Account</li></ul></label></div></div>');
 		jQuery('#block-mainmenu').parent().append('<a id="nav-toggle" href="#"><span></span></a>');
 
@@ -253,7 +353,7 @@ jQuery(document).ready(function() {
 
 		// my vote click 
 		jQuery('.my-vote').click(function(e) {
-			swal.close();
+			//swal.close();
 			jQuery.ajax({
 				url: "/ajax-content",
 				type: "POST",
@@ -269,8 +369,8 @@ jQuery(document).ready(function() {
 
 		// my account click 
 		jQuery('.my-account').click(function(e) {
-			loader();
-			swal.close();
+			loader(1);
+			//swal.close();
 			jQuery.ajax({
 				url: "/ajax-content",
 				type: "POST",
@@ -290,12 +390,12 @@ jQuery(document).ready(function() {
 	    	jQuery('#block-mainmenu').slideToggle();
 
 	    	// hide white windows
-	    	swal.close();
+	    	// swal.close();
 	  	});
 	} catch(e) {}
 
 	// -------------
-	// menu click
+	// main menu click
 	jQuery('#block-mainmenu li a').click(function(e) {
 		staticPage = true;
 		if (jQuery(this).parent().attr('class') == "current-voting") {
@@ -315,16 +415,16 @@ jQuery(document).ready(function() {
 			});
 		}
 
-		if (jQuery(this).parent().attr('class') == "social") {
+		/*if (jQuery(this).parent().attr('class') == "social") {
 			e.preventDefault();
 			staticPage = false;
-		}
+		}*/
 
 		if (jQuery(this).parent().attr('class') == "buy-ticket") {
 			e.preventDefault();
 			staticPage = false;
-			swal.close();
-		    loader();
+			//swal.close();
+		    loader(1);
 		  	jQuery('.dialog-buttons-wrapper #btn-buy-ticket').trigger('click');
 		  	setTimeout(function() {
 		  		loader(0);
@@ -334,8 +434,8 @@ jQuery(document).ready(function() {
 		if (jQuery(this).parent().attr('class') == "donate") {
 			e.preventDefault();
 			staticPage = false;
-			swal.close();
-		    loader();
+			//swal.close();
+		    loader(1);
 		  	jQuery('.dialog-buttons-wrapper #btn-donate').trigger('click');
 		  	setTimeout(function() {
 		  		loader(0);
@@ -346,7 +446,7 @@ jQuery(document).ready(function() {
 		if (jQuery(this).attr('href') != "/" && jQuery(this).attr('href') != "/user/logout" && staticPage) {
 			openStaticPage(jQuery(this));
 			e.preventDefault();
-			console.log("Open statis page");
+			console.log("Open static page");
 		}
 	});		
 });
@@ -386,14 +486,16 @@ function contestant_video() {
 function edit_account() {
 	jQuery(".my-account-edit").click(function() {
 		jQuery("#btn-edit-account").trigger('click');
-		loader();
+		loader(1);
 		jQuery('.dialog-my-account').remove();
 	});
 }
 
-// Welcome sweetalert box
-// Box param: false = Welcome
-function displayWelcome(box = false) {
+// Welcome sweetalert box. Box param: false = Welcome
+function displayWelcome(box) {
+	if ((jQuery("#block-userlogin").length && jQuery("#block-userlogin").css('display') != "none")) {
+		return;
+	}
 
 	// show login window
 	if (jQuery.urlParam('login')) {
@@ -434,6 +536,8 @@ function displayWelcome(box = false) {
 				//allowEscapeKey: false
 			});
 
+			jQuery(".sweet-alert").css('z-index', ++jQuery.ui.dialogr.maxZ);
+
 			scrollbar('.welcome-text', false);
 
 			jQuery('.sweet-alert').draggable({ containment: "html" });
@@ -442,16 +546,16 @@ function displayWelcome(box = false) {
 			// ------------------------------
 			// blind click event for button - click this button will trigger drupal button 
 			jQuery('.sweet-alert #swal-btn-register').on('click', function() {
-				swal.close();
-				loader();
+				//swal.close();
+				loader(1);
 		  		jQuery('.dialog-buttons-wrapper #btn-enter-contest').trigger('click');
 			});
 
 		    // ------------------------------
 		    // Vote
 		    jQuery('.sweet-alert #swal-btn-vote').on('click', function() {
-		    	swal.close();
-		    	loader();
+		    	//swal.close();
+		    	loader(1);
 		  		jQuery('.dialog-buttons-wrapper #btn-vote').trigger('click');
 		  	});
 
@@ -468,8 +572,8 @@ function displayWelcome(box = false) {
 		  	// ------------------------------
 		    // Add my name
 		    jQuery('.sweet-alert #swal-btn-add-me').on('click', function() {
-		    	swal.close();
-		    	loader();
+		    	//swal.close();
+		    	loader(1);
 		  		jQuery('.dialog-buttons-wrapper #btn-add-me').trigger('click');
 		  	});
 		}
@@ -497,14 +601,14 @@ function displayWelcome(box = false) {
 		    // Browse
 		    jQuery('.sweet-alert #swal-btn-men').on('click', function() {
 		    	swal.close();
-		    	loader();
+		    	loader(1);
 		  		jQuery('.dialog-buttons-wrapper #btn-men').trigger('click');
 		  	});
 
 		    // Browse women
 		  	jQuery('.sweet-alert #swal-btn-women').on('click', function() {
 		    	swal.close();
-		    	loader();
+		    	loader(1);
 		  		jQuery('.dialog-buttons-wrapper #btn-women').trigger('click');
 		  	});
 		}
@@ -517,7 +621,14 @@ function displayWelcome(box = false) {
 
 	// swal bind event close event 
 	jQuery('.swal-back').click(function() {
-		displayWelcome();
+		displayWelcome(false);
+	});
+
+	// z-index
+	jQuery('.sweet-alert').click(function(event) {
+		// only incease z-index if user click on windows but not link to open new dialog
+		jQuery.ui.dialogr.maxZ += 1;
+		jQuery(this).css('z-index', jQuery.ui.dialogr.maxZ);
 	});
 }
 
@@ -526,6 +637,7 @@ function displayWelcome(box = false) {
 		jQuery(klass).dialog().dialog('close');
 	}
 }*/
+
 
 function dialogOpened(dialog_class) {
 	return jQuery(dialog_class + ' #drupal-modal').length;
@@ -553,7 +665,7 @@ function openOWSDialog(dialog_class) {
 	
 	// skip scrollbar
 	if (dialog_class != ".dialog-add-me") {
-		scrollbar(dialog_class);
+		scrollbar(dialog_class, true);
 	}
 
 	loader(false);
@@ -564,7 +676,7 @@ function openOWSDialog(dialog_class) {
 	if (dialog_class == ".dialog-browse") {
 		jQuery(dialog_class).click(function(event) {
 			tag = jQuery(event.target).prop("tagName");
-			// only incease Zindex if user click on windows but not link to open new dialog
+			// only incease z-index if user click on windows but not link to open new dialog
 			if (jQuery(event.target).attr('class') != "field-content" && tag != "IMG") {
 				jQuery.ui.dialogr.maxZ += 1;
 				jQuery(this).css('z-index', jQuery.ui.dialogr.maxZ);
@@ -572,13 +684,16 @@ function openOWSDialog(dialog_class) {
 		});
 
 		browser_fields_ghost_text();
-		setTimeout(function() {
-			jQuery(".dialog-browse .ui-dialog-buttonpane .form-actions").prepend('<button type="button" class="button filter-button">Filter</button>');
-			jQuery(".dialog-browse .filter-button").click(function(event) {
-				jQuery("#views-exposed-form-browse-page-browse").toggle();
-			});
-		}, 2000);
-		console.log("prepended");
+
+		/*var filter_interval = setInterval(function() {
+			if (jQuery(".dialog-browse .ui-dialog-buttonpane .form-actions").length > 0) {
+				jQuery(".dialog-browse .ui-dialog-buttonpane .form-actions").prepend('<button type="button" class="button filter-button">Filter</button>');
+				jQuery(".dialog-browse .filter-button").click(function(event) {
+					jQuery("#views-exposed-form-browse-page-browse").toggle();
+				});
+				clearInterval(filter_interval);
+			}
+		}, 200);*/
 	} 
 	
 	// --------------
@@ -614,6 +729,7 @@ function openOWSDialog(dialog_class) {
 	}
 
 	// --------------------
+	// Measurement
 	if (dialog_class == ".dialog-enter-contest") {
 		jQuery(".form-item-measurement select").change(function() {
 			if (jQuery(this).val() == "US Standard") {
@@ -623,8 +739,8 @@ function openOWSDialog(dialog_class) {
 				jQuery(".form-item-waist .measurement-suffix").html("inch");
 				jQuery(".form-item-hips .measurement-suffix").html("inch");
 			} else if (jQuery(this).val() == "Metric") {
-				jQuery(".form-item-height .measurement-suffix").html("kg");
-				jQuery(".form-item-weight .measurement-suffix").html("cm");
+				jQuery(".form-item-height .measurement-suffix").html("cm");
+				jQuery(".form-item-weight .measurement-suffix").html("kg");
 				jQuery(".form-item-bust .measurement-suffix").html("cm");
 				jQuery(".form-item-waist .measurement-suffix").html("cm");
 				jQuery(".form-item-hips .measurement-suffix").html("cm");
@@ -654,17 +770,54 @@ function openOWSDialog(dialog_class) {
 	if (dialog_class == ".dialog-my-account") {
 		
 	}
+
+	// ---------------
+	// dialog resize
+	jQuery('.ui-dialog').resize(function() {
+		// browse
+		if (jQuery(this).hasClass("dialog-browse")) {
+			if (jQuery(this).width() < 600) {
+				if (jQuery(this).width() < 400) {
+					jQuery(this).find('.views-row').addClass('col-2').removeClass('col-3').removeClass('col-5');
+				} else {
+					jQuery(this).find('.views-row').addClass('col-3').removeClass('col-2').removeClass('col-5');
+				}
+			} else {
+				jQuery(this).find('.views-row').addClass('col-5').removeClass('col-2').removeClass('col-3');
+			}
+		}
+	});
 }
 
 // -------------------
 // Dialog custom events
 function dialog_restore(dialog_class) {
+	console.log("Restore");
 	jQuery(dialog_class).draggable("enable");
 	jQuery(dialog_class + " .ui-dialog-titlebar").css("cursor", "move");
 
 	window.maximized = false; /* reset both states (restored) */
 	window.minimized = false;
 	$this = jQuery(dialog_class);
+
+	// get saved state
+	var _w = _h = _t = _l = false;
+	if (jQuery(dialog_class).attr('w') != undefined) {
+		_w = jQuery(dialog_class).attr('w');
+	}
+
+	if (jQuery(dialog_class).attr('h') != undefined) {
+		_h = jQuery(dialog_class).attr('h');
+	}
+
+	if (jQuery(dialog_class).attr('t') != undefined) {
+		_t = jQuery(dialog_class).attr('t');
+	}
+
+	if (jQuery(dialog_class).attr('l') != undefined) {
+		_l = jQuery(dialog_class).attr('l');
+	}
+
 	$this.find('.ui-dialog-content').show();
 	jQuery('.ui-dialog-titlebar-rest', $this).hide();
 	jQuery('.ui-dialog-titlebar-max', $this).show();
@@ -672,6 +825,9 @@ function dialog_restore(dialog_class) {
 		
 	_width = 650;
 	_height = 400;
+
+	if (_w)  _width = _w;
+	if (_h)  _height = _h;
 
 	if ($this.attr('dialog_width')) _width = $this.attr('dialog_width');
 	if ($this.attr('dialog_height')) _height = $this.attr('dialog_height');
@@ -689,7 +845,10 @@ function dialog_restore(dialog_class) {
 	}
 
 	// $this.position(this.options.position);
-	$this.center();
+	
+	// center this dialog
+	// $this.center();
+
 	$this.find('#dialog-restore').css('right', '1.5em');
 	//$this._setOption("resizable", true);
 	//$this._setOption("draggable", true);
@@ -715,19 +874,30 @@ function dialog_restore(dialog_class) {
 	// and do it !
 	var left = 10;
 	jQuery('.dialogr-minimized:visible').each(function() {
-	  var $t = $(this);
-	  $t.width(w);
+	  var $t = jQuery(this);
+	  //$t.width(w);
 	  $t.css('left', left);
 	  left += w + 5;
 	});
+
+	// reposition
+	if (_t) $this.css('top', _t);
+	if (_l) $this.css('left', _l);
+
 	/* end */
 }
 	  
-	  /* Minimize to a custom position */
+/* Minimize to a custom position */
 function dialog_minimize(dialog_class) {
 	console.log("Minimize");
 	jQuery(dialog_class).draggable('disable');
 	jQuery(dialog_class + " .ui-dialog-titlebar").css("cursor", "default");
+	
+	// save width, height and position
+	jQuery(dialog_class).attr('w', jQuery(dialog_class).width());
+	jQuery(dialog_class).attr('h', jQuery(dialog_class).height());
+	jQuery(dialog_class).attr('t', jQuery(dialog_class).css('top'));
+	jQuery(dialog_class).attr('l', jQuery(dialog_class).css('left'));
 
 	window.minimized = true; /* save the current state: minimized */
 	window.maximized = false;
@@ -794,12 +964,17 @@ function dialog_maximize(dialog_class) {
 	  marginHDialog = 25;
 	  marginWDialog = 52;
 	}
+
+	// let windows maximize full
+	marginHDialog = marginWDialog = 0;
+	left = 0; // left = 10;
+
 	marginHDialog = jQuery(window).height() - marginHDialog;
 	marginWDialog = jQuery('body').width() - marginWDialog;
 	//console.log('maximize to '+marginWDialog+", $('body').width() : "+$('body').width());
 	$this.css( {
-		left : 10,
-		top : jQuery(document).scrollTop() + 5,
+		left : left,
+		top : jQuery(document).scrollTop() + 0, // 5
 		width : marginWDialog + "px",
 		height : marginHDialog + "px"
 	});
@@ -854,7 +1029,7 @@ function openStaticPage(obj) {
 	page = obj.attr('data-drupal-link-system-path').replace('node/', '');
 
 	if (!jQuery('.page-'+page).length) {
-		loader();
+		loader(1);
 		jQuery.ajax({
 			url: "/ajax-content",
 			type: "POST",
@@ -878,7 +1053,7 @@ function browseContestant(dialog_class) {
 
 		if (!jQuery('.dialog-contestant-'+id).length) {
 			full_name = jQuery(this).find('.views-field-field-first-name .field-content').html() + ' ' + jQuery(this).find('.views-field-field-last-name .field-content').html();
-			loader();
+			loader(1);
 	    	// browse website
 			jQuery.ajax({
 				url: "/ajax-content",
@@ -1006,19 +1181,20 @@ function myFavorite() {
 
 // Invite friend
 function inviteFriendForm(klass) {
-	html = '<div class="form-item form-fullname">';
+	html = '<div class="validate"></div>';
+	html += '<div class="form-item form-fullname">';
 	html += '<label for="edit-name">Friend\'s name</label>';
-	html += '<input type="text" class="form-name" maxlength="254" size="60" value="" name="name" id="edit-name">';
+	html += '<input type="text" class="form-name form-text" maxlength="254" size="60" value="" name="name" id="edit-name">';
 	html += '</div>';
 
 	html += '<div class="form-item form-email">';
 	html += '<label for="edit-email">Email Address</label>';
-	html += '<input type="text" class="form-email" maxlength="254" size="60" value="" name="email" id="edit-email">';
+	html += '<input type="text" class="form-email form-text" maxlength="254" size="60" value="" name="email" id="edit-email">';
 	html += '</div>';
 
 	html += '<div class="form-item form-content">';
 	html += '<label for="edit-content">Content</label>';
-	html += '<textarea class="form-content" maxlength="254" size="60" value="" name="content" id="edit-content"></textarea>';
+	html += '<textarea class="form-content form-text" maxlength="254" size="60" value="" name="content" id="edit-content"></textarea>';
 	html += '</div>';
 
 	html += '<div id="edit-actions" class="form-actions form-wrapper">';
@@ -1030,7 +1206,8 @@ function inviteFriendForm(klass) {
 
 	// bind event for invite form
 	jQuery(klass + ' #edit-actions .form-submit').click(function() {
-		loader();
+
+		loader(1);
 		_name = jQuery(klass + ' #edit-name').val();
 		_email = jQuery(klass + ' #edit-email').val();
 		_content = jQuery(klass + ' #edit-content').val();
@@ -1042,10 +1219,14 @@ function inviteFriendForm(klass) {
 			success: function(data) {
 				loader(0);
 				if (data == 1) {
-					
+					swal("Thank you", "Invite has been sent.", "success");					
+				} else if (data == 0) {
+					swal("Error", "There is an error while sending invite, please try again later.", "error");
 				} else {
-
+					swal("Error", data, "error");
 				}
+
+				jQuery(".sweet-alert").center();
 			}
 		});
 	});
@@ -1056,20 +1237,20 @@ function closeOWSDialog(dialog_class) {
 	// dialog_class = "." + dialog_class;
 	if (dialogs > 0) dialogs--;
 	else dialogs = 0;
-	//if (dialogs == 0) displayWelcome();
+	//if (dialogs == 0) displayWelcome(false);
 
 	// show welcome message if user close Add Me form
-	if (dialog_class == "dialog-add-me") displayWelcome();
+	if (dialog_class == "dialog-add-me") displayWelcome(false);
 }
 
 function anyDialogActive() {
 	// no more dialog, display welcome mesasge
 	if(dialogs == 0) {
-		// displayWelcome();
+		// displayWelcome(false);
 	}
 }
 
-function scrollbar(klass, is_dialog = true) {
+function scrollbar(klass, is_dialog) {
 	if (is_dialog) klass = klass + ' .ui-dialog-content';
 	else _k = klass;
 
@@ -1082,7 +1263,7 @@ function scrollbar(klass, is_dialog = true) {
 }
 
 // loading
-function loader(flag = true) {
+function loader(flag) {
 	if (flag) {
 		jQuery('.load-container').center().show();
 	} else jQuery('.load-container').hide();
@@ -1099,7 +1280,7 @@ width & height: dialog size
 is_new: create new dialog
 callback: callback for opened dialog
 */
-function openDialog(element, title, data, width = 500, height = 500, is_new = false, callback = false) {
+function openDialog(element, title, data, width, height, is_new, callback) {
 	// default dialog
 	/* // check dialog element 
 	if (!jQuery('.ui-dialog ' +element).length) {
@@ -1124,7 +1305,7 @@ function openDialog(element, title, data, width = 500, height = 500, is_new = fa
 		open: function( event, ui ) {
 			w = jQuery(element + ' .ui-dialog-content').width();
 			jQuery(element + ' .ui-dialog').width(w);
-			scrollbar(element + ' .ui-dialog-content');
+			scrollbar(element + ' .ui-dialog-content', true);
 
 			// execute callback
 			console.log("Dialogr: " + callback);
@@ -1145,6 +1326,8 @@ function openDialog(element, title, data, width = 500, height = 500, is_new = fa
 
 // ajax complete event
 jQuery(document).ajaxComplete(function(event, xhr, settings) {
+	console.log("AjaxComplete");
+
 	// user clicks on pager
 	try {
 		if (dialog_class.toString() == 'dialog-browse') {
@@ -1173,12 +1356,18 @@ jQuery(document).ajaxComplete(function(event, xhr, settings) {
 		    });*/
 		}
 	} catch (e) {}
+
+	// validate
+	if (jQuery(".validate.error").length) {
+		jQuery(".ui-dialog .ui-dialog-content").mCustomScrollbar("scrollTo", "top");
+	}
 });
 
 function browser_fields_ghost_text() {
 	// Add ghost text for filters
+	// jQuery('.dialog-browse .form-item-gender option:first-child').text("- Gender -");
 	jQuery('.dialog-browse .form-item-field-country-value option:first-child').text("- Country -");
-	jQuery('.dialog-browse .form-item-field-eyes-color-value option:first-child').text("- Eyes Color -");
+	jQuery('.dialog-browse .form-item-eyes-color option:first-child').text("- Eyes Color -");
 	jQuery('.dialog-browse .form-item-field-hair-color-value option:first-child').text("- Hair Color -");
 
 	// Height
@@ -1267,3 +1456,7 @@ jQuery.urlParam = function(name) {
     }
 }
 
+if (!window.console) window.console = {};
+if (!window.console.log) window.console.log = function () {
+	alert(1);
+};
